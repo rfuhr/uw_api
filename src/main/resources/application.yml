@@ -1,0 +1,76 @@
+server:
+  port: 3333
+  error:
+     include-exception: false
+         
+spring:
+  mvc:
+    throw-exception-if-no-handler-found: true
+  web:
+    resources:
+      add-mappings: false
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+    show-sql: true
+  flyway: 
+     locations: db/migration
+     schemas: public
+     validate-on-migrate: true
+     baseline-on-migrate: true
+     migrate-at-start: true
+     baseline-version: 1.0.0
+     baseline-description: Initial version
+     sql-migration-prefix: DV
+     out-of-order: true
+
+         
+uworks:
+   erp:
+      auth:
+         accessTokenExpirationMinutes: 60
+         refreshTokenExpirationDays: 30
+         
+         accessTokenSecret: 12345
+         refreshTokenSecret: 54321    
+             
+multitenancy:
+  datasource-cache:
+    maximumSize: 100
+    expireAfterAccess: 10
+    
+  master:
+    repository:
+      packages: br.com.ultraworks.erp.core.multitenancy.repository
+    entityManager:
+      packages: br.com.ultraworks.erp.core.multitenancy.domain
+    datasource:
+      url: jdbc:postgresql://localhost:5432/master
+      username: postgres
+      password: postgres
+      
+  tenant:
+    repository:
+      packages: br.com.ultraworks.erp.api.*.repository
+    entityManager:
+      packages: br.com.ultraworks.erp.api.*.domain
+    datasource:
+      url-prefix: jdbc:postgresql://
+      hikari:
+        maximumPoolSize: 2
+        minimumIdle: 
+        idleTimeout: 30000
+
+encryption:
+  secret: verySecret
+  salt: jozo
+  
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE  

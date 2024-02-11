@@ -1,0 +1,49 @@
+package br.com.ultraworks.erp.core.entity.listener;
+
+import java.io.Serializable;
+
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Scope;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+
+import br.com.ultraworks.erp.core.entity.UWEntityBase;
+import br.com.ultraworks.erp.core.security.domain.user.User;
+import br.com.ultraworks.erp.core.service.UniqueValidationService;
+import br.com.ultraworks.erp.core.util.FieldsTransform;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+
+@Service
+public class BaseListener implements Serializable {
+
+	UniqueValidationService unique;
+	
+	private static final long serialVersionUID = 4506029740189227365L;
+
+
+	public BaseListener(@Lazy UniqueValidationService unique) {
+		super();
+		this.unique = unique;
+	}
+
+	@PrePersist
+	public void prePersist(UWEntityBase entity) throws Exception {
+		this.unique.verificarUnicidade(entity, true);
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		entity.setCriadoPor(user.getId().longValue());
+		FieldsTransform.transform(entity);
+	}
+
+	@PreUpdate
+	public void preUpdate(UWEntityBase entity) throws Exception {
+		if (!entity.isUpdated() ) {
+			entity.setUpdated(true);
+			this.unique.verificarUnicidade(entity, false);
+			User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			entity.setAlteradoPor(user.getId().longValue());
+			FieldsTransform.transform(entity);
+		}
+	}
+}
