@@ -25,4 +25,5 @@ public class OpcaoFiltro implements Serializable {
 	private String tipo;
 
 	private String fieldFilter;
+	
 }

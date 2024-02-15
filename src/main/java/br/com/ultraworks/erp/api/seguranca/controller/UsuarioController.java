@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,14 +17,18 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.ultraworks.erp.api.seguranca.domain.usuario.InfoUserViewDTO;
 import br.com.ultraworks.erp.api.seguranca.domain.usuario.Usuario;
 import br.com.ultraworks.erp.api.seguranca.domain.usuario.UsuarioDTO;
+import br.com.ultraworks.erp.api.seguranca.domain.usuarioAutonomia.UsuarioAutonomia;
+import br.com.ultraworks.erp.api.seguranca.domain.usuarioAutonomia.UsuarioAutonomiaDTO;
 import br.com.ultraworks.erp.api.seguranca.domain.usuarioFuncionalidade.UsuarioFuncionalidade;
 import br.com.ultraworks.erp.api.seguranca.domain.usuarioFuncionalidade.UsuarioFuncionalidadeDTO;
 import br.com.ultraworks.erp.api.seguranca.domain.usuarioPermissao.UsuarioPermissao;
 import br.com.ultraworks.erp.api.seguranca.domain.usuarioPermissao.UsuarioPermissaoDTO;
 import br.com.ultraworks.erp.api.seguranca.domain.vo.OrganogramaUsuarioVO;
+import br.com.ultraworks.erp.api.seguranca.mapper.UsuarioAutonomiaMapper;
 import br.com.ultraworks.erp.api.seguranca.mapper.UsuarioFuncionalidadeMapper;
 import br.com.ultraworks.erp.api.seguranca.mapper.UsuarioMapper;
 import br.com.ultraworks.erp.api.seguranca.mapper.UsuarioPermissaoMapper;
+import br.com.ultraworks.erp.api.seguranca.service.UsuarioAutonomiaService;
 import br.com.ultraworks.erp.api.seguranca.service.UsuarioFuncionalidadeService;
 import br.com.ultraworks.erp.api.seguranca.service.UsuarioPermissaoService;
 import br.com.ultraworks.erp.api.seguranca.service.UsuarioService;
@@ -47,11 +50,16 @@ public class UsuarioController extends GenericController<Usuario, Long, UsuarioD
 	private UsuarioPermissaoService usuarioPermissaoService;
 	private UsuarioFuncionalidadeMapper usuarioFuncionalidadeMapper;
 	private UsuarioFuncionalidadeService usuarioFuncionalidadeService;
+	private UsuarioAutonomiaMapper usuarioAutonomiaMapper;
+	private UsuarioAutonomiaService usuarioAutonomiaService;
+	
 
 	public UsuarioController(UsuarioService usuarioService, UsuarioMapper usuarioMapper,
 			UsuarioPermissaoMapper usuarioPermissaoMapper, UsuarioPermissaoService usuarioPermissaoService,
 			UsuarioFuncionalidadeMapper usuarioFuncionalidadeMapper,
-			UsuarioFuncionalidadeService usuarioFuncionalidadeService) {
+			UsuarioFuncionalidadeService usuarioFuncionalidadeService,
+			UsuarioAutonomiaMapper usuarioAutonomiaMapper,
+			UsuarioAutonomiaService usuarioAutonomiaService) {
 		super(usuarioService, usuarioMapper);
 		this.usuarioService = usuarioService;
 		this.usuarioMapper = usuarioMapper;
@@ -59,6 +67,8 @@ public class UsuarioController extends GenericController<Usuario, Long, UsuarioD
 		this.usuarioPermissaoService = usuarioPermissaoService;
 		this.usuarioFuncionalidadeMapper = usuarioFuncionalidadeMapper;
 		this.usuarioFuncionalidadeService = usuarioFuncionalidadeService;
+		this.usuarioAutonomiaMapper = usuarioAutonomiaMapper;
+		this.usuarioAutonomiaService = usuarioAutonomiaService;		
 	}
 
 	@PostMapping
@@ -83,6 +93,10 @@ public class UsuarioController extends GenericController<Usuario, Long, UsuarioD
 		List<UsuarioFuncionalidade> listaUsuarioFuncionalidade = this.usuarioFuncionalidadeMapper
 				.toNewEntity(newUsuarioRequest.getFuncionalidades());
 		this.usuarioFuncionalidadeService.salvarPermissoes(listaUsuarioFuncionalidade);
+		
+		List<UsuarioAutonomia> listaUsuarioAutonomia = this.usuarioAutonomiaMapper
+				.toNewEntity(newUsuarioRequest.getAutonomias());
+		this.usuarioAutonomiaService.salvarPermissoes(listaUsuarioAutonomia);
 
 		return ResponseEntity.ok(usuarioMapper.toDto(usuario));
 	}
@@ -110,6 +124,11 @@ public class UsuarioController extends GenericController<Usuario, Long, UsuarioD
 		List<UsuarioFuncionalidade> listaUsuarioFuncionalidade = this.usuarioFuncionalidadeMapper
 				.toEntity(newUsuarioRequest.getFuncionalidades());
 		this.usuarioFuncionalidadeService.salvarPermissoes(listaUsuarioFuncionalidade);
+		
+		List<UsuarioAutonomia> listaUsuarioAutonomia = this.usuarioAutonomiaMapper
+				.toEntity(newUsuarioRequest.getAutonomias());
+		this.usuarioAutonomiaService.salvarPermissoes(listaUsuarioAutonomia);
+		
 		return ResponseEntity.ok(usuarioMapper.toDto(usuario));
 	}
 
@@ -147,6 +166,13 @@ public class UsuarioController extends GenericController<Usuario, Long, UsuarioD
 						.toDto(listaUsuarioFuncionalidade);
 				dto.setFuncionalidades(dtoPermissoes);
 			}
+			List<UsuarioAutonomia> listaUsuarioAutonomia = usuarioAutonomiaService
+					.findByUsuarioId(entity.get().getId());
+			if (listaUsuarioAutonomia != null && !listaUsuarioAutonomia.isEmpty()) {
+				List<UsuarioAutonomiaDTO> dtoPermissoes = usuarioAutonomiaMapper
+						.toDto(listaUsuarioAutonomia);
+				dto.setAutonomias(dtoPermissoes);
+			}
 			return ResponseEntity.ok(dto);
 		} else {
 			throw new RegisterNotFoundException("Não encontrado registro");
@@ -161,6 +187,17 @@ public class UsuarioController extends GenericController<Usuario, Long, UsuarioD
 				return ResponseEntity.noContent().build();
 			} else {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN).build(); 
+			}
+	}
+	
+	@GetMapping("/autonomia/{empresaId}/{empresaFilialId}/{tag}")
+	public ResponseEntity<?> findAutonomia(@PathVariable("empresaId") long empresaId,
+			@PathVariable("empresaFilialId") long empresaFilialId, @PathVariable("tag") String tag) {
+			Optional checkAutonomia = usuarioService.checkAutonomia(empresaId, empresaFilialId, tag);
+			if (checkAutonomia.isPresent() && checkAutonomia.get() == Boolean.TRUE) {
+				return ResponseEntity.ok(true);
+			} else {
+				return ResponseEntity.ok(false); 
 			}
 	}
 }

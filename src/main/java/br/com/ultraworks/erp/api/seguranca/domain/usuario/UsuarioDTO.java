@@ -3,6 +3,7 @@ package br.com.ultraworks.erp.api.seguranca.domain.usuario;
 import java.io.Serializable;
 import java.util.List;
 
+import br.com.ultraworks.erp.api.seguranca.domain.usuarioAutonomia.UsuarioAutonomiaDTO;
 import br.com.ultraworks.erp.api.seguranca.domain.usuarioFuncionalidade.UsuarioFuncionalidadeDTO;
 import br.com.ultraworks.erp.api.seguranca.domain.usuarioPermissao.UsuarioPermissaoDTO;
 import lombok.Data;
@@ -24,5 +25,6 @@ public class UsuarioDTO implements Serializable {
 	private String senha;
 	private List<UsuarioPermissaoDTO> permissoes;
 	private List<UsuarioFuncionalidadeDTO> funcionalidades;
+	private List<UsuarioAutonomiaDTO> autonomias;
 
 }

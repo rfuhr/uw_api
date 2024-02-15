@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 import br.com.ultraworks.erp.api.tabela.domain.historicopadrao.HistoricoPadrao;
 import br.com.ultraworks.erp.api.tabela.domain.historicopadrao.HistoricoPadraoDTO;
+import br.com.ultraworks.erp.api.tabela.domain.tipoobrigatoriedade.TipoObrigatoriedade;
 import br.com.ultraworks.erp.api.tabela.repository.HistoricoPadraoRepository;
 import br.com.ultraworks.erp.core.mapper.GenericMapper;
 
@@ -20,6 +21,7 @@ public class HistoricoPadraoMapper extends GenericMapper<HistoricoPadrao, Histor
 		entity.setNome(dto.getNome());
 		entity.setCodigo(dto.getCodigo());
 		entity.setSigla(dto.getSigla());
+		entity.setInformaDocumento(TipoObrigatoriedade.fromCodigo(dto.getInformaDocumento()));
 	}
 
 	@Override
@@ -28,5 +30,6 @@ public class HistoricoPadraoMapper extends GenericMapper<HistoricoPadrao, Histor
 		dto.setNome(entity.getNome());
 		dto.setCodigo(entity.getCodigo());
 		dto.setSigla(entity.getSigla());
+		dto.setInformaDocumento(entity.getInformaDocumento().getCodigo());
 	}
 }

@@ -47,9 +47,12 @@ public class GenericService<T, ID, D> {
 
 		return resultados;
 	}
+	
 
 	private Page<T> getResultadosPaginado(LazyParams params) {
+		
 		Specification<T> specification = SQLUtils.buildQueryByFilters(params);
+
 		Sort sort = Sort.unsorted();
 		if (params.getSortField() != null) {
 			String sortField = params.getSortField();
@@ -60,6 +63,7 @@ public class GenericService<T, ID, D> {
 		int pagina = params.getFirst() == 0 ? 0 : Math.abs(params.getFirst() / rows);
 		Pageable pageable = PageRequest.of(pagina, rows, sort);
 		Page<T> resultados = repository.findAll(specification, pageable);
+		
 
 		if (resultados.getContent() != null && params.getId() != null) {
 			Optional<T> registroEspecifico = resultados.getContent().stream().filter(item -> {

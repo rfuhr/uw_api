@@ -1,5 +1,6 @@
 package br.com.ultraworks.erp.api.tabela.domain.historicopadrao;
 
+import br.com.ultraworks.erp.api.tabela.domain.tipoobrigatoriedade.validator.ValidaTipoObrigatoriedade;
 import br.com.ultraworks.erp.core.annotation.FriendlyName;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -17,4 +18,6 @@ public class HistoricoPadraoDTO {
 	@FriendlyName("Nome")
 	private String nome;
 	private String sigla;
+	@ValidaTipoObrigatoriedade
+	private String informaDocumento;
 }

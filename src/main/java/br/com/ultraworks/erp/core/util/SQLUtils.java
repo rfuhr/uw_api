@@ -13,9 +13,7 @@ import br.com.ultraworks.erp.core.dto.LazyParams;
 import br.com.ultraworks.erp.core.dto.OpcaoFiltro;
 import br.com.ultraworks.erp.core.entity.specification.FilterSpecification;
 import br.com.ultraworks.erp.core.exception.BusinessException;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.Join;
-import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
 
 public class SQLUtils {
 
@@ -57,7 +55,10 @@ public class SQLUtils {
 						filtroSpecification = FilterSpecification.createIntegerSpecification(chave, opcao);
 					} else if ("boolean".equals(opcao.getTipo())) {
 						filtroSpecification = FilterSpecification.createBooleanSpecification(chave, opcao);
-					} else {
+					} else if ("enum".equals(opcao.getTipo())) {
+						filtroSpecification = FilterSpecification.createEnumSpecification(chave, opcao);
+					}
+					else {
 						throw new BusinessException("Tipo de campo não implementado para o filtro.");
 					}
 
@@ -69,23 +70,14 @@ public class SQLUtils {
 				}
 			}
 		}
-//		if (params.getId() != null) {
-//			Specification<T> filtroSpecification;
-//			filtroSpecification = SQLUtils.criarSpecificationPorId(params.getId());
-//			if (specification == null) {
-//				specification = filtroSpecification;
-//			} else {
-//				specification = specification.or(filtroSpecification);
-//			}
-//		}
-
 		return specification;
 	}
 
-	public static <T> Specification<T> criarSpecificationPorId(Long id) {
-        return (root, query, builder) -> {
-            // Aqui você deve substituir "id" pelo nome do atributo na sua entidade que representa o ID
-            return builder.equal(root.get("id"), id); // Filtrar pelo ID igual a 3
+	public static <T> Specification<T> or(Specification<T> specification1, Specification<T> specification2) {
+        return (root, query, criteriaBuilder) -> {
+            Predicate predicate1 = specification1.toPredicate(root, query, criteriaBuilder);
+            Predicate predicate2 = specification2.toPredicate(root, query, criteriaBuilder);
+            return criteriaBuilder.or(predicate1, predicate2);
         };
     }
 }

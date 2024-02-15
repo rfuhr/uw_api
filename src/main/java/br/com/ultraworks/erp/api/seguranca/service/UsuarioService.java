@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import br.com.ultraworks.erp.api.seguranca.domain.usuario.Usuario;
 import br.com.ultraworks.erp.api.seguranca.domain.usuario.UsuarioDTO;
 import br.com.ultraworks.erp.api.seguranca.domain.vo.OrganogramaUsuarioVO;
+import br.com.ultraworks.erp.api.seguranca.domain.vo.PermissaoAutonomiaUsuarioVO;
 import br.com.ultraworks.erp.api.seguranca.domain.vo.PermissaoFuncionalidadeUsuarioVO;
 import br.com.ultraworks.erp.api.seguranca.mapper.UsuarioMapper;
 import br.com.ultraworks.erp.api.seguranca.repository.ContextoRepository;
@@ -21,6 +22,7 @@ import br.com.ultraworks.erp.api.seguranca.repository.UsuarioFuncionalidadeRepos
 import br.com.ultraworks.erp.api.seguranca.repository.UsuarioPermissaoRepository;
 import br.com.ultraworks.erp.api.seguranca.repository.UsuarioRepository;
 import br.com.ultraworks.erp.api.seguranca.repository.query.BuscaOrganogramaUsuarioQuery;
+import br.com.ultraworks.erp.api.seguranca.repository.query.BuscaPermissaoAutonomiaUsuarioQuery;
 import br.com.ultraworks.erp.api.seguranca.repository.query.BuscaPermissaoFuncionalidadeUsuarioQuery;
 import br.com.ultraworks.erp.core.exception.BusinessException;
 import br.com.ultraworks.erp.core.exception.RegisterNotFoundException;
@@ -41,6 +43,7 @@ public class UsuarioService extends GenericService<Usuario, Long, UsuarioDTO> {
 	private UsuarioPermissaoRepository usuarioPermissaoRepository;
 	private UsuarioFuncionalidadeRepository usuarioFuncionalidadeRepository;
 	private BuscaPermissaoFuncionalidadeUsuarioQuery queryBuscaPermissaoFuncionalidadeUsuarioQuery;
+	private BuscaPermissaoAutonomiaUsuarioQuery queryBuscaPermissaoAutonomiaUsuarioQuery;
 	private ContextoRepository contextoRepository;
 
 	@Autowired
@@ -48,7 +51,8 @@ public class UsuarioService extends GenericService<Usuario, Long, UsuarioDTO> {
 			BuscaOrganogramaUsuarioQuery query, UserRepository userRepository,
 			UsuarioPermissaoRepository usuarioPermissaoRepository,
 			UsuarioFuncionalidadeRepository usuarioFuncionalidadeRepository, ContextoRepository contextoRepository,
-			BuscaPermissaoFuncionalidadeUsuarioQuery queryBuscaPermissaoFuncionalidadeUsuarioQuery) {
+			BuscaPermissaoFuncionalidadeUsuarioQuery queryBuscaPermissaoFuncionalidadeUsuarioQuery,
+			BuscaPermissaoAutonomiaUsuarioQuery queryBuscaPermissaoAutonomiaUsuarioQuery) {
 		super(repository, mapper);
 		this.usuarioRepository = repository;
 		this.passwordEncoder = passwordEncoder;
@@ -58,6 +62,7 @@ public class UsuarioService extends GenericService<Usuario, Long, UsuarioDTO> {
 		this.usuarioFuncionalidadeRepository = usuarioFuncionalidadeRepository;
 		this.contextoRepository = contextoRepository;
 		this.queryBuscaPermissaoFuncionalidadeUsuarioQuery = queryBuscaPermissaoFuncionalidadeUsuarioQuery;
+		this.queryBuscaPermissaoAutonomiaUsuarioQuery = queryBuscaPermissaoAutonomiaUsuarioQuery;
 	}
 
 	public Usuario novoUsuario(Usuario usuario, String username, String password) {
@@ -125,26 +130,45 @@ public class UsuarioService extends GenericService<Usuario, Long, UsuarioDTO> {
 				} else {
 					switch (operacao) {
 					case "consultar":
-						retorno = Optional
-								.of(permissao.isConsultar());
+						retorno = Optional.of(permissao.isConsultar());
 						break;
 					case "inserir":
-						retorno = Optional
-								.of(permissao.isInserir());
+						retorno = Optional.of(permissao.isInserir());
 						break;
 					case "alterar":
-						retorno = Optional
-								.of(permissao.isAlterar());
+						retorno = Optional.of(permissao.isAlterar());
 						break;
 					case "excluir":
-						retorno = Optional
-								.of(permissao.isExcluir());
+						retorno = Optional.of(permissao.isExcluir());
 						break;
 
 					default:
 						break;
 					}
 				}
+			}
+		}
+		return retorno;
+	}
+
+	public Optional checkAutonomia(long empresaId, long empresaFilialId, String tag) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Usuario usuario = this.findByUserId(user.getId().longValue())
+				.orElseThrow(() -> new RegisterNotFoundException("Não encontrado usuário com user id" + user.getId()));
+		Optional<Boolean> retorno = Optional.of(Boolean.FALSE);
+
+		if (usuario.isAdmin()) {
+			List<OrganogramaUsuarioVO> organograma = getOrganogramaUsuario(usuario.getId());
+			retorno = Optional.of(organograma.stream()
+					.anyMatch(el -> el.getEmpresaId() == empresaId && el.getEmpresaFilialId() == empresaFilialId));
+		} else {
+
+			List<PermissaoAutonomiaUsuarioVO> permissoes = this.queryBuscaPermissaoAutonomiaUsuarioQuery
+					.executeSQL(empresaId, empresaFilialId, usuario.getId(), tag);
+			if (permissoes != null && !permissoes.isEmpty()) {
+				PermissaoAutonomiaUsuarioVO permissao = permissoes.get(0);
+				return Optional.of(true);
 			}
 		}
 		return retorno;

@@ -10,3 +10,4 @@ create table modulo (
 
 insert into modulo (id,  nome, sigla, icone, path_base) values (nextval('seq_modulo'), 'Administrativo', 'ADM', '', 'admin');
 insert into modulo (id,  nome, sigla, icone, path_base) values (nextval('seq_modulo'), 'Financeiro', 'FIN', '', 'financeiro');
+insert into modulo (id,  nome, sigla, icone, path_base) values (nextval('seq_modulo'), 'Estoque', 'EST', '', 'estoque');

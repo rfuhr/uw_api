@@ -81,22 +81,22 @@ public class ServicoIntegracaoFinanceira {
 				.findById(tipoOperacaoFinanceiraId).orElseThrow(() -> new RegisterNotFoundException(
 						"Não encontrado tipo operação financeira com id " + tipoOperacaoFinanceiraId));
 
-		if (this.tipoOperacaoIntegracaoFinanceira.isInclusaoLancamento()) {
-			if (!tipoOperacaoFinanceira.isCriaParcela()) {
-				new RegisterNotFoundException(
-						"Operação Financeira para integração não é válida para inclusão de título ");
-			}
-		} else if (this.tipoOperacaoIntegracaoFinanceira.isBaixa()) {
-			if (!tipoOperacaoFinanceira.isBaixaTitulo()) {
-				new RegisterNotFoundException(
-						"Operação Financeira para integração não é válida para baixa de movimento de título ");
-			}
-		}
-
-		if (valorOperacao.doubleValue() <= 0) {
-			new RegisterNotFoundException(
-					"Valor da operação de integração do movimento financeiro deve ser maior que R$ 0,00 ");
-		}
+//		if (this.tipoOperacaoIntegracaoFinanceira.isInclusaoLancamento()) {
+//			if (!tipoOperacaoFinanceira.isCriaParcela()) {
+//				new RegisterNotFoundException(
+//						"Operação Financeira para integração não é válida para inclusão de título ");
+//			}
+//		} else if (this.tipoOperacaoIntegracaoFinanceira.isBaixa()) {
+//			if (!tipoOperacaoFinanceira.isBaixaTitulo()) {
+//				new RegisterNotFoundException(
+//						"Operação Financeira para integração não é válida para baixa de movimento de título ");
+//			}
+//		}
+//
+//		if (valorOperacao.doubleValue() <= 0) {
+//			new RegisterNotFoundException(
+//					"Valor da operação de integração do movimento financeiro deve ser maior que R$ 0,00 ");
+//		}
 
 		container.setContainerDefinicaoOperacao(
 				ContainerDefinicaoOperacao.builder().tipoOperacaoFinanceira(tipoOperacaoFinanceira)
@@ -160,13 +160,13 @@ public class ServicoIntegracaoFinanceira {
 
 	public void executarIntegracao() {
 
-		if (container.getContainerDefinicaoOperacao().getTipoOperacaoFinanceira().isCriaTitulo()) {
-			executarIntegracaoNovoTitulo();
-		}
-		if ((container.getContainerDefinicaoOperacao().getTipoOperacaoFinanceira().isBaixaTitulo()) &&
-				!this.tipoOperacaoIntegracaoFinanceira.isEstorno()) {
-			executarIntegracaoBaixaParcela();
-		}
+//		if (container.getContainerDefinicaoOperacao().getTipoOperacaoFinanceira().isCriaTitulo()) {
+//			executarIntegracaoNovoTitulo();
+//		}
+//		if ((container.getContainerDefinicaoOperacao().getTipoOperacaoFinanceira().isBaixaTitulo()) &&
+//				!this.tipoOperacaoIntegracaoFinanceira.isEstorno()) {
+//			executarIntegracaoBaixaParcela();
+//		}
 	}
 
 	public void executarIntegracaoNovoTitulo() {

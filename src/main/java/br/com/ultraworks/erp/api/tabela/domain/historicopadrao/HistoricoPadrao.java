@@ -1,7 +1,12 @@
 package br.com.ultraworks.erp.api.tabela.domain.historicopadrao;
 
+import br.com.ultraworks.erp.api.tabela.domain.tipoobrigatoriedade.TipoObrigatoriedade;
+import br.com.ultraworks.erp.api.tabela.domain.tipoobrigatoriedade.TipoObrigatoriedadeConverter;
+import br.com.ultraworks.erp.api.tabela.domain.tipopessoa.TipoPessoa;
+import br.com.ultraworks.erp.api.tabela.domain.tipopessoa.TipoPessoaConverter;
 import br.com.ultraworks.erp.core.entity.UWEntityBase;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -29,4 +34,9 @@ public class HistoricoPadrao extends UWEntityBase {
 	
 	private String nome;
 	private String sigla;
+	
+	@Convert(converter = TipoObrigatoriedadeConverter.class)
+	@Column(name = "informa_documento")
+	private TipoObrigatoriedade informaDocumento;
+	
 }

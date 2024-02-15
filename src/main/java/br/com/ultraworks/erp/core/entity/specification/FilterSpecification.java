@@ -87,4 +87,27 @@ public class FilterSpecification<T> {
 	private static <T> Predicate createBooleanBuilder(OpcaoFiltro filtro, Path<Boolean> x, CriteriaBuilder builder) {
 		return builder.equal(x, filtro.getValue());
 	}
+	
+	public static <T> Specification<T> createEnumSpecification(String chave, OpcaoFiltro filtro) {
+        return (root, query, builder) -> {
+        	return createEnumBuilder(filtro, root.get(chave), builder);
+        };
+    }
+
+	private static <T> Predicate createEnumBuilder(OpcaoFiltro filtro, Path<String> x, CriteriaBuilder builder) {
+		if ("contains".equals(filtro.getMatchMode())) {
+		    return builder.like(builder.lower(x), "%" + filtro.getValue().toLowerCase() + "%");
+		} else if ("notContains".equals(filtro.getMatchMode())) {
+		    return builder.notLike(builder.lower(x), "%" + filtro.getValue().toLowerCase() + "%");
+		} else if ("startsWith".equals(filtro.getMatchMode())) {
+		    return builder.like(builder.lower(x), filtro.getValue().toLowerCase() + "%");
+		} else if ("endsWith".equals(filtro.getMatchMode())) {
+		    return builder.like(builder.lower(x), "%" + filtro.getValue().toLowerCase());
+		} else if ("notEquals".equals(filtro.getMatchMode())) {
+		    return builder.notEqual(builder.lower(x), filtro.getValue().toLowerCase());
+		} else {
+		    return builder.equal(builder.lower(x), filtro.getValue().toLowerCase());
+		}
+	}
+	
 }
