@@ -3,11 +3,11 @@ package br.com.ultraworks.erp.api.tabela.domain.grandezaMedida;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.ultraworks.erp.core.dto.EnumResponse;
+import br.com.ultraworks.erp.core.dto.ENumResponse;
 
 public enum GrandezaMedida {
-	AREA("A", "Área"), COMPRIMENTO("C", "Comprimento"), VOLUME("V", "Volume"), PESO("P", "Peso"),
-	EMBALAGEM("E", "Embalagem"), CONSUMO("CS", "Consumo");
+	AREA("Área", "Área"), COMPRIMENTO("Comprimento", "Comprimento"), VOLUME("Volume", "Volume"), PESO("Peso", "Peso"),
+	EMBALAGEM("Embalagem", "Embalagem"), CONSUMO("Consumo", "Consumo");
 
 	private String value;
 	private String name;
@@ -25,10 +25,6 @@ public enum GrandezaMedida {
 		return name;
 	}
 
-	public void setValue(String value) {
-		this.value = value;
-	}
-
 	public static GrandezaMedida fromValue(String value) {
 		for (GrandezaMedida tipo : GrandezaMedida.values()) {
 			if (tipo.getValue().equalsIgnoreCase(value)) {
@@ -38,13 +34,13 @@ public enum GrandezaMedida {
 		return null;
 	}
 
-	public static List<EnumResponse> valuesResponse() {
-		List<EnumResponse> list = new ArrayList<>();
+	public static List<ENumResponse> valuesResponse() {
+		List<ENumResponse> list = new ArrayList<>();
 
 		for (int i = 0; i < GrandezaMedida.values().length; i++) {
 			GrandezaMedida grandezaMedida = GrandezaMedida.values()[i];
 
-			list.add(EnumResponse.builder().name(grandezaMedida.getName()).value(grandezaMedida.getValue()).build());
+			list.add(ENumResponse.builder().name(grandezaMedida.getName()).value(grandezaMedida.getValue()).build());
 		}
 
 		return list;

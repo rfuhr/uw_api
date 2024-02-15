@@ -25,7 +25,6 @@ public class UnidadeMedidaDTO {
 	private String sigla;
 
 	@ValidaGrandezaMedida
-	private String grandeza;
+	private String grandezaMedida;
 	
-	private String grandezaNome;
 }
