@@ -77,10 +77,10 @@ public class ServicoIntegracaoFinanceira {
 
 	public void definirOperacao(long tipoOperacaoFinanceiraId, BigDecimal valorOperacao,
 			Departamento departamentoPelaOperacao) {
-		TipoOperacaoFinanceira tipoOperacaoFinanceira = tipoOperacaoFinanceiraRepository
-				.findById(tipoOperacaoFinanceiraId).orElseThrow(() -> new RegisterNotFoundException(
-						"Não encontrado tipo operação financeira com id " + tipoOperacaoFinanceiraId));
-
+//		TipoOperacaoFinanceira tipoOperacaoFinanceira = tipoOperacaoFinanceiraRepository
+//				.findById(tipoOperacaoFinanceiraId).orElseThrow(() -> new RegisterNotFoundException(
+//						"Não encontrado tipo operação financeira com id " + tipoOperacaoFinanceiraId));
+//
 //		if (this.tipoOperacaoIntegracaoFinanceira.isInclusaoLancamento()) {
 //			if (!tipoOperacaoFinanceira.isCriaParcela()) {
 //				new RegisterNotFoundException(
@@ -97,10 +97,10 @@ public class ServicoIntegracaoFinanceira {
 //			new RegisterNotFoundException(
 //					"Valor da operação de integração do movimento financeiro deve ser maior que R$ 0,00 ");
 //		}
-
-		container.setContainerDefinicaoOperacao(
-				ContainerDefinicaoOperacao.builder().tipoOperacaoFinanceira(tipoOperacaoFinanceira)
-						.valorOperacao(valorOperacao).departamentoPelaOperacao(departamentoPelaOperacao).build());
+//
+//		container.setContainerDefinicaoOperacao(
+//				ContainerDefinicaoOperacao.builder().tipoOperacaoFinanceira(tipoOperacaoFinanceira)
+//						.valorOperacao(valorOperacao).departamentoPelaOperacao(departamentoPelaOperacao).build());
 	}
 
 	public void atribuiValoresTitulo(TipoTitulo tipoTitulo, Departamento departamento, GrupoFinanceiro grupoFinanceiro,
