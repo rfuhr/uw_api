@@ -20,7 +20,7 @@ public class UnidadeMedidaMapper extends GenericMapper<UnidadeMedida, UnidadeMed
 		entity.setId(dto.getId());
 		entity.setNome(dto.getNome());
 		entity.setSigla(dto.getSigla());
-		entity.setGrandezaMedida(GrandezaMedida.fromValue(dto.getGrandeza()));
+		entity.setGrandezaMedida(GrandezaMedida.fromValue(dto.getGrandezaMedida()));
 	}
 
 	@Override
@@ -28,7 +28,6 @@ public class UnidadeMedidaMapper extends GenericMapper<UnidadeMedida, UnidadeMed
 		dto.setId(entity.getId());
 		dto.setNome(entity.getNome());
 		dto.setSigla(entity.getSigla());
-		dto.setGrandeza(entity.getGrandezaMedida().getValue());
-		dto.setGrandezaNome(entity.getGrandezaMedida().getName());
+		dto.setGrandezaMedida(entity.getGrandezaMedida().getValue());
 	}
 }
