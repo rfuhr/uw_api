@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class ENumResponse {
+public class EnumResponse {
 
 	private String name;
 	private String value;
