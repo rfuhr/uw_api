@@ -32,6 +32,6 @@ public class CfopMapper extends GenericMapper<Cfop, CfopDTO> {
 		dto.setNome(entity.getNome());
 		dto.setDataInicioVigencia(entity.getDataInicioVigencia());
 		dto.setDataFinalVigencia(entity.getDataFinalVigencia());
-		dto.setTipoOperacao(entity.getTipoOperacao().getCodigo());
+		dto.setTipoOperacao(entity.getTipoOperacao().getValue());
 	}	
 }

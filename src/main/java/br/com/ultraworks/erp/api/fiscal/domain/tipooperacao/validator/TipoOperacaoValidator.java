@@ -21,7 +21,7 @@ public class TipoOperacaoValidator implements ConstraintValidator<ValidaTipoOper
     @Override
     public void initialize(ValidaTipoOperacao constraint) {
         codigosValidos = Arrays.stream(TipoOperacao.values())
-                .map(TipoOperacao::getCodigo)
+                .map(TipoOperacao::getValue)
                 .collect(Collectors.toSet());
     }
 
