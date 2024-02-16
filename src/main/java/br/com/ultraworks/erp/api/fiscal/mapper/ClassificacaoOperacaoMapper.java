@@ -19,7 +19,6 @@ public class ClassificacaoOperacaoMapper extends GenericMapper<ClassificacaoOper
 		entity.setId(dto.getId());
 		entity.setCodigo(dto.getCodigo());
 		entity.setNome(dto.getNome());
-		entity.setUsoConsumo(dto.isUsoConsumo());
 	}
 
 	@Override
@@ -27,6 +26,5 @@ public class ClassificacaoOperacaoMapper extends GenericMapper<ClassificacaoOper
 		dto.setId(entity.getId());
 		dto.setCodigo(entity.getCodigo());
 		dto.setNome(entity.getNome());
-		dto.setUsoConsumo(entity.isUsoConsumo());
 	}
 }
