@@ -1,10 +1,12 @@
 package br.com.ultraworks.erp.core.entity.listener;
 
 import java.io.Serializable;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +35,11 @@ public class BaseListener implements Serializable {
 		this.unique.verificarUnicidade(entity, true);
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		entity.setCriadoPor(user.getId().longValue());
+		if (entity.getCriadoEm() == null) {
+			Date date = new Date();
+			Instant instant = date.toInstant();
+			entity.setCriadoEm(LocalDateTime.ofInstant(instant, ZoneId.systemDefault()));
+		}
 		FieldsTransform.transform(entity);
 	}
 
@@ -43,6 +50,12 @@ public class BaseListener implements Serializable {
 			this.unique.verificarUnicidade(entity, false);
 			User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			entity.setAlteradoPor(user.getId().longValue());
+			if (entity.getCriadoEm() == null) {
+				entity.setCriadoPor(user.getId().longValue());
+				Date date = new Date();
+				Instant instant = date.toInstant();
+				entity.setCriadoEm(LocalDateTime.ofInstant(instant, ZoneId.systemDefault()));
+			}			
 			FieldsTransform.transform(entity);
 		}
 	}
