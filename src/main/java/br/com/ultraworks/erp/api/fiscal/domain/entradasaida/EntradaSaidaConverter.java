@@ -11,7 +11,7 @@ public class EntradaSaidaConverter implements AttributeConverter<EntradaSaida, S
         if (ModalidadeBaseCalculo == null) {
             return null;
         }
-        return ModalidadeBaseCalculo.getCodigo();
+        return ModalidadeBaseCalculo.getValue();
     }
 
     @Override

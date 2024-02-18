@@ -21,7 +21,7 @@ public class EntradaSaidaValidator implements ConstraintValidator<ValidaEntradaS
     @Override
     public void initialize(ValidaEntradaSaida constraint) {
         codigosValidos = Arrays.stream(EntradaSaida.values())
-                .map(EntradaSaida::getCodigo)
+                .map(EntradaSaida::getValue)
                 .collect(Collectors.toSet());
     }
 
