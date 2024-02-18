@@ -2,7 +2,12 @@ package br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscal;
 
 import java.time.LocalDate;
 
+import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscalcofins.ConfiguracaoFiscalCofinsDTO;
+import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscalicms.ConfiguracaoFiscalIcmsDTO;
+import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscalipi.ConfiguracaoFiscalIpiDTO;
+import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscalpis.ConfiguracaoFiscalPisDTO;
 import br.com.ultraworks.erp.api.fiscal.domain.entradasaida.validador.ValidaEntradaSaida;
+import jakarta.validation.Valid;
 import lombok.Data;
 
 @Data
@@ -38,4 +43,16 @@ public class ConfiguracaoFiscalDTO {
 	private String classificacaoOperacaoNome;
 	private Long itemId;
 	private String itemNome;
+	
+	@Valid
+	private ConfiguracaoFiscalIcmsDTO configuracaoFiscalIcms;
+	
+	@Valid
+	private ConfiguracaoFiscalIpiDTO configuracaoFiscalIpi;
+	
+	@Valid
+	private ConfiguracaoFiscalPisDTO configuracaoFiscalPis;
+	
+	@Valid
+	private ConfiguracaoFiscalCofinsDTO configuracaoFiscalCofins;
 }

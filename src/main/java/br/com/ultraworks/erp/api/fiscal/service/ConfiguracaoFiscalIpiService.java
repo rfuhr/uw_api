@@ -13,10 +13,17 @@ import lombok.NoArgsConstructor;
 @Service
 @NoArgsConstructor
 public class ConfiguracaoFiscalIpiService extends GenericService<ConfiguracaoFiscalIpi, Long, ConfiguracaoFiscalIpiDTO> {
+	
+	ConfiguracaoFiscalIpiRepository repository;
 
 	@Autowired
 	public ConfiguracaoFiscalIpiService(ConfiguracaoFiscalIpiRepository repository, ConfiguracaoFiscalIpiMapper mapper) {
 		super(repository, mapper);
+		this.repository = repository;
+	}
+	
+	public ConfiguracaoFiscalIpi findByConfiguracaoFiscalId(Long configuracaoFiscalId) {
+		return repository.findByConfiguracaoFiscalId(configuracaoFiscalId);
 	}
 
 }

@@ -7,5 +7,7 @@ import br.com.ultraworks.erp.core.UWRepository;
 
 @Repository
 public interface ConfiguracaoFiscalIpiRepository extends UWRepository<ConfiguracaoFiscalIpi, Long> {
+	
+	ConfiguracaoFiscalIpi findByConfiguracaoFiscalId(Long configuracaoFiscalId);
 
 }

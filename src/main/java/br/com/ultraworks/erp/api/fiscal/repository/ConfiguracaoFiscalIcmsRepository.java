@@ -8,4 +8,6 @@ import br.com.ultraworks.erp.core.UWRepository;
 @Repository
 public interface ConfiguracaoFiscalIcmsRepository extends UWRepository<ConfiguracaoFiscalIcms, Long> {
 
+	ConfiguracaoFiscalIcms findByConfiguracaoFiscalId(Long configuracaoFiscalId);
+	
 }

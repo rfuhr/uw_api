@@ -5,6 +5,10 @@ import java.time.LocalDate;
 import br.com.ultraworks.erp.api.estoque.domain.item.Item;
 import br.com.ultraworks.erp.api.fiscal.domain.cfop.Cfop;
 import br.com.ultraworks.erp.api.fiscal.domain.classificacaooperacao.ClassificacaoOperacao;
+import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscalcofins.ConfiguracaoFiscalCofins;
+import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscalicms.ConfiguracaoFiscalIcms;
+import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscalipi.ConfiguracaoFiscalIpi;
+import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscalpis.ConfiguracaoFiscalPis;
 import br.com.ultraworks.erp.api.fiscal.domain.entradasaida.EntradaSaida;
 import br.com.ultraworks.erp.api.fiscal.domain.entradasaida.EntradaSaidaConverter;
 import br.com.ultraworks.erp.api.fiscal.domain.grupotributacao.GrupoTributacao;
@@ -24,6 +28,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -95,4 +100,16 @@ public class ConfiguracaoFiscal extends UWEntityBase {
 	@OneToOne
 	@JoinColumn(name = "item_id")
 	private Item item;
+	
+	@Transient
+	private ConfiguracaoFiscalIcms configuracaoFiscalIcms;
+	
+	@Transient
+	private ConfiguracaoFiscalIpi configuracaoFiscalIpi;
+	
+	@Transient
+	private ConfiguracaoFiscalPis configuracaoFiscalPis;
+	
+	@Transient
+	private ConfiguracaoFiscalCofins configuracaoFiscalCofins;
 }

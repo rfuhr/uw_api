@@ -33,10 +33,17 @@ public class ConfiguracaoFiscalMapper extends GenericMapper<ConfiguracaoFiscal, 
 	ClassificacaoOperacaoRepository classificacaoOperacaoRepository;
 	ItemRepository itemRepository;
 	
+	ConfiguracaoFiscalIcmsMapper configuracaoFiscalIcmsMapper;
+	ConfiguracaoFiscalIpiMapper configuracaoFiscalIpiMapper;
+	ConfiguracaoFiscalPisMapper configuracaoFiscalPisMapper;
+	ConfiguracaoFiscalCofinsMapper configuracaoFiscalCofinsMapper;
+	
 	public ConfiguracaoFiscalMapper(ConfiguracaoFiscalRepository ConfiguracaoFiscalRepository, PaisRepository paisRepository, UfRepository ufRepository,
 			GrupoTributacaoRepository grupoTributacaoRepository, CfopRepository cfopRepository, NcmRepository ncmRepository,
 			RegimeTributarioRepository regimeTributarioRepository, OrigemRepository origemRepository, ItemRepository itemRepository,
-			OperacaoInternaRepository operacaoInternaRepository, ClassificacaoOperacaoRepository classificacaoOperacaoRepository) {
+			OperacaoInternaRepository operacaoInternaRepository, ClassificacaoOperacaoRepository classificacaoOperacaoRepository,
+			ConfiguracaoFiscalIcmsMapper configuracaoFiscalIcmsMapper, ConfiguracaoFiscalIpiMapper configuracaoFiscalIpiMapper,
+			ConfiguracaoFiscalPisMapper configuracaoFiscalPisMapper, ConfiguracaoFiscalCofinsMapper configuracaoFiscalCofinsMapper) {
 		super(ConfiguracaoFiscalRepository, ConfiguracaoFiscal::new, ConfiguracaoFiscalDTO::new);
 		this.paisRepository = paisRepository;
 		this.ufRepository = ufRepository;
@@ -48,7 +55,11 @@ public class ConfiguracaoFiscalMapper extends GenericMapper<ConfiguracaoFiscal, 
 		this.itemRepository = itemRepository;
 		this.operacaoInternaRepository = operacaoInternaRepository;
 		this.classificacaoOperacaoRepository = classificacaoOperacaoRepository;
-    }
+		this.configuracaoFiscalIcmsMapper = configuracaoFiscalIcmsMapper;
+		this.configuracaoFiscalIpiMapper = configuracaoFiscalIpiMapper;
+		this.configuracaoFiscalPisMapper = configuracaoFiscalPisMapper;
+		this.configuracaoFiscalCofinsMapper = configuracaoFiscalCofinsMapper;
+	}
 
 	@Override
 	protected void setValuesToEntity(ConfiguracaoFiscalDTO dto, ConfiguracaoFiscal entity) {
@@ -94,6 +105,19 @@ public class ConfiguracaoFiscalMapper extends GenericMapper<ConfiguracaoFiscal, 
 			entity.setItem(itemRepository.findById(dto.getItemId())
 					.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Item com id " + dto.getItemId())));
 		}
+		if (dto.getConfiguracaoFiscalIcms() != null) {
+			entity.setConfiguracaoFiscalIcms(configuracaoFiscalIcmsMapper.toEntity(dto.getConfiguracaoFiscalIcms()));
+		}
+		if (dto.getConfiguracaoFiscalPis() != null) {
+			entity.setConfiguracaoFiscalPis(configuracaoFiscalPisMapper.toEntity(dto.getConfiguracaoFiscalPis()));
+		}
+		if (dto.getConfiguracaoFiscalIpi() != null) {
+			entity.setConfiguracaoFiscalIpi(configuracaoFiscalIpiMapper.toEntity(dto.getConfiguracaoFiscalIpi()));
+		}
+		if (dto.getConfiguracaoFiscalCofins() != null) {
+			entity.setConfiguracaoFiscalCofins(configuracaoFiscalCofinsMapper.toEntity(dto.getConfiguracaoFiscalCofins()));
+		}
+
 	}
 
 	@Override
@@ -139,6 +163,18 @@ public class ConfiguracaoFiscalMapper extends GenericMapper<ConfiguracaoFiscal, 
 		if (entity.getItem() != null) {
 			dto.setItemId(entity.getItem().getId());
 			dto.setItemNome(entity.getItem().getNome());
+		}
+		if (entity.getConfiguracaoFiscalIcms() != null) {
+			dto.setConfiguracaoFiscalIcms(configuracaoFiscalIcmsMapper.toDto(entity.getConfiguracaoFiscalIcms()));
+		}
+		if (entity.getConfiguracaoFiscalIpi() != null) {
+			dto.setConfiguracaoFiscalIpi(configuracaoFiscalIpiMapper.toDto(entity.getConfiguracaoFiscalIpi()));
+		}
+		if (entity.getConfiguracaoFiscalPis() != null) {
+			dto.setConfiguracaoFiscalPis(configuracaoFiscalPisMapper.toDto(entity.getConfiguracaoFiscalPis()));
+		}
+		if (entity.getConfiguracaoFiscalCofins() != null) {
+			dto.setConfiguracaoFiscalCofins(configuracaoFiscalCofinsMapper.toDto(entity.getConfiguracaoFiscalCofins()));
 		}
 	}	
 }
