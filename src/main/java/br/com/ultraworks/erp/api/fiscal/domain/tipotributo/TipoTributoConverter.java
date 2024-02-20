@@ -11,7 +11,7 @@ public class TipoTributoConverter implements AttributeConverter<TipoTributo, Str
         if (TipoTributo == null) {
             return null;
         }
-        return TipoTributo.getCodigo();
+        return TipoTributo.getValue();
     }
 
     @Override

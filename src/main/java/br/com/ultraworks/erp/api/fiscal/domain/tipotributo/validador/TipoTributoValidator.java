@@ -21,14 +21,14 @@ public class TipoTributoValidator implements ConstraintValidator<ValidaTipoTribu
     @Override
     public void initialize(ValidaTipoTributo constraint) {
         codigosValidos = Arrays.stream(TipoTributo.values())
-                .map(TipoTributo::getCodigo)
+                .map(TipoTributo::getValue)
                 .collect(Collectors.toSet());
     }
 
     @Override
     public boolean isValid(String tipoTributoCodigo, ConstraintValidatorContext context) {
         if (tipoTributoCodigo == null) {
-            return true; // Permitir valores nulos, se necessário
+            return false; // Permitir valores nulos, se necessário
         }
 
         boolean isValid = codigosValidos.contains(tipoTributoCodigo);

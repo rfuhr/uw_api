@@ -11,7 +11,7 @@ public class TipoOperacaoConverter implements AttributeConverter<TipoOperacao, S
         if (TipoOperacao == null) {
             return null;
         }
-        return TipoOperacao.getCodigo();
+        return TipoOperacao.getValue();
     }
 
     @Override

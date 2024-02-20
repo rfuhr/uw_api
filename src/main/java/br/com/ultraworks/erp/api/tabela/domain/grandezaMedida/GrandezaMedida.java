@@ -3,7 +3,7 @@ package br.com.ultraworks.erp.api.tabela.domain.grandezaMedida;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.ultraworks.erp.core.dto.ENumResponse;
+import br.com.ultraworks.erp.core.dto.EnumResponse;
 
 public enum GrandezaMedida {
 	AREA("Área", "Área"), COMPRIMENTO("Comprimento", "Comprimento"), VOLUME("Volume", "Volume"), PESO("Peso", "Peso"),
@@ -34,13 +34,13 @@ public enum GrandezaMedida {
 		return null;
 	}
 
-	public static List<ENumResponse> valuesResponse() {
-		List<ENumResponse> list = new ArrayList<>();
+	public static List<EnumResponse> valuesResponse() {
+		List<EnumResponse> list = new ArrayList<>();
 
 		for (int i = 0; i < GrandezaMedida.values().length; i++) {
 			GrandezaMedida grandezaMedida = GrandezaMedida.values()[i];
 
-			list.add(ENumResponse.builder().name(grandezaMedida.getName()).value(grandezaMedida.getValue()).build());
+			list.add(EnumResponse.builder().name(grandezaMedida.getName()).value(grandezaMedida.getValue()).build());
 		}
 
 		return list;

@@ -21,7 +21,7 @@ public class ModalidadeBaseCalculoValidator implements ConstraintValidator<Valid
     @Override
     public void initialize(ValidaModalidadeBaseCalculo constraint) {
         codigosValidos = Arrays.stream(ModalidadeBaseCalculo.values())
-                .map(ModalidadeBaseCalculo::getCodigo)
+                .map(ModalidadeBaseCalculo::getValue)
                 .collect(Collectors.toSet());
     }
 

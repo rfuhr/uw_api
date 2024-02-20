@@ -11,7 +11,7 @@ public class ModalidadeBaseCalculoConverter implements AttributeConverter<Modali
         if (ModalidadeBaseCalculo == null) {
             return null;
         }
-        return ModalidadeBaseCalculo.getCodigo();
+        return ModalidadeBaseCalculo.getValue();
     }
 
     @Override
