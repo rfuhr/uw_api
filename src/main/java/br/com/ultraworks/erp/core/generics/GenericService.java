@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 @Component
 public class GenericService<T, ID, D> {
 
-	private UWRepository<T, ID> repository;
+	protected UWRepository<T, ID> repository;
 	private EntityMapper<T, D> mapper;
 
 	public GenericService(UWRepository<T, ID> repository, EntityMapper<T, D> mapper) {
@@ -118,4 +118,5 @@ public class GenericService<T, ID, D> {
 			return Optional.empty();
 		}
 	}
+
 }

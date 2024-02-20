@@ -32,7 +32,7 @@ import jakarta.transaction.Transactional;
 
 public class GenericController<T, ID, D> {
 
-	GenericService<T, ID, D> service;
+	protected GenericService<T, ID, D> service;
 	protected EntityMapper<T, D> mapper;
 	
 	@Autowired
@@ -84,7 +84,7 @@ public class GenericController<T, ID, D> {
 //        def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
         
 //        TransactionStatus status = transactionManager.getTransaction(def);
-        
+		
 		dtoValidator.validate(dto);
 		T entity = mapper.toNewEntity(dto);
 		service.save(entity);

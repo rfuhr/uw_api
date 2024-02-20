@@ -25,6 +25,7 @@ public abstract class GenericMapper<Entity, DTO> implements EntityMapper<Entity,
     @Override
     public Entity toNewEntity(DTO dto) {
         Entity entity = entitySupplier.get();
+        setNullToId(dto);
         setValuesToEntity(dto, entity);
         return entity;
     }
@@ -95,5 +96,15 @@ public abstract class GenericMapper<Entity, DTO> implements EntityMapper<Entity,
 		}
     	return 0L;
         
+    }
+    
+    private void setNullToId(DTO dto) {
+        try {
+            Class<?> dtoClass = dto.getClass();
+            Method setIdMethod = dtoClass.getMethod("setId", Long.class);
+            setIdMethod.invoke(dto, (Long) null);
+        } catch (Exception e) {
+            throw new BusinessException("Não foi possível definir o id do objeto", e);
+        }
     }
 }

@@ -33,7 +33,7 @@ public class BaseListener implements Serializable {
 		this.unique.verificarUnicidade(entity, true);
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		entity.setCriadoPor(user.getId().longValue());
-		FieldsTransform.transform(entity);
+//		FieldsTransform.transform(entity);
 	}
 
 	@PreUpdate
@@ -43,7 +43,7 @@ public class BaseListener implements Serializable {
 			this.unique.verificarUnicidade(entity, false);
 			User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			entity.setAlteradoPor(user.getId().longValue());
-			FieldsTransform.transform(entity);
+//			FieldsTransform.transform(entity);
 		}
 	}
 }

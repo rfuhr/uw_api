@@ -19,4 +19,7 @@ public class ItemService extends GenericService<Item, Long, ItemDTO> {
 		super(repository, mapper);
 	}
 
+	public int getProximoCodigo() {
+		return ((ItemRepository) repository).getProximoCodigo();
+	}
 }

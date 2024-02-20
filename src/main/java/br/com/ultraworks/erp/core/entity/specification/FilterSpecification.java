@@ -85,7 +85,7 @@ public class FilterSpecification<T> {
     }
 
 	private static <T> Predicate createBooleanBuilder(OpcaoFiltro filtro, Path<Boolean> x, CriteriaBuilder builder) {
-		return builder.equal(x, filtro.getValue());
+		return builder.equal(x, Boolean.valueOf(filtro.getValue()));
 	}
 	
 	public static <T> Specification<T> createEnumSpecification(String chave, OpcaoFiltro filtro) {

@@ -41,7 +41,10 @@ public class UniqueValidationService {
 				// especificados
 				String whereClause = "";
 				for (String field : fieldsToCheck) {
-					whereClause += getColumnName(field, entity.getClass()) + " = :" + field + " AND ";
+					if (isStringField(field, entity))
+						whereClause += "lower(" + getColumnName(field, entity.getClass()) + ") = lower(:" + field + ") AND ";
+					else
+						whereClause += getColumnName(field, entity.getClass()) + " = :" + field + " AND ";
 				}
 				if (!create)
 					whereClause += obterNomeAtributoId(entity.getClass()) + " <> :id";
@@ -218,4 +221,11 @@ public class UniqueValidationService {
 		// Retorna null se nenhum campo com a anotação @Id for encontrado
 		return null;
 	}
+	
+	public static boolean isStringField(String fieldName, Object obj) throws NoSuchFieldException {
+        Field field = obj.getClass().getDeclaredField(fieldName);
+        return field.getType().equals(String.class);
+    }
+
+	
 }
