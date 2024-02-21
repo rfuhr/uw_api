@@ -128,21 +128,26 @@ public class ConfiguracaoFiscalMapper extends GenericMapper<ConfiguracaoFiscal, 
 		dto.setEntradaSaida(entity.getEntradaSaida().getValue());
 		dto.setUfOrigemId(entity.getUfOrigem().getId());
 		dto.setUfOrigemNome(entity.getUfOrigem().getNome());
+		dto.setUfOrigemSigla(entity.getUfOrigem().getSigla());
 		dto.setUfDestinoId(entity.getUfDestino().getId());
 		dto.setUfDestinoNome(entity.getUfDestino().getNome());
+		dto.setUfDestinoSigla(entity.getUfDestino().getSigla());
 		dto.setPaisDestinoId(entity.getPaisDestino().getId());
 		dto.setPaisDestinoNome(entity.getPaisDestino().getNome());
 		if (entity.getGrupoTributacao() != null) {
 			dto.setGrupoTributacaoId(entity.getGrupoTributacao().getId());
 			dto.setGrupoTributacaoNome(entity.getGrupoTributacao().getNome());
+			dto.setGrupoTributacaoCodigo(new Long(entity.getGrupoTributacao().getCodigo()));
 		}
 		if (entity.getCfop() != null) {
 			dto.setCfopId(entity.getCfop().getId());
 			dto.setCfopNome(entity.getCfop().getNome());
+			dto.setCfopCodigo(new Long(entity.getCfop().getCodigo()));
 		}
 		if (entity.getNcm() != null) {
 			dto.setNcmId(entity.getNcm().getId());
 			dto.setNcmNome(entity.getNcm().getNome());
+			dto.setNcmCodigo(entity.getNcm().getCodigo());
 		}
 		if (entity.getRegimeTributario() != null) {
 			dto.setRegimeTributarioId(entity.getRegimeTributario().getId());
@@ -151,18 +156,22 @@ public class ConfiguracaoFiscalMapper extends GenericMapper<ConfiguracaoFiscal, 
 		if (entity.getOrigem() != null) {
 			dto.setOrigemId(entity.getOrigem().getId());
 			dto.setOrigemNome(entity.getOrigem().getNome());
+			dto.setOrigemCodigo(new Long(entity.getOrigem().getCodigo()));
 		}
 		if (entity.getClassificacaoOperacao() != null) {
 			dto.setClassificacaoOperacaoId(entity.getClassificacaoOperacao().getId());
 			dto.setClassificacaoOperacaoNome(entity.getClassificacaoOperacao().getNome());
+			dto.setClassificacaoOperacaoCodigo(new Long(entity.getClassificacaoOperacao().getCodigo()));
 		}
 		if (entity.getOperacaoInterna() != null) {
 			dto.setOperacaoInternaId(entity.getOperacaoInterna().getId());
 			dto.setOperacaoInternaNome(entity.getOperacaoInterna().getNome());
+			dto.setOperacaoInternaSigla(entity.getOperacaoInterna().getSigla());
 		}
 		if (entity.getItem() != null) {
 			dto.setItemId(entity.getItem().getId());
 			dto.setItemNome(entity.getItem().getNome());
+			dto.setItemCodigo(new Long(entity.getItem().getCodigo()));
 		}
 		if (entity.getConfiguracaoFiscalIcms() != null) {
 			dto.setConfiguracaoFiscalIcms(configuracaoFiscalIcmsMapper.toDto(entity.getConfiguracaoFiscalIcms()));

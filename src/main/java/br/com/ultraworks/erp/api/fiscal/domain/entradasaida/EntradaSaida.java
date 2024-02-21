@@ -7,7 +7,7 @@ import br.com.ultraworks.erp.core.dto.EnumResponse;
 
 public enum EntradaSaida {
     ENTRADA("Entrada"),
-    SAIDA("Saída)");
+    SAIDA("Saída");
 
     private String value;
 
