@@ -40,6 +40,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode(callSuper=false)
+//@UniqueValidationGroup({
+//    @UniqueValidation(fields = {"uf_origem_id","uf_destino_id","entrada_saida","data_inicio_vigencia", "data_final_vigencia", "grupo_tributacao_id",
+//    		                    "cfop_id","ncm_id","regime_tributario_id","origem_id","operacao_interna_id","classificacao_operacao_id", "item_id"},
+//    					label = "Já existe Configuração Fiscal com esta chave")
+//})
 public class ConfiguracaoFiscal extends UWEntityBase {
 	
 	@Id

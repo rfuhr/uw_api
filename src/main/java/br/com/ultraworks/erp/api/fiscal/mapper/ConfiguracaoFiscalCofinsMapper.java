@@ -47,7 +47,9 @@ public class ConfiguracaoFiscalCofinsMapper extends GenericMapper<ConfiguracaoFi
 	protected void setValuesToDto(ConfiguracaoFiscalCofins entity, ConfiguracaoFiscalCofinsDTO dto) {
 		dto.setId(entity.getId());
 		dto.setConfiguracaoFiscalId(entity.getConfiguracaoFiscal().getId());
-		dto.setSituacaoTributaria(situacaoTributariaMapper.toDto(entity.getSituacaoTributaria()));
+		dto.setSituacaoTributariaId(entity.getSituacaoTributaria().getId());
+		dto.setSituacaoTributariaNome(entity.getSituacaoTributaria().getNome());
+		dto.setSituacaoTributariaCodigo(new Long(entity.getSituacaoTributaria().getCodigo()));
 		dto.setModalidadeBaseCalculo(entity.getModalidadeBaseCalculo().getValue());
 		dto.setAliquota(dto.getAliquota());
 		dto.setTipoCalculo(entity.getTipoCalculo().getValue());

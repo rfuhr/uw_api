@@ -54,9 +54,9 @@ public class ConfiguracaoFiscalIcmsMapper extends GenericMapper<ConfiguracaoFisc
 		if (dto.getModalidadeBaseCalculoST() != null) {
 			entity.setModalidadeBaseCalculoST(ModalidadeBaseCalculo.fromValue(dto.getModalidadeBaseCalculoST()));
 		}
-		if (dto.getMotivoDesoneracaoST() != null) {
-			entity.setMotivoDesoneracaoST(motivoDesoneracaoRepository.findById(dto.getMotivoDesoneracaoST().getId())
-					.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Motivo Desoneração ST com id " + dto.getMotivoDesoneracaoST().getId())));
+		if (dto.getMotivoDesoneracaoSTId() != null) {
+			entity.setMotivoDesoneracaoST(motivoDesoneracaoRepository.findById(dto.getMotivoDesoneracaoSTId())
+					.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Motivo Desoneração ST com id " + dto.getMotivoDesoneracaoSTId())));
 		}
 		entity.setReducaoBaseCalculoST(dto.getReducaoBaseCalculoST());
 		entity.setSomaIpiBaseCalculoST(dto.isSomaIpiBaseCalculoST());
@@ -68,23 +68,29 @@ public class ConfiguracaoFiscalIcmsMapper extends GenericMapper<ConfiguracaoFisc
 	protected void setValuesToDto(ConfiguracaoFiscalIcms entity, ConfiguracaoFiscalIcmsDTO dto) {
 		dto.setId(entity.getId());
 		dto.setConfiguracaoFiscalId(entity.getConfiguracaoFiscal().getId());
-		dto.setSituacaoTributaria(situacaoTributariaMapper.toDto(entity.getSituacaoTributaria()));
+		dto.setSituacaoTributariaId(entity.getSituacaoTributaria().getId());
+		dto.setSituacaoTributariaCodigo(new Long(entity.getSituacaoTributaria().getCodigo()));
+		dto.setSituacaoTributariaNome(entity.getSituacaoTributaria().getNome());
 		if (entity.getModalidadeBaseCalculo() != null) {
 			dto.setModalidadeBaseCalculo(entity.getModalidadeBaseCalculo().getValue());
 		}
 		if (entity.getMotivoDesoneracao() != null) {
-			dto.setMotivoDesoneracao(motivoDesoneracaoMapper.toDto(entity.getMotivoDesoneracao()));
+			dto.setMotivoDesoneracaoId(entity.getMotivoDesoneracao().getId());
+			dto.setMotivoDesoneracaoCodigo(new Long(entity.getMotivoDesoneracao().getId()));
+			dto.setMotivoDesoneracaoNome(entity.getMotivoDesoneracao().getNome());
 		}
-		dto.setReducaoBaseCalculo(dto.getReducaoBaseCalculo());
-		dto.setSomaIpiBaseCalculo(dto.isSomaIpiBaseCalculo());
-		dto.setAliquota(dto.getAliquota());
-		dto.setAliquotaCredito(dto.getAliquotaCredito());
-		dto.setDiferencialAliquota(dto.getDiferencialAliquota());
+		dto.setReducaoBaseCalculo(entity.getReducaoBaseCalculo());
+		dto.setSomaIpiBaseCalculo(entity.isSomaIpiBaseCalculo());
+		dto.setAliquota(entity.getAliquota());
+		dto.setAliquotaCredito(entity.getAliquotaCredito());
+		dto.setDiferencialAliquota(entity.getDiferencialAliquota());
 		if (entity.getModalidadeBaseCalculoST() != null) {
 			dto.setModalidadeBaseCalculoST(entity.getModalidadeBaseCalculoST().getValue());
 		}
 		if (entity.getMotivoDesoneracaoST() != null) {
-			dto.setMotivoDesoneracaoST(motivoDesoneracaoMapper.toDto(entity.getMotivoDesoneracaoST()));
+			dto.setMotivoDesoneracaoSTId(entity.getMotivoDesoneracaoST().getId());
+			dto.setMotivoDesoneracaoSTCodigo(new Long(entity.getMotivoDesoneracaoST().getId()));
+			dto.setMotivoDesoneracaoSTNome(entity.getMotivoDesoneracaoST().getNome());
 		}
 		dto.setReducaoBaseCalculoST(entity.getReducaoBaseCalculoST());
 		dto.setSomaIpiBaseCalculoST(entity.isSomaIpiBaseCalculoST());

@@ -55,9 +55,13 @@ public class ConfiguracaoFiscalIpiMapper extends GenericMapper<ConfiguracaoFisca
 	protected void setValuesToDto(ConfiguracaoFiscalIpi entity, ConfiguracaoFiscalIpiDTO dto) {
 		dto.setId(entity.getId());
 		dto.setConfiguracaoFiscalId(entity.getConfiguracaoFiscal().getId());
-		dto.setSituacaoTributaria(situacaoTributariaMapper.toDto(entity.getSituacaoTributaria()));
+		dto.setSituacaoTributariaId(entity.getSituacaoTributaria().getId());
+		dto.setSituacaoTributariaNome(entity.getSituacaoTributaria().getNome());
+		dto.setSituacaoTributariaCodigo(new Long(entity.getSituacaoTributaria().getCodigo()));
 		dto.setModalidadeBaseCalculo(entity.getModalidadeBaseCalculo().getValue());
-		dto.setEnquadramento(enquadramentoMapper.toDto(entity.getEnquadramento()));
+		dto.setEnquadramentoId(entity.getEnquadramento().getId());
+		dto.setEnquadramentoNome(entity.getEnquadramento().getNome());
+		dto.setEnquadramentoCodigo(new Long(entity.getEnquadramento().getCodigo()));
 		dto.setAliquota(dto.getAliquota());
 		dto.setTipoCalculo(entity.getTipoCalculo().getValue());
 		dto.setCodigoSelo(entity.getCodigoSelo());

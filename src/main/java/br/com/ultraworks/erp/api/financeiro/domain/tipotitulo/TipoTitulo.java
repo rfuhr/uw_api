@@ -1,5 +1,7 @@
 package br.com.ultraworks.erp.api.financeiro.domain.tipotitulo;
 
+import br.com.ultraworks.erp.core.annotation.UniqueValidation;
+import br.com.ultraworks.erp.core.annotation.UniqueValidationGroup;
 import br.com.ultraworks.erp.core.entity.UWEntityBase;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,6 +19,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode(callSuper=false)
+@UniqueValidationGroup({
+    @UniqueValidation(fields = {"codigo"}, label = "Já existe Tipo de Título com este código"),
+    @UniqueValidation(fields = {"nome"}, label = "Já existe Tipo de Título com este nome")
+})
 public class TipoTitulo extends UWEntityBase {
 	
 	@Id

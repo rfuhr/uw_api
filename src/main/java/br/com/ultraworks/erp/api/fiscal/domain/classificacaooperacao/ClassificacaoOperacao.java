@@ -1,5 +1,7 @@
 package br.com.ultraworks.erp.api.fiscal.domain.classificacaooperacao;
 
+import br.com.ultraworks.erp.core.annotation.UniqueValidation;
+import br.com.ultraworks.erp.core.annotation.UniqueValidationGroup;
 import br.com.ultraworks.erp.core.entity.UWEntityBase;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,6 +19,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode(callSuper=false)
+@UniqueValidationGroup({
+    @UniqueValidation(fields = {"codigo"}, label = "Já existe um código com este valor"),
+    @UniqueValidation(fields = {"nome"}, label = "Já existe uma Classificação de Operação com este nome")
+})
 public class ClassificacaoOperacao extends UWEntityBase {
 	
 	@Id

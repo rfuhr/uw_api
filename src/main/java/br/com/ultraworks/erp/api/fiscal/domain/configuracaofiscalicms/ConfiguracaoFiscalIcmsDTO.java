@@ -3,8 +3,6 @@ package br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscalicms;
 import java.math.BigDecimal;
 
 import br.com.ultraworks.erp.api.fiscal.domain.modalidadebasecalculo.validador.ValidaModalidadeBaseCalculo;
-import br.com.ultraworks.erp.api.fiscal.domain.motivodesoneracao.MotivoDesoneracaoDTO;
-import br.com.ultraworks.erp.api.fiscal.domain.situacaotributaria.SituacaoTributariaDTO;
 import lombok.Data;
 
 @Data
@@ -12,12 +10,16 @@ public class ConfiguracaoFiscalIcmsDTO {
 
 	private Long id;
 	private Long configuracaoFiscalId;
-	private SituacaoTributariaDTO situacaoTributaria;
+	private Long situacaoTributariaId;
+	private Long situacaoTributariaCodigo;
+	private String situacaoTributariaNome;
 	
 	@ValidaModalidadeBaseCalculo
 	private String modalidadeBaseCalculo;
 	
-	private MotivoDesoneracaoDTO motivoDesoneracao;
+	private Long motivoDesoneracaoId;
+	private Long motivoDesoneracaoCodigo;
+	private String motivoDesoneracaoNome;
 	private BigDecimal reducaoBaseCalculo;
 	private boolean somaIpiBaseCalculo;
 	private BigDecimal aliquota;
@@ -27,7 +29,9 @@ public class ConfiguracaoFiscalIcmsDTO {
 	@ValidaModalidadeBaseCalculo
 	private String modalidadeBaseCalculoST;
 	
-	private MotivoDesoneracaoDTO motivoDesoneracaoST;
+	private Long motivoDesoneracaoSTId;
+	private Long motivoDesoneracaoSTCodigo;
+	private String motivoDesoneracaoSTNome;
 	private BigDecimal reducaoBaseCalculoST;
 	private boolean somaIpiBaseCalculoST;
 	private BigDecimal aliquotaST;

@@ -2,6 +2,8 @@ package br.com.ultraworks.erp.api.fiscal.domain.situacaotributaria;
 
 import br.com.ultraworks.erp.api.fiscal.domain.tipotributo.TipoTributo;
 import br.com.ultraworks.erp.api.fiscal.domain.tipotributo.TipoTributoConverter;
+import br.com.ultraworks.erp.core.annotation.UniqueValidation;
+import br.com.ultraworks.erp.core.annotation.UniqueValidationGroup;
 import br.com.ultraworks.erp.core.entity.UWEntityBase;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -21,6 +23,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode(callSuper=false)
+@UniqueValidationGroup({
+    @UniqueValidation(fields = {"tipo_tributo","codigo"}, label = "Já existe Situação Tributária com esse código para o Tipo de Tributo")
+})
 public class SituacaoTributaria extends UWEntityBase {
 	
 	@Id
