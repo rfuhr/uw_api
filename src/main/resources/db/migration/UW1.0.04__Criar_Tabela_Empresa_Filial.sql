@@ -23,5 +23,5 @@ create table departamento (
 	date_create		timestamp with time zone 	 not null,
 	user_update     bigint,
 	date_update		timestamp with time zone,
-	CONSTRAINT departamento_empresa__filial_id_foreign FOREIGN KEY (empresa_filial_id) REFERENCES empresa_filial(id)
+	CONSTRAINT departamento_empresa_filial_id_foreign FOREIGN KEY (empresa_filial_id) REFERENCES empresa_filial(id)
 );

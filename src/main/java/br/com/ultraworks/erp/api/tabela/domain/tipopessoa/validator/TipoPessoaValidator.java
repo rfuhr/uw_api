@@ -21,7 +21,7 @@ public class TipoPessoaValidator implements ConstraintValidator<ValidaTipoPessoa
     @Override
     public void initialize(ValidaTipoPessoa constraint) {
         codigosValidos = Arrays.stream(TipoPessoa.values())
-                .map(TipoPessoa::getCodigo)
+                .map(TipoPessoa::getValue)
                 .collect(Collectors.toSet());
     }
 

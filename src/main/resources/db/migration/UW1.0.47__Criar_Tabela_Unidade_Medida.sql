@@ -1,3 +1,15 @@
+create table grandeza (
+	value				char(2) not null constraint grandeza_pkey primary key,
+	name				varchar(250) not null
+);
+
+insert into tipo_telefone values ('A', 'Área');
+insert into tipo_telefone values ('C', 'Comprimento');
+insert into tipo_telefone values ('V', 'Volume');
+insert into tipo_telefone values ('P', 'Peso');
+insert into tipo_telefone values ('E', 'Embalagem');
+
+
 create sequence seq_unidade_medida;
 
 create table unidade_medida (

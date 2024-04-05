@@ -28,7 +28,11 @@ spring:
      baseline-description: Initial version
      sql-migration-prefix: DV
      out-of-order: true
-
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB # Tamanho máximo do arquivo permitido
+      max-request-size: 10MB # Tamanho máximo da requisição permitido
          
 uworks:
    erp:

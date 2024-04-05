@@ -1,0 +1,1 @@
+alter table operacao_interna add column idn_fiscal boolean default false;

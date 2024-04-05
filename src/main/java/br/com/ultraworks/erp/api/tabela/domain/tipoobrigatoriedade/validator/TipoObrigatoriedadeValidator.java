@@ -20,7 +20,7 @@ public class TipoObrigatoriedadeValidator implements ConstraintValidator<ValidaT
 
 	@Override
 	public void initialize(ValidaTipoObrigatoriedade constraint) {
-		codigosValidos = Arrays.stream(TipoObrigatoriedade.values()).map(TipoObrigatoriedade::getCodigo)
+		codigosValidos = Arrays.stream(TipoObrigatoriedade.values()).map(TipoObrigatoriedade::getValue)
 				.collect(Collectors.toSet());
 	}
 

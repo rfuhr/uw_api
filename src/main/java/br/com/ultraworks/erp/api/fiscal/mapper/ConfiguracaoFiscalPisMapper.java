@@ -36,10 +36,10 @@ public class ConfiguracaoFiscalPisMapper extends GenericMapper<ConfiguracaoFisca
 				.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Configuração Fiscal com id " + dto.getConfiguracaoFiscalId())));
 		entity.setSituacaoTributaria(situacaoTributariaRepository.findById(dto.getSituacaoTributaria().getId())
 				.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Situação Tributária com id " + dto.getSituacaoTributaria().getId())));
-		entity.setModalidadeBaseCalculo(ModalidadeBaseCalculo.fromCodigo(dto.getModalidadeBaseCalculo()));
-		entity.setTipoCalculo(TipoCalculo.fromCodigo(dto.getTipoCalculo()));
+		entity.setModalidadeBaseCalculo(ModalidadeBaseCalculo.fromValue(dto.getModalidadeBaseCalculo()));
+		entity.setTipoCalculo(TipoCalculo.fromValue(dto.getTipoCalculo()));
 		entity.setAliquota(dto.getAliquota());
-		entity.setTipoCalculoST(TipoCalculo.fromCodigo(dto.getTipoCalculoST()));
+		entity.setTipoCalculoST(TipoCalculo.fromValue(dto.getTipoCalculoST()));
 		entity.setAliquotaST(dto.getAliquotaST());
 	}
 

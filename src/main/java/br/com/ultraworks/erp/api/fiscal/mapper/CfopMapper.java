@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 import br.com.ultraworks.erp.api.fiscal.domain.cfop.Cfop;
 import br.com.ultraworks.erp.api.fiscal.domain.cfop.CfopDTO;
-import br.com.ultraworks.erp.api.fiscal.domain.tipooperacao.TipoOperacao;
+import br.com.ultraworks.erp.api.fiscal.domain.destinooperacao.DestinoOperacao;
 import br.com.ultraworks.erp.api.fiscal.repository.CfopRepository;
 import br.com.ultraworks.erp.core.mapper.GenericMapper;
 
@@ -22,7 +22,7 @@ public class CfopMapper extends GenericMapper<Cfop, CfopDTO> {
 		entity.setNome(dto.getNome());
 		entity.setDataInicioVigencia(dto.getDataInicioVigencia());
 		entity.setDataFinalVigencia(dto.getDataFinalVigencia());
-		entity.setTipoOperacao(TipoOperacao.fromCodigo(dto.getTipoOperacao()));
+		entity.setDestinoOperacao(DestinoOperacao.fromValue(dto.getDestinoOperacao()));
 	}
 
 	@Override
@@ -32,6 +32,6 @@ public class CfopMapper extends GenericMapper<Cfop, CfopDTO> {
 		dto.setNome(entity.getNome());
 		dto.setDataInicioVigencia(entity.getDataInicioVigencia());
 		dto.setDataFinalVigencia(entity.getDataFinalVigencia());
-		dto.setTipoOperacao(entity.getTipoOperacao().getValue());
+		dto.setDestinoOperacao(entity.getDestinoOperacao().getValue());
 	}	
 }

@@ -1,6 +1,7 @@
 package br.com.ultraworks.erp.api.organograma.domain.empresaFilial;
 
 import br.com.ultraworks.erp.api.organograma.domain.empresa.Empresa;
+import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocal.ParceiroLocal;
 import br.com.ultraworks.erp.core.entity.UWEntityBase;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -30,4 +31,8 @@ public class EmpresaFilial extends UWEntityBase {
 	
 	private String nome;
 	private String sigla;
+	
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "parceiro_local_id")
+	private ParceiroLocal parceiroLocal;
 }

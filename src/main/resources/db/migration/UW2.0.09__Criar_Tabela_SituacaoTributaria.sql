@@ -1,3 +1,14 @@
+create table tipo_tributo (
+	value				char(15) not null constraint tipo_tributo_pkey primary key,
+	name				varchar(250) not null
+);
+
+insert into tipo_tributo values ('ICMS', 'ICMS');
+insert into tipo_tributo values ('PIS', 'PIS');
+insert into tipo_tributo values ('COFINS', 'COFINS');
+insert into tipo_tributo values ('IPI', 'IPI');
+
+
 create sequence seq_situacao_tributaria start with 1;
 
 create table situacao_tributaria (

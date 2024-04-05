@@ -29,7 +29,7 @@ public class ParceiroLocalTelefoneMapper extends GenericMapper<ParceiroLocalTele
 					.orElseThrow(() -> new RegisterNotFoundException(
 							"Não encontrado local de parceiro com id " + dto.getParceiroLocalId())));
 		}
-		entity.setTipoTelefone(TipoTelefone.fromCodigo(dto.getTipoTelefone()));
+		entity.setTipoTelefone(TipoTelefone.fromValue(dto.getTipoTelefone()));
 		entity.setIdentificacao(dto.getIdentificacao());
 		entity.setNumero(dto.getNumero());
 
@@ -39,7 +39,7 @@ public class ParceiroLocalTelefoneMapper extends GenericMapper<ParceiroLocalTele
 	protected void setValuesToDto(ParceiroLocalTelefone entity, ParceiroLocalTelefoneDTO dto) {
 		dto.setId(entity.getId());
 		dto.setParceiroLocalId(entity.getParceiroLocal().getId());
-		dto.setTipoTelefone(entity.getTipoTelefone().getCodigo());
+		dto.setTipoTelefone(entity.getTipoTelefone().getValue());
 		dto.setIdentificacao(entity.getIdentificacao());
 		dto.setNumero(entity.getNumero());
 	}

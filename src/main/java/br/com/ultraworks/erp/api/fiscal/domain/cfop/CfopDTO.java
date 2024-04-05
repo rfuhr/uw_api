@@ -2,7 +2,7 @@ package br.com.ultraworks.erp.api.fiscal.domain.cfop;
 
 import java.time.LocalDate;
 
-import br.com.ultraworks.erp.api.fiscal.domain.tipooperacao.validator.ValidaTipoOperacao;
+import br.com.ultraworks.erp.api.fiscal.domain.destinooperacao.validator.ValidaDestinoOperacao;
 import br.com.ultraworks.erp.core.annotation.FriendlyName;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -22,8 +22,8 @@ public class CfopDTO {
 	private String nome;
 	private int codigo;
 	
-	@ValidaTipoOperacao
-	private String tipoOperacao;
+	@ValidaDestinoOperacao
+	private String destinoOperacao;
 	
 	private LocalDate dataInicioVigencia;
 	private LocalDate dataFinalVigencia;

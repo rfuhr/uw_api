@@ -11,14 +11,14 @@ public class TipoObrigatoriedadeConverter implements AttributeConverter<TipoObri
         if (tipoObrigatoriedade == null) {
             return null;
         }
-        return tipoObrigatoriedade.getCodigo();
+        return tipoObrigatoriedade.getValue();
     }
 
     @Override
-    public TipoObrigatoriedade convertToEntityAttribute(String codigo) {
-        if (codigo == null) {
+    public TipoObrigatoriedade convertToEntityAttribute(String value) {
+        if (value == null) {
             return null;
         }
-        return TipoObrigatoriedade.fromCodigo(codigo);
+        return TipoObrigatoriedade.fromValue(value);
     }
 }

@@ -9,12 +9,12 @@ import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscalcofins.Configur
 import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscalicms.ConfiguracaoFiscalIcms;
 import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscalipi.ConfiguracaoFiscalIpi;
 import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscalpis.ConfiguracaoFiscalPis;
-import br.com.ultraworks.erp.api.fiscal.domain.entradasaida.EntradaSaida;
-import br.com.ultraworks.erp.api.fiscal.domain.entradasaida.EntradaSaidaConverter;
 import br.com.ultraworks.erp.api.fiscal.domain.grupotributacao.GrupoTributacao;
 import br.com.ultraworks.erp.api.fiscal.domain.ncm.Ncm;
 import br.com.ultraworks.erp.api.fiscal.domain.origem.Origem;
 import br.com.ultraworks.erp.api.fiscal.domain.regimetributario.RegimeTributario;
+import br.com.ultraworks.erp.api.tabela.domain.indicadoroperacao.IndicadorOperacao;
+import br.com.ultraworks.erp.api.tabela.domain.indicadoroperacao.IndicadorOperacaoConverter;
 import br.com.ultraworks.erp.api.tabela.domain.operacaointerna.OperacaoInterna;
 import br.com.ultraworks.erp.api.tabela.domain.pais.Pais;
 import br.com.ultraworks.erp.api.tabela.domain.uf.Uf;
@@ -59,9 +59,9 @@ public class ConfiguracaoFiscal extends UWEntityBase {
 	@JoinColumn(name = "uf_destino_id")
 	private Uf ufDestino;
 	
-	@Convert(converter = EntradaSaidaConverter.class)
+	@Convert(converter = IndicadorOperacaoConverter.class)
 	@Column(name = "entrada_saida")
-	private EntradaSaida entradaSaida;
+	private IndicadorOperacao entradaSaida;
 	
 	@Column(name = "data_inicio_vigencia")
 	private LocalDate dataInicioVigencia;

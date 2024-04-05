@@ -1,3 +1,15 @@
+create table tipo_endereco (
+	value				char(3) not null constraint tipo_endereco_pkey primary key,
+	name				varchar(250) not null
+);
+
+insert into tipo_endereco values ('COM', 'Comercial');
+insert into tipo_endereco values ('ENT', 'Entrada');
+insert into tipo_endereco values ('FIS', 'Físcal');
+insert into tipo_endereco values ('RES', 'Residencial');
+
+
+
 create sequence seq_parceiro_local_endereco;
 
 create table parceiro_local_endereco (

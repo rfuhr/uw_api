@@ -3,8 +3,8 @@ package br.com.ultraworks.erp.api.fiscal.domain.cfop;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-import br.com.ultraworks.erp.api.fiscal.domain.tipooperacao.TipoOperacao;
-import br.com.ultraworks.erp.api.fiscal.domain.tipooperacao.TipoOperacaoConverter;
+import br.com.ultraworks.erp.api.fiscal.domain.destinooperacao.DestinoOperacao;
+import br.com.ultraworks.erp.api.fiscal.domain.destinooperacao.DestinoOperacaoConverter;
 import br.com.ultraworks.erp.core.annotation.UniqueValidation;
 import br.com.ultraworks.erp.core.annotation.UniqueValidationGroup;
 import br.com.ultraworks.erp.core.entity.UWEntityBase;
@@ -42,9 +42,9 @@ public class Cfop extends UWEntityBase implements Serializable{
 	private int codigo;
 	private String nome;
 	
-	@Convert(converter = TipoOperacaoConverter.class)
-	@Column(name = "tipo_operacao")
-	private TipoOperacao tipoOperacao;
+	@Convert(converter = DestinoOperacaoConverter.class)
+	@Column(name = "destino_operacao")
+	private DestinoOperacao destinoOperacao;
 
 	@Column(name = "data_inicio_vigencia")
 	private LocalDate dataInicioVigencia;

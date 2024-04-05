@@ -56,34 +56,29 @@ public class ParceiroLocalService extends GenericService<ParceiroLocal, Long, Pa
 		List<ParceiroLocal> listRegistros = new ArrayList<>();
 
 		repository.findByParceiroId(id).forEach(parceiroLocal -> {
-			parceiroLocal.getDadosPessoaFisica()
-					.addAll(parceiroFisicaService.getAllByParceiroLocal(parceiroLocal.getId()));
-			parceiroLocal.getDadosPessoaJuridica()
-					.addAll(parceiroJuridicaService.getAllByParceiroLocal(parceiroLocal.getId()));
-			parceiroLocal.getEnderecos()
-					.addAll(parceiroLocalEnderecoService.getAllByParceiroLocal(parceiroLocal.getId()));
-			parceiroLocal.getTelefones()
-					.addAll(parceiroLocalTelefoneService.getAllByParceiroLocal(parceiroLocal.getId()));
-			parceiroLocal.getEmails().addAll(parceiroLocalEmailService.getAllByParceiroLocal(parceiroLocal.getId()));
+			getDadosListasDependentes(parceiroLocal);
 			listRegistros.add(parceiroLocal);
 		});
 		return listRegistros;
+	}
+
+	private void getDadosListasDependentes(ParceiroLocal parceiroLocal) {
+		parceiroLocal.getDadosPessoaFisica()
+				.addAll(parceiroFisicaService.getAllByParceiroLocal(parceiroLocal.getId()));
+		parceiroLocal.getDadosPessoaJuridica()
+				.addAll(parceiroJuridicaService.getAllByParceiroLocal(parceiroLocal.getId()));
+		parceiroLocal.getEnderecos()
+				.addAll(parceiroLocalEnderecoService.getAllByParceiroLocal(parceiroLocal.getId()));
+		parceiroLocal.getTelefones()
+				.addAll(parceiroLocalTelefoneService.getAllByParceiroLocal(parceiroLocal.getId()));
+		parceiroLocal.getEmails().addAll(parceiroLocalEmailService.getAllByParceiroLocal(parceiroLocal.getId()));
 	}
 
 	@Override
 	public Optional<ParceiroLocal> getById(Long id) {
 		Optional<ParceiroLocal> parceiroLocal = repository.findById(id);
 		if (parceiroLocal.isPresent()) {
-			parceiroLocal.get().getDadosPessoaFisica()
-					.addAll(parceiroFisicaService.getAllByParceiroLocal(parceiroLocal.get().getId()));
-			parceiroLocal.get().getDadosPessoaJuridica()
-					.addAll(parceiroJuridicaService.getAllByParceiroLocal(parceiroLocal.get().getId()));
-			parceiroLocal.get().getEnderecos()
-					.addAll(parceiroLocalEnderecoService.getAllByParceiroLocal(parceiroLocal.get().getId()));
-			parceiroLocal.get().getTelefones()
-					.addAll(parceiroLocalTelefoneService.getAllByParceiroLocal(parceiroLocal.get().getId()));
-			parceiroLocal.get().getEmails()
-					.addAll(parceiroLocalEmailService.getAllByParceiroLocal(parceiroLocal.get().getId()));
+			getDadosListasDependentes(parceiroLocal.get());
 		}
 		return parceiroLocal;
 	}
@@ -236,4 +231,10 @@ public class ParceiroLocalService extends GenericService<ParceiroLocal, Long, Pa
 		repository.deleteById(id);
 	}
 
+	public ParceiroLocal findByCpfCnpj(String cpfCnpj) {
+		ParceiroLocal parceiroLocal = repository.findByCpfCnpj(cpfCnpj);
+		getDadosListasDependentes(parceiroLocal);
+		return parceiroLocal;
+	}
+	
 }

@@ -6,8 +6,8 @@ import java.util.List;
 import br.com.ultraworks.erp.core.dto.EnumResponse;
 
 public enum GrandezaMedida {
-	AREA("Área", "Área"), COMPRIMENTO("Comprimento", "Comprimento"), VOLUME("Volume", "Volume"), PESO("Peso", "Peso"),
-	EMBALAGEM("Embalagem", "Embalagem"), CONSUMO("Consumo", "Consumo");
+	AREA("A", "Área"), COMPRIMENTO("C", "Comprimento"), VOLUME("V", "Volume"), PESO("P", "Peso"),
+	EMBALAGEM("E", "Embalagem");
 
 	private String value;
 	private String name;

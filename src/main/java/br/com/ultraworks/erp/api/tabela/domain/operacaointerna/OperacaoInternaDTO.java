@@ -1,6 +1,7 @@
 package br.com.ultraworks.erp.api.tabela.domain.operacaointerna;
 
-import br.com.ultraworks.erp.api.tabela.domain.grupooperacaointerna.GrupoOperacaoInternaDTO;
+import br.com.ultraworks.erp.api.tabela.domain.naturezaOperacao.NaturezaOperacaoDTO;
+import br.com.ultraworks.erp.api.tabela.domain.operacaointernafiscal.OperacaoInternaFiscalDTO;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -16,5 +17,8 @@ public class OperacaoInternaDTO {
 	private String nome;
 	@NotNull
 	private String sigla;	
-	private GrupoOperacaoInternaDTO grupoOperacaoInterna;
+	private NaturezaOperacaoDTO naturezaOperacao;
+	private Long naturezaOperacaoId;
+	private boolean caracteristicaFiscal;
+	private OperacaoInternaFiscalDTO operacaoInternaFiscal;
 }

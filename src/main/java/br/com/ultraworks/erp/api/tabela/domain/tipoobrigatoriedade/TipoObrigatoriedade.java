@@ -1,23 +1,29 @@
 package br.com.ultraworks.erp.api.tabela.domain.tipoobrigatoriedade;
 
 public enum TipoObrigatoriedade {
-    OBRIGATORIO("S"),
-    OPCIONAL("O"),
-    NAO_INFORMA("N");
+    OBRIGATORIO("S", "Obrigatório"),
+    OPCIONAL("O", "Opcional"),
+    NAO_INFORMA("N", "Não informa");
 
-    private String codigo;
+    private String value;
+    private String name;
 
-    TipoObrigatoriedade(String codigo) {
-        this.codigo = codigo;
+    TipoObrigatoriedade(String value, String name) {
+        this.value = value;
+        this.name = name;
     }
 
-    public String getCodigo() {
-        return codigo;
+    public String getValue() {
+        return value;
     }
-
-    public static TipoObrigatoriedade fromCodigo(String codigo) {
+    
+    public String getName() {
+    	return name;
+    }
+    
+    public static TipoObrigatoriedade fromValue(String codigo) {
         for (TipoObrigatoriedade tipo : TipoObrigatoriedade.values()) {
-            if (tipo.getCodigo().equalsIgnoreCase(codigo)) {
+            if (tipo.getValue().equalsIgnoreCase(codigo)) {
                 return tipo;
             }
         }

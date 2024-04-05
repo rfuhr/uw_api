@@ -1,3 +1,12 @@
+create table tipo_pessoa (
+	value				char(3) not null constraint tipo_pessoa_pkey primary key,
+	name				varchar(250) not null
+);
+
+insert into tipo_pessoa values ('F', 'Pessoa Física');
+insert into tipo_pessoa values ('J', 'Pessoa Jurídica');
+insert into tipo_pessoa values ('EX', 'Pessoa Exterior');
+
 create sequence seq_parceiro;
 
 create table parceiro (

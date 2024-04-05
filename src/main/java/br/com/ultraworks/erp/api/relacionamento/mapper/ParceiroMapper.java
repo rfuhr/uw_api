@@ -27,7 +27,7 @@ public class ParceiroMapper extends GenericMapper<Parceiro, ParceiroDTO> {
 		entity.setId(dto.getId());
 		entity.setNomeRazaoSocial(dto.getNomeRazaoSocial());
 		entity.setNomeFantasia(dto.getNomeFantasia());
-		entity.setTipoPessoa(TipoPessoa.fromCodigo(dto.getTipoPessoa()));
+		entity.setTipoPessoa(TipoPessoa.fromValue(dto.getTipoPessoa()));
 		entity.setRaizCnpjCpf(dto.getRaizCnpjCpf());
 		
 		if (dto.getLocais() != null) {
@@ -47,7 +47,7 @@ public class ParceiroMapper extends GenericMapper<Parceiro, ParceiroDTO> {
 		dto.setId(entity.getId());
 		dto.setNomeRazaoSocial(entity.getNomeRazaoSocial());
 		dto.setNomeFantasia(entity.getNomeFantasia());
-		dto.setTipoPessoa(entity.getTipoPessoa().getCodigo());
+		dto.setTipoPessoa(entity.getTipoPessoa().getValue());
 		dto.setRaizCnpjCpf(entity.getRaizCnpjCpf());
 		dto.setLocais(new ArrayList<>());
 		

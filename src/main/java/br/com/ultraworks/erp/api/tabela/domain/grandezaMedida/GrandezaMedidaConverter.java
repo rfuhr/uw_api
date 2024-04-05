@@ -15,10 +15,10 @@ public class GrandezaMedidaConverter implements AttributeConverter<GrandezaMedid
     }
 
     @Override
-    public GrandezaMedida convertToEntityAttribute(String codigo) {
-        if (codigo == null) {
+    public GrandezaMedida convertToEntityAttribute(String value) {
+        if (value == null) {
             return null;
         }
-        return GrandezaMedida.fromValue(codigo);
+        return GrandezaMedida.fromValue(value);
     }
 }

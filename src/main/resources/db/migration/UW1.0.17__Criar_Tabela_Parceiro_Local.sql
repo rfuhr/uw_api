@@ -9,7 +9,5 @@ create table parceiro_local (
 	date_create			timestamp with time zone 	 not null,
 	user_update     	bigint,
 	date_update			timestamp with time zone,
-    CONSTRAINT parceiro_local_cidade_id_foreign FOREIGN KEY (cidade_id) REFERENCES cidade (id),
-    CONSTRAINT parceiro_local_pais_id_foreign FOREIGN KEY (pais_id) REFERENCES pais (id),
     CONSTRAINT parceiro_local_parceiro_id_foreign FOREIGN KEY (parceiro_id) REFERENCES parceiro (id)
 );

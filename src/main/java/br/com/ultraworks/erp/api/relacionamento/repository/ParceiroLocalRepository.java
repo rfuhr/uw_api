@@ -12,4 +12,6 @@ import br.com.ultraworks.erp.core.UWRepository;
 public interface ParceiroLocalRepository extends UWRepository<ParceiroLocal, Long> {
 	
 	List<ParceiroLocal> findByParceiroId(Long parceiroId);
+	
+	ParceiroLocal findByCpfCnpj(String cpfCnpj);
 }

@@ -81,6 +81,18 @@
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
 		</dependency>
+
+		<dependency>
+			<groupId>br.com.swconsultoria</groupId>
+			<artifactId>java-nfe</artifactId>
+			<version>4.00.28</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>br.com.swconsultoria</groupId>
+			<artifactId>java-danfe</artifactId>
+			<version>1.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>

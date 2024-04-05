@@ -25,12 +25,10 @@ public class ParametroFinanceiroMapper extends GenericMapper<ParametroFinanceiro
 	private OperacaoFinanceiraRepository operacaoFinanceiraRepository;
 	private EmpresaRepository empresaRepository;
 
-	public ParametroFinanceiroMapper(ParametroFinanceiroRepository repository,
-			EmpresaRepository empresaRepository,
+	public ParametroFinanceiroMapper(ParametroFinanceiroRepository repository, EmpresaRepository empresaRepository,
 			TipoTituloRepository tipoTituloRepository,
 			CaracteristicaMovimentoFinanceiroRepository caracteristicaMovimentoFinanceiroRepository,
-			CarteiraFinanceiraRepository carteiraRepository,
-			FatoGeradorRepository fatoGeradorRepository,
+			CarteiraFinanceiraRepository carteiraRepository, FatoGeradorRepository fatoGeradorRepository,
 			OperacaoFinanceiraRepository operacaoFinanceiraRepository) {
 		super(repository, ParametroFinanceiro::new, ParametroFinanceiroDTO::new);
 		this.empresaRepository = empresaRepository;
@@ -44,30 +42,23 @@ public class ParametroFinanceiroMapper extends GenericMapper<ParametroFinanceiro
 	@Override
 	protected void setValuesToEntity(ParametroFinanceiroDTO dto, ParametroFinanceiro entity) {
 		entity.setId(dto.getId());
-		entity.setEmpresa(empresaRepository.findById(dto.getEmpresaId())
-				.orElseThrow(() -> new RegisterNotFoundException(
-						"Não encontrado empresa com id " + dto.getEmpresaId())));
-		entity.setTipoTitulo(
-				tipoTituloRepository.findById(dto.getTipoTituloId()).orElseThrow(
-						() -> new RegisterNotFoundException("Não encontrado tipo título com id "
-								+ dto.getTipoTituloId())));
-		entity.setCaracteristicaMovimentoFinanceiro(
-				caracteristicaMovimentoFinanceiroRepository.findById(dto.getCaracteristicaMovimentoFinanceiroId()).orElseThrow(
+		entity.setEmpresa(empresaRepository.findById(dto.getEmpresaId()).orElseThrow(
+				() -> new RegisterNotFoundException("Não encontrado empresa com id " + dto.getEmpresaId())));
+		entity.setTipoTitulo(tipoTituloRepository.findById(dto.getTipoTituloId()).orElseThrow(
+				() -> new RegisterNotFoundException("Não encontrado tipo título com id " + dto.getTipoTituloId())));
+		entity.setCaracteristicaMovimentoFinanceiro(caracteristicaMovimentoFinanceiroRepository
+				.findById(dto.getCaracteristicaMovimentoFinanceiroId()).orElseThrow(
 						() -> new RegisterNotFoundException("Não encontrado caracteristica movimento financeiro com id "
 								+ dto.getCaracteristicaMovimentoFinanceiroId())));
-		entity.setCarteiraFinanceira(
-				carteiraRepository.findById(dto.getCarteiraFinanceiraId()).orElseThrow(
-						() -> new RegisterNotFoundException("Não encontrado carteira financeira com id "
-								+ dto.getCarteiraFinanceiraId())));
-		entity.setFatoGerador(
-				fatoGeradorRepository.findById(dto.getFatoGeradorId()).orElseThrow(
-						() -> new RegisterNotFoundException("Não encontrado fato gerador com id "
-								+ dto.getFatoGeradorId())));
+		entity.setCarteiraFinanceira(carteiraRepository.findById(dto.getCarteiraFinanceiraId())
+				.orElseThrow(() -> new RegisterNotFoundException(
+						"Não encontrado carteira financeira com id " + dto.getCarteiraFinanceiraId())));
+		entity.setFatoGerador(fatoGeradorRepository.findById(dto.getFatoGeradorId()).orElseThrow(
+				() -> new RegisterNotFoundException("Não encontrado fato gerador com id " + dto.getFatoGeradorId())));
 		entity.setIndicadorDC(IndicadorDC.valueOf(dto.getIndicadorDC()));
-		entity.setOperacaoFinanceira(
-				operacaoFinanceiraRepository.findById(dto.getOperacaoFinanceiraId()).orElseThrow(
-						() -> new RegisterNotFoundException("Não encontrado operação financeira com id "
-								+ dto.getOperacaoFinanceiraId())));
+		entity.setOperacaoFinanceira(operacaoFinanceiraRepository.findById(dto.getOperacaoFinanceiraId())
+				.orElseThrow(() -> new RegisterNotFoundException(
+						"Não encontrado operação financeira com id " + dto.getOperacaoFinanceiraId())));
 
 	}
 
@@ -79,7 +70,7 @@ public class ParametroFinanceiroMapper extends GenericMapper<ParametroFinanceiro
 		dto.setCaracteristicaMovimentoFinanceiroId(entity.getCaracteristicaMovimentoFinanceiro().getId());
 		dto.setCarteiraFinanceiraId(entity.getCarteiraFinanceira().getId());
 		dto.setFatoGeradorId(entity.getFatoGerador().getId());
-		dto.setIndicadorDC(entity.getIndicadorDC().getCodigo());
+		dto.setIndicadorDC(entity.getIndicadorDC().getValue());
 		dto.setOperacaoFinanceiraId(entity.getOperacaoFinanceira().getId());
 	}
 }

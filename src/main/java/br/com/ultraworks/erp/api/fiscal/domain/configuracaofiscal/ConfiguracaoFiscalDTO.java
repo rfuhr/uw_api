@@ -6,7 +6,6 @@ import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscalcofins.Configur
 import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscalicms.ConfiguracaoFiscalIcmsDTO;
 import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscalipi.ConfiguracaoFiscalIpiDTO;
 import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscalpis.ConfiguracaoFiscalPisDTO;
-import br.com.ultraworks.erp.api.fiscal.domain.entradasaida.validador.ValidaEntradaSaida;
 import jakarta.validation.Valid;
 import lombok.Data;
 
@@ -21,7 +20,6 @@ public class ConfiguracaoFiscalDTO {
 	private Long ufDestinoId;
 	private String ufDestinoNome;
 	
-	@ValidaEntradaSaida
 	private String entradaSaida;
 	
 	private LocalDate dataInicioVigencia;

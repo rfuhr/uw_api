@@ -11,14 +11,14 @@ public class TipoEnderecoConverter implements AttributeConverter<TipoEndereco, S
         if (tipoEndereco == null) {
             return null;
         }
-        return tipoEndereco.getCodigo();
+        return tipoEndereco.getValue();
     }
 
     @Override
-    public TipoEndereco convertToEntityAttribute(String codigo) {
-        if (codigo == null) {
+    public TipoEndereco convertToEntityAttribute(String value) {
+        if (value == null) {
             return null;
         }
-        return TipoEndereco.fromCodigo(codigo);
+        return TipoEndereco.fromValue(value);
     }
 }

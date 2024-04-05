@@ -32,7 +32,7 @@ public class ParceiroLocalEnderecoMapper extends GenericMapper<ParceiroLocalEnde
 					.orElseThrow(() -> new RegisterNotFoundException(
 							"Não encontrado local de parceiro com id " + dto.getParceiroLocalId())));
 		}
-		entity.setTipoEndereco(TipoEndereco.fromCodigo(dto.getTipoEndereco()));
+		entity.setTipoEndereco(TipoEndereco.fromValue(dto.getTipoEndereco()));
 		entity.setIdentificacao(dto.getIdentificacao());
 		entity.setCep(dto.getCep());
 		entity.setCidade(cidadeRepository.findById(dto.getCidadeId())
@@ -48,7 +48,7 @@ public class ParceiroLocalEnderecoMapper extends GenericMapper<ParceiroLocalEnde
 	protected void setValuesToDto(ParceiroLocalEndereco entity, ParceiroLocalEnderecoDTO dto) {
 		dto.setId(entity.getId());
 		dto.setParceiroLocalId(entity.getParceiroLocal().getId());
-		dto.setTipoEndereco(entity.getTipoEndereco().getCodigo());
+		dto.setTipoEndereco(entity.getTipoEndereco().getValue());
 		dto.setIdentificacao(entity.getIdentificacao());
 		dto.setCep(entity.getCep());
 		dto.setCidadeId(entity.getCidade().getId());

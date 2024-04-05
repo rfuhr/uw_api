@@ -42,10 +42,10 @@ public class ConfiguracaoFiscalIpiMapper extends GenericMapper<ConfiguracaoFisca
 				.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Configuração Fiscal com id " + dto.getConfiguracaoFiscalId())));
 		entity.setSituacaoTributaria(situacaoTributariaRepository.findById(dto.getSituacaoTributaria().getId())
 				.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Situação Tributária com id " + dto.getSituacaoTributaria().getId())));
-		entity.setModalidadeBaseCalculo(ModalidadeBaseCalculo.fromCodigo(dto.getModalidadeBaseCalculo()));
+		entity.setModalidadeBaseCalculo(ModalidadeBaseCalculo.fromValue(dto.getModalidadeBaseCalculo()));
 		entity.setEnquadramento(enquadramentoRepository.findById(dto.getEnquadramento().getId())
 				.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Enquadramento com id " + dto.getEnquadramento().getId())));
-		entity.setTipoCalculo(TipoCalculo.fromCodigo(dto.getTipoCalculo()));
+		entity.setTipoCalculo(TipoCalculo.fromValue(dto.getTipoCalculo()));
 		entity.setAliquota(dto.getAliquota());
 		entity.setCodigoSelo(dto.getCodigoSelo());
 		entity.setQuantidadeSelo(dto.getQuantidadeSelo());

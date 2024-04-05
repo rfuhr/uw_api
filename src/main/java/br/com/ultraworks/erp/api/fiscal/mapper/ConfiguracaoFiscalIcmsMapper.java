@@ -41,7 +41,7 @@ public class ConfiguracaoFiscalIcmsMapper extends GenericMapper<ConfiguracaoFisc
 				.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Configuração Fiscal com id " + dto.getConfiguracaoFiscalId())));
 		entity.setSituacaoTributaria(situacaoTributariaRepository.findById(dto.getSituacaoTributaria().getId())
 				.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Situação Tributária com id " + dto.getSituacaoTributaria().getId())));
-		entity.setModalidadeBaseCalculo(ModalidadeBaseCalculo.fromCodigo(dto.getModalidadeBaseCalculo()));
+		entity.setModalidadeBaseCalculo(ModalidadeBaseCalculo.fromValue(dto.getModalidadeBaseCalculo()));
 		if (dto.getMotivoDesoneracao() != null) {
 			entity.setMotivoDesoneracao(motivoDesoneracaoRepository.findById(dto.getMotivoDesoneracao().getId())
 					.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Motivo Desoneração com id " + dto.getMotivoDesoneracao().getId())));
@@ -52,7 +52,7 @@ public class ConfiguracaoFiscalIcmsMapper extends GenericMapper<ConfiguracaoFisc
 		entity.setAliquotaCredito(dto.getAliquotaCredito());
 		entity.setDiferencialAliquota(dto.getDiferencialAliquota());
 		if (dto.getModalidadeBaseCalculoST() != null) {
-			entity.setModalidadeBaseCalculoST(ModalidadeBaseCalculo.fromCodigo(dto.getModalidadeBaseCalculoST()));
+			entity.setModalidadeBaseCalculoST(ModalidadeBaseCalculo.fromValue(dto.getModalidadeBaseCalculoST()));
 		}
 		if (dto.getMotivoDesoneracaoST() != null) {
 			entity.setMotivoDesoneracaoST(motivoDesoneracaoRepository.findById(dto.getMotivoDesoneracaoST().getId())

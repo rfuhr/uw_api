@@ -15,10 +15,10 @@ public class ModalidadeBaseCalculoConverter implements AttributeConverter<Modali
     }
 
     @Override
-    public ModalidadeBaseCalculo convertToEntityAttribute(String codigo) {
-        if (codigo == null) {
+    public ModalidadeBaseCalculo convertToEntityAttribute(String value) {
+        if (value == null) {
             return null;
         }
-        return ModalidadeBaseCalculo.fromCodigo(codigo);
+        return ModalidadeBaseCalculo.fromValue(value);
     }
 }

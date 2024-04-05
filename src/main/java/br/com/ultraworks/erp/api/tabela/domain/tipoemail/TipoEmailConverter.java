@@ -15,10 +15,10 @@ public class TipoEmailConverter implements AttributeConverter<TipoEmail, String>
     }
 
     @Override
-    public TipoEmail convertToEntityAttribute(String codigo) {
-        if (codigo == null) {
+    public TipoEmail convertToEntityAttribute(String value) {
+        if (value == null) {
             return null;
         }
-        return TipoEmail.fromCodigo(codigo);
+        return TipoEmail.fromValue(value);
     }
 }

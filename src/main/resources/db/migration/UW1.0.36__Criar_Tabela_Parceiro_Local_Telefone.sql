@@ -1,3 +1,14 @@
+create table tipo_telefone (
+	value				char(3) not null constraint tipo_telefone_pkey primary key,
+	name				varchar(250) not null
+);
+
+insert into tipo_telefone values ('COM', 'Comercial');
+insert into tipo_telefone values ('REC', 'Recado');
+insert into tipo_telefone values ('RES', 'Residencial');
+insert into tipo_telefone values ('ZAP', 'WhatsApp');
+
+
 create sequence seq_parceiro_local_telefone;
 
 create table parceiro_local_telefone (

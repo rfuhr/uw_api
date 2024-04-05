@@ -8,6 +8,6 @@ create table parceiro_local_tipo_parceiro (
 	date_create			timestamp with time zone 	 not null,
 	user_update     	bigint,
 	date_update			timestamp with time zone,
-    CONSTRAINT parceiro_local_parceiro_id_foreign FOREIGN KEY (parceiro_id) REFERENCES parceiro (id),
+    CONSTRAINT parceiro_local_parceiro_local_id_foreign FOREIGN KEY (parceiro_local_id) REFERENCES parceiro_local (id),
     CONSTRAINT parceiro_local_tipo_parceiro_id_foreign FOREIGN KEY (tipo_parceiro_id) REFERENCES tipo_parceiro (id)
 );

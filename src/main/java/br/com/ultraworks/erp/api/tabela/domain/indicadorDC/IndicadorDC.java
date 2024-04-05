@@ -1,26 +1,32 @@
 package br.com.ultraworks.erp.api.tabela.domain.indicadorDC;
 
 public enum IndicadorDC {
-    DEBITO("D"),
-    CRÉDITO("C");
+    DEBITO("D", "Débito"),
+    CRÉDITO("C", "Crédito");
 
-    private String codigo;
+    private String value;
+    private String name;
 
-    IndicadorDC(String codigo) {
-        this.codigo = codigo;
+    IndicadorDC(String value, String name) {
+        this.value = value;
+        this.name = name;
     }
 
-    public String getCodigo() {
-        return codigo;
+    public String getValue() {
+        return value;
+    }
+    
+    public String getName() {
+    	return name;
     }
 
-    public static IndicadorDC fromCodigo(String codigo) {
+    public static IndicadorDC fromValue(String value) {
         for (IndicadorDC tipo : IndicadorDC.values()) {
-            if (tipo.getCodigo().equalsIgnoreCase(codigo)) {
+            if (tipo.getValue().equalsIgnoreCase(value)) {
                 return tipo;
             }
         }
-        return null; // Ou lançar uma exceção se preferir
+        return null; 
     }
 }
 

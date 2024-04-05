@@ -15,10 +15,10 @@ public class TipoTributoConverter implements AttributeConverter<TipoTributo, Str
     }
 
     @Override
-    public TipoTributo convertToEntityAttribute(String codigo) {
-        if (codigo == null) {
+    public TipoTributo convertToEntityAttribute(String value) {
+        if (value == null) {
             return null;
         }
-        return TipoTributo.fromCodigo(codigo);
+        return TipoTributo.fromValue(value);
     }
 }

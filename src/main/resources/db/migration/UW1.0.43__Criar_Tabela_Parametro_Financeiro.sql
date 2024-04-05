@@ -1,3 +1,12 @@
+create table indicador_dc (
+	value				char(1) not null constraint indicador_dc_pkey primary key,
+	name				varchar(250) not null
+);
+
+insert into indicador_dc values ('D', 'Débito');
+insert into indicador_dc values ('C', 'Crédito');
+
+
 create sequence seq_parametro_financeiro;
 
 create table parametro_financeiro (

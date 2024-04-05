@@ -11,14 +11,14 @@ public class TipoTelefoneConverter implements AttributeConverter<TipoTelefone, S
 		if (tipoTelefone == null) {
 			return null;
 		}
-		return tipoTelefone.getCodigo();
+		return tipoTelefone.getValue();
 	}
 
 	@Override
-	public TipoTelefone convertToEntityAttribute(String codigo) {
-		if (codigo == null) {
+	public TipoTelefone convertToEntityAttribute(String value) {
+		if (value == null) {
 			return null;
 		}
-		return TipoTelefone.fromCodigo(codigo);
+		return TipoTelefone.fromValue(value);
 	}
 }

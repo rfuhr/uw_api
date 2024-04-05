@@ -11,14 +11,14 @@ public class TipoPessoaConverter implements AttributeConverter<TipoPessoa, Strin
         if (tipoPessoa == null) {
             return null;
         }
-        return tipoPessoa.getCodigo();
+        return tipoPessoa.getValue();
     }
 
     @Override
-    public TipoPessoa convertToEntityAttribute(String codigo) {
-        if (codigo == null) {
+    public TipoPessoa convertToEntityAttribute(String value) {
+        if (value == null) {
             return null;
         }
-        return TipoPessoa.fromCodigo(codigo);
+        return TipoPessoa.fromValue(value);
     }
 }

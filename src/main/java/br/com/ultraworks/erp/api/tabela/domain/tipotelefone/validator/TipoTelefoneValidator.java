@@ -22,7 +22,7 @@ public class TipoTelefoneValidator implements ConstraintValidator<ValidaTipoTele
     @Override
     public void initialize(ValidaTipoTelefone constraint) {
         codigosValidos = Arrays.stream(TipoTelefone.values())
-                .map(TipoTelefone::getCodigo)
+                .map(TipoTelefone::getValue)
                 .collect(Collectors.toSet());
     }
 

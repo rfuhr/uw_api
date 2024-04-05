@@ -8,6 +8,7 @@ create table modulo (
 	path_base       varchar(30)  not null	
 );
 
-insert into modulo (id,  nome, sigla, icone, path_base) values (nextval('seq_modulo'), 'Administrativo', 'ADM', '', 'admin');
-insert into modulo (id,  nome, sigla, icone, path_base) values (nextval('seq_modulo'), 'Financeiro', 'FIN', '', 'financeiro');
-insert into modulo (id,  nome, sigla, icone, path_base) values (nextval('seq_modulo'), 'Estoque', 'EST', '', 'estoque');
+insert into modulo (id,  nome, sigla, icone, path_base) values (nextval('seq_modulo'), 'Administrativo', 'ADM', 'pi-database', 'admin');
+insert into modulo (id,  nome, sigla, icone, path_base) values (nextval('seq_modulo'), 'Financeiro', 'FIN', 'pi-dollar', 'financeiro');
+insert into modulo (id,  nome, sigla, icone, path_base) values (nextval('seq_modulo'), 'Estoque', 'EST', 'pi-box', 'estoque');
+insert into modulo (id,  nome, sigla, icone, path_base) values (nextval('seq_modulo'), 'Fiscal', 'FIS', 'pi-bullseye', 'fiscal');

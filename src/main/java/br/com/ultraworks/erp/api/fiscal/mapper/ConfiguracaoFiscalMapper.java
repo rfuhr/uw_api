@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import br.com.ultraworks.erp.api.estoque.repository.ItemRepository;
 import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscal.ConfiguracaoFiscal;
 import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscal.ConfiguracaoFiscalDTO;
-import br.com.ultraworks.erp.api.fiscal.domain.entradasaida.EntradaSaida;
 import br.com.ultraworks.erp.api.fiscal.repository.CfopRepository;
 import br.com.ultraworks.erp.api.fiscal.repository.ClassificacaoOperacaoRepository;
 import br.com.ultraworks.erp.api.fiscal.repository.ConfiguracaoFiscalRepository;
@@ -13,6 +12,7 @@ import br.com.ultraworks.erp.api.fiscal.repository.GrupoTributacaoRepository;
 import br.com.ultraworks.erp.api.fiscal.repository.NcmRepository;
 import br.com.ultraworks.erp.api.fiscal.repository.OrigemRepository;
 import br.com.ultraworks.erp.api.fiscal.repository.RegimeTributarioRepository;
+import br.com.ultraworks.erp.api.tabela.domain.indicadoroperacao.IndicadorOperacao;
 import br.com.ultraworks.erp.api.tabela.repository.OperacaoInternaRepository;
 import br.com.ultraworks.erp.api.tabela.repository.PaisRepository;
 import br.com.ultraworks.erp.api.tabela.repository.UfRepository;
@@ -66,7 +66,7 @@ public class ConfiguracaoFiscalMapper extends GenericMapper<ConfiguracaoFiscal, 
 		entity.setId(dto.getId());
 		entity.setDataInicioVigencia(dto.getDataInicioVigencia());
 		entity.setDataFinalVigencia(dto.getDataFinalVigencia());
-		entity.setEntradaSaida(EntradaSaida.fromCodigo(dto.getEntradaSaida()));
+		entity.setEntradaSaida(IndicadorOperacao.fromValue(dto.getEntradaSaida()));
 		entity.setUfOrigem(ufRepository.findById(dto.getUfOrigemId())
 				.orElseThrow(() -> new RegisterNotFoundException("Não encontrado UF Origem com id " + dto.getUfOrigemId())));
 		entity.setUfDestino(ufRepository.findById(dto.getUfDestinoId())

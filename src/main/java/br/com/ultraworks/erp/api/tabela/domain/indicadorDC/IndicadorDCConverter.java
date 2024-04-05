@@ -11,14 +11,14 @@ public class IndicadorDCConverter implements AttributeConverter<IndicadorDC, Str
         if (tipoPessoa == null) {
             return null;
         }
-        return tipoPessoa.getCodigo();
+        return tipoPessoa.getValue();
     }
 
     @Override
-    public IndicadorDC convertToEntityAttribute(String codigo) {
-        if (codigo == null) {
+    public IndicadorDC convertToEntityAttribute(String value) {
+        if (value == null) {
             return null;
         }
-        return IndicadorDC.fromCodigo(codigo);
+        return IndicadorDC.fromValue(value);
     }
 }

@@ -21,7 +21,7 @@ public class TipoEnderecoValidator implements ConstraintValidator<ValidaTipoEnde
     @Override
     public void initialize(ValidaTipoEndereco constraint) {
         codigosValidos = Arrays.stream(TipoEndereco.values())
-                .map(TipoEndereco::getCodigo)
+                .map(TipoEndereco::getValue)
                 .collect(Collectors.toSet());
     }
 

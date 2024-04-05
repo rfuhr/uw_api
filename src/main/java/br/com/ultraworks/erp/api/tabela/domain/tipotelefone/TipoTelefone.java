@@ -1,28 +1,27 @@
 package br.com.ultraworks.erp.api.tabela.domain.tipotelefone;
 
 public enum TipoTelefone {
-    COMERCIAL("COM"),
-    RECADO("REC"),
-    RESIDENCIAL("RES"),
-    WHATSAPP("ZAP");
+	COMERCIAL("COM", "Comercial"), RECADO("REC", "Recado"), RESIDENCIAL("RES", "Residencial"),
+	WHATSAPP("ZAP", "WhatsApp");
 
-    private String codigo;
+	private String value;
+	private String name;
 
-    TipoTelefone(String codigo) {
-        this.codigo = codigo;
-    }
+	TipoTelefone(String value, String name) {
+		this.value = value;
+		this.name = name;
+	}
 
-    public String getCodigo() {
-        return codigo;
-    }
+	public String getValue() {
+		return value;
+	}
 
-    public static TipoTelefone fromCodigo(String codigo) {
-        for (TipoTelefone tipo : TipoTelefone.values()) {
-            if (tipo.getCodigo().equalsIgnoreCase(codigo)) {
-                return tipo;
-            }
-        }
-        return null; // Ou lançar uma exceção se preferir
-    }
+	public static TipoTelefone fromValue(String value) {
+		for (TipoTelefone tipo : TipoTelefone.values()) {
+			if (tipo.getValue().equalsIgnoreCase(value)) {
+				return tipo;
+			}
+		}
+		return null; // Ou lançar uma exceção se preferir
+	}
 }
-

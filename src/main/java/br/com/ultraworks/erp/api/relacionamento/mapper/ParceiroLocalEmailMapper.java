@@ -29,7 +29,7 @@ public class ParceiroLocalEmailMapper extends GenericMapper<ParceiroLocalEmail, 
 					.orElseThrow(() -> new RegisterNotFoundException(
 							"Não encontrado local de parceiro com id " + dto.getParceiroLocalId())));
 		}
-		entity.setTipoEmail(TipoEmail.fromCodigo(dto.getTipoEmail()));
+		entity.setTipoEmail(TipoEmail.fromValue(dto.getTipoEmail()));
 		entity.setIdentificacao(dto.getIdentificacao());
 		entity.setEmail(dto.getEmail());
 

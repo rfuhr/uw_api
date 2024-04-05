@@ -20,7 +20,7 @@ public class SituacaoTributariaMapper extends GenericMapper<SituacaoTributaria, 
 		entity.setId(dto.getId());
 		entity.setCodigo(dto.getCodigo());
 		entity.setNome(dto.getNome());
-		entity.setTipoTributo(TipoTributo.fromCodigo(dto.getTipoTributo()));
+		entity.setTipoTributo(TipoTributo.fromValue(dto.getTipoTributo()));
 		entity.setAliquotaZero(dto.isAliquotaZero());
 		entity.setControlaImpostoRetido(dto.isControlaImpostoRetido());
 		entity.setDestacaStSaida(dto.isDestacaStSaida());

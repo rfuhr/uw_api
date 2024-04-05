@@ -1,3 +1,13 @@
+create table tipo_email (
+	value				char(3) not null constraint tipo_email_pkey primary key,
+	name				varchar(250) not null
+);
+
+insert into tipo_email values ('NFE', 'NFE');
+insert into tipo_email values ('COM', 'Compra');
+insert into tipo_email values ('RES', 'Residencial');
+insert into tipo_email values ('OUT', 'Outros');
+
 create sequence seq_parceiro_local_email;
 
 create table parceiro_local_email (

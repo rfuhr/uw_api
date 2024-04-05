@@ -1,8 +1,9 @@
 package br.com.ultraworks.erp.api.tabela.domain.operacaointerna;
 
-import br.com.ultraworks.erp.api.tabela.domain.grupooperacaointerna.GrupoOperacaoInterna;
-import br.com.ultraworks.erp.api.tabela.domain.tipooperacao.TipoOperacao;
+import br.com.ultraworks.erp.api.tabela.domain.naturezaOperacao.NaturezaOperacao;
+import br.com.ultraworks.erp.api.tabela.domain.operacaointernafiscal.OperacaoInternaFiscal;
 import br.com.ultraworks.erp.core.entity.UWEntityBase;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -11,6 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,18 +23,24 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 public class OperacaoInterna extends UWEntityBase {
 
 	@Id
-	@SequenceGenerator(name = "opInternaFinSeq", sequenceName = "seq_operacao_interna_financeira", allocationSize = 1)
-	@GeneratedValue(generator = "opInternaFinSeq")
+	@SequenceGenerator(name = "opInternaSeq", sequenceName = "seq_operacao_interna", allocationSize = 1)
+	@GeneratedValue(generator = "opInternaSeq")
 	private Long id;
 
 	private String nome;
 	private String sigla;
-	
+
 	@OneToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "grupo_operacao_interna_id")
-	private GrupoOperacaoInterna grupoOperacaoInterna;
+	@JoinColumn(name = "natureza_operacao_id")
+	private NaturezaOperacao naturezaOperacao;
+	
+	@Column(name = "idn_fiscal")
+	private boolean caracteristicaFiscal;
+	
+	@Transient
+	private OperacaoInternaFiscal operacaoInternaFiscal;
 }

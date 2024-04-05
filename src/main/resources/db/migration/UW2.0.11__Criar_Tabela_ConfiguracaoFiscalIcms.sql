@@ -1,3 +1,33 @@
+create table modalidade_base_calculo (
+	value				char(3) not null constraint modalidade_base_calculo_pkey primary key,
+	name				varchar(250) not null
+);
+
+insert into modalidade_base_calculo values ('0', 'Margem Valor Agregado');
+insert into modalidade_base_calculo values ('1', 'Pauta (Valor)');
+insert into modalidade_base_calculo values ('2', 'Preço Tabelado');
+insert into modalidade_base_calculo values ('3', 'Valor da Operação');
+
+create table modalidade_base_calculo_st (
+	value				char(3) not null constraint modalidade_base_calculo_st_pkey primary key,
+	name				varchar(250) not null
+);
+
+insert into modalidade_base_calculo_st values ('0', 'Preço tabelado ou máximo sugerido');
+insert into modalidade_base_calculo_st values ('1', 'Lista Negativa (valor)');
+insert into modalidade_base_calculo_st values ('2', 'Lista Positiva (valor)');
+insert into modalidade_base_calculo_st values ('3', 'Lista Neutra (valor)');
+insert into modalidade_base_calculo_st values ('4', 'Margem Valor Agregado (%)');
+insert into modalidade_base_calculo_st values ('5', 'Pauta (valor)');
+
+create table tipo_calculo (
+	value				char(3) not null constraint tipo_calculo_pkey primary key,
+	name				varchar(250) not null
+);
+
+insert into tipo_calculo values ('P', 'Percentual');
+insert into tipo_calculo values ('V', 'Valor');
+
 create sequence seq_configuracao_fiscal_icms start with 1;
 
 create table configuracao_fiscal_icms (

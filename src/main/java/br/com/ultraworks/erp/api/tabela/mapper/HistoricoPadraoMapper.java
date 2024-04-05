@@ -21,7 +21,7 @@ public class HistoricoPadraoMapper extends GenericMapper<HistoricoPadrao, Histor
 		entity.setNome(dto.getNome());
 		entity.setCodigo(dto.getCodigo());
 		entity.setSigla(dto.getSigla());
-		entity.setInformaDocumento(TipoObrigatoriedade.fromCodigo(dto.getInformaDocumento()));
+		entity.setInformaDocumento(TipoObrigatoriedade.fromValue(dto.getInformaDocumento()));
 	}
 
 	@Override
@@ -30,6 +30,6 @@ public class HistoricoPadraoMapper extends GenericMapper<HistoricoPadrao, Histor
 		dto.setNome(entity.getNome());
 		dto.setCodigo(entity.getCodigo());
 		dto.setSigla(entity.getSigla());
-		dto.setInformaDocumento(entity.getInformaDocumento().getCodigo());
+		dto.setInformaDocumento(entity.getInformaDocumento().getValue());
 	}
 }
