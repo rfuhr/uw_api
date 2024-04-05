@@ -40,11 +40,11 @@ public class ConfiguracaoFiscalIpiMapper extends GenericMapper<ConfiguracaoFisca
 		entity.setId(dto.getId());
 		entity.setConfiguracaoFiscal(configuracaoFiscalRepository.findById(dto.getConfiguracaoFiscalId())
 				.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Configuração Fiscal com id " + dto.getConfiguracaoFiscalId())));
-		entity.setSituacaoTributaria(situacaoTributariaRepository.findById(dto.getSituacaoTributaria().getId())
-				.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Situação Tributária com id " + dto.getSituacaoTributaria().getId())));
+		entity.setSituacaoTributaria(situacaoTributariaRepository.findById(dto.getSituacaoTributariaId())
+				.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Situação Tributária com id " + dto.getSituacaoTributariaId())));
 		entity.setModalidadeBaseCalculo(ModalidadeBaseCalculo.fromCodigo(dto.getModalidadeBaseCalculo()));
-		entity.setEnquadramento(enquadramentoRepository.findById(dto.getEnquadramento().getId())
-				.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Enquadramento com id " + dto.getEnquadramento().getId())));
+		entity.setEnquadramento(enquadramentoRepository.findById(dto.getEnquadramentoId())
+				.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Enquadramento com id " + dto.getEnquadramentoId())));
 		entity.setTipoCalculo(TipoCalculo.fromCodigo(dto.getTipoCalculo()));
 		entity.setAliquota(dto.getAliquota());
 		entity.setCodigoSelo(dto.getCodigoSelo());
@@ -55,9 +55,13 @@ public class ConfiguracaoFiscalIpiMapper extends GenericMapper<ConfiguracaoFisca
 	protected void setValuesToDto(ConfiguracaoFiscalIpi entity, ConfiguracaoFiscalIpiDTO dto) {
 		dto.setId(entity.getId());
 		dto.setConfiguracaoFiscalId(entity.getConfiguracaoFiscal().getId());
-		dto.setSituacaoTributaria(situacaoTributariaMapper.toDto(entity.getSituacaoTributaria()));
+		dto.setSituacaoTributariaId(entity.getSituacaoTributaria().getId());
+		dto.setSituacaoTributariaNome(entity.getSituacaoTributaria().getNome());
+		dto.setSituacaoTributariaCodigo(new Long(entity.getSituacaoTributaria().getCodigo()));
 		dto.setModalidadeBaseCalculo(entity.getModalidadeBaseCalculo().getValue());
-		dto.setEnquadramento(enquadramentoMapper.toDto(entity.getEnquadramento()));
+		dto.setEnquadramentoId(entity.getEnquadramento().getId());
+		dto.setEnquadramentoNome(entity.getEnquadramento().getNome());
+		dto.setEnquadramentoCodigo(new Long(entity.getEnquadramento().getCodigo()));
 		dto.setAliquota(dto.getAliquota());
 		dto.setTipoCalculo(entity.getTipoCalculo().getValue());
 		dto.setCodigoSelo(entity.getCodigoSelo());

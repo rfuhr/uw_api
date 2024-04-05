@@ -105,13 +105,13 @@ public class ConfiguracaoFiscalMapper extends GenericMapper<ConfiguracaoFiscal, 
 			entity.setItem(itemRepository.findById(dto.getItemId())
 					.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Item com id " + dto.getItemId())));
 		}
-		if (dto.getConfiguracaoFiscalIcms() != null) {
+		if (dto.getConfiguracaoFiscalIcms().getSituacaoTributariaId() != null) {
 			entity.setConfiguracaoFiscalIcms(configuracaoFiscalIcmsMapper.toEntity(dto.getConfiguracaoFiscalIcms()));
 		}
 		if (dto.getConfiguracaoFiscalPis() != null) {
 			entity.setConfiguracaoFiscalPis(configuracaoFiscalPisMapper.toEntity(dto.getConfiguracaoFiscalPis()));
 		}
-		if (dto.getConfiguracaoFiscalIpi() != null) {
+		if (dto.getConfiguracaoFiscalIpi().getSituacaoTributariaId() != null) {
 			entity.setConfiguracaoFiscalIpi(configuracaoFiscalIpiMapper.toEntity(dto.getConfiguracaoFiscalIpi()));
 		}
 		if (dto.getConfiguracaoFiscalCofins() != null) {

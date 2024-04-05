@@ -34,8 +34,8 @@ public class ConfiguracaoFiscalPisMapper extends GenericMapper<ConfiguracaoFisca
 		entity.setId(dto.getId());
 		entity.setConfiguracaoFiscal(configuracaoFiscalRepository.findById(dto.getConfiguracaoFiscalId())
 				.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Configuração Fiscal com id " + dto.getConfiguracaoFiscalId())));
-		entity.setSituacaoTributaria(situacaoTributariaRepository.findById(dto.getSituacaoTributaria().getId())
-				.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Situação Tributária com id " + dto.getSituacaoTributaria().getId())));
+		entity.setSituacaoTributaria(situacaoTributariaRepository.findById(dto.getSituacaoTributariaId())
+				.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Situação Tributária com id " + dto.getSituacaoTributariaId())));
 		entity.setModalidadeBaseCalculo(ModalidadeBaseCalculo.fromCodigo(dto.getModalidadeBaseCalculo()));
 		entity.setTipoCalculo(TipoCalculo.fromCodigo(dto.getTipoCalculo()));
 		entity.setAliquota(dto.getAliquota());
@@ -47,7 +47,9 @@ public class ConfiguracaoFiscalPisMapper extends GenericMapper<ConfiguracaoFisca
 	protected void setValuesToDto(ConfiguracaoFiscalPis entity, ConfiguracaoFiscalPisDTO dto) {
 		dto.setId(entity.getId());
 		dto.setConfiguracaoFiscalId(entity.getConfiguracaoFiscal().getId());
-		dto.setSituacaoTributaria(situacaoTributariaMapper.toDto(entity.getSituacaoTributaria()));
+		dto.setSituacaoTributariaId(entity.getSituacaoTributaria().getId());
+		dto.setSituacaoTributariaNome(entity.getSituacaoTributaria().getNome());
+		dto.setSituacaoTributariaCodigo(new Long(entity.getSituacaoTributaria().getCodigo()));
 		dto.setModalidadeBaseCalculo(entity.getModalidadeBaseCalculo().getValue());
 		dto.setAliquota(dto.getAliquota());
 		dto.setTipoCalculo(entity.getTipoCalculo().getValue());
