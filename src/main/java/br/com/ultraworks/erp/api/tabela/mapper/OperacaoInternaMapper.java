@@ -1,5 +1,7 @@
 package br.com.ultraworks.erp.api.tabela.mapper;
 
+import java.util.ArrayList;
+
 import org.springframework.stereotype.Component;
 
 import br.com.ultraworks.erp.api.tabela.domain.operacaointerna.OperacaoInterna;
@@ -34,8 +36,15 @@ public class OperacaoInternaMapper extends GenericMapper<OperacaoInterna, Operac
 				.orElseThrow(() -> new RegisterNotFoundException(
 						"Não encontrado empresa filial com id " + dto.getNaturezaOperacaoId())));
 		entity.setCaracteristicaFiscal(dto.isCaracteristicaFiscal());
-		if (dto.getOperacaoInternaFiscal() != null)
-			entity.setOperacaoInternaFiscal(operacaoInternaFiscalMapper.toEntity(dto.getOperacaoInternaFiscal()));
+		if (dto.getOperacaoInternaFiscal() != null) {
+			entity.setOperacoesInternasFiscal(new ArrayList<>());
+			entity.getOperacoesInternasFiscal()
+					.add(operacaoInternaFiscalMapper.toEntity(dto.getOperacaoInternaFiscal()));
+			entity.getOperacoesInternasFiscal().forEach(dado -> {
+				if (dado.getOperacaoInterna() == null)
+					dado.setOperacaoInterna(entity);
+			});
+		}
 	}
 
 	@Override
@@ -47,8 +56,8 @@ public class OperacaoInternaMapper extends GenericMapper<OperacaoInterna, Operac
 		dto.setNaturezaOperacao(naturezaOperacaoInternaMapper.toDto(entity.getNaturezaOperacao()));
 		dto.setNaturezaOperacaoId(entity.getNaturezaOperacao().getId());
 		dto.setCaracteristicaFiscal(entity.isCaracteristicaFiscal());
-		if (entity.getOperacaoInternaFiscal() != null) {
-			dto.setOperacaoInternaFiscal(operacaoInternaFiscalMapper.toDto(entity.getOperacaoInternaFiscal()));
+		if (entity.getOperacoesInternasFiscal() != null && entity.getOperacoesInternasFiscal().size() > 0) {
+			dto.setOperacaoInternaFiscal(operacaoInternaFiscalMapper.toDto(entity.getOperacoesInternasFiscal()).get(0));
 		}
 
 	}

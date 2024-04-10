@@ -12,6 +12,7 @@ import br.com.ultraworks.erp.api.configuracao.domain.configempresa.ConfigEmpresa
 import br.com.ultraworks.erp.api.configuracao.domain.configempresanfe.ConfigEmpresaNFe;
 import br.com.ultraworks.erp.api.configuracao.mapper.ConfigEmpresaMapper;
 import br.com.ultraworks.erp.api.configuracao.repository.ConfigEmpresaRepository;
+import br.com.ultraworks.erp.api.tabela.domain.operacaointerna.OperacaoInterna;
 import br.com.ultraworks.erp.core.generics.GenericService;
 import br.com.ultraworks.erp.core.util.ListUtils;
 import lombok.NoArgsConstructor;
@@ -46,37 +47,18 @@ public class ConfigEmpresaService extends GenericService<ConfigEmpresa, Long, Co
 
 	@Override
 	public ConfigEmpresa save(ConfigEmpresa entity) {
-		List<ConfigEmpresaNFe> configuracoesNFeSalvos = new ArrayList<ConfigEmpresaNFe>();
-		if (entity.getId() != null) {
-			configuracoesNFeSalvos = configEmpresaNFeService.getAllByConfigEmpresa(entity.getId());
-		}
-		repository.save(entity);
-
-		if (entity.getConfiguracoesNFe() != null && entity.getConfiguracoesNFe().size() > 0) {
-			entity.getConfiguracoesNFe().forEach(config -> {
-				config.setConfigEmpresa(entity);
-				config = configEmpresaNFeService.save(config);
-			});
-		}
-
-		List<ConfigEmpresaNFe> configuracoesNFeExcluir = (List<ConfigEmpresaNFe>) ListUtils
-				.compararListasERetornaDiferenca(configuracoesNFeSalvos, entity.getConfiguracoesNFe());
-		if (configuracoesNFeExcluir.size() > 0) {
-			configuracoesNFeExcluir.forEach(config -> {
-				configEmpresaNFeService.delete(config.getId());
-			});
-		}
-
-		return entity;
+		ConfigEmpresa entitySaved = repository.save(entity);
+		if (entity.getConfiguracoesNFe() != null)
+			entity.getConfiguracoesNFe().forEach(cnfe -> cnfe.setConfigEmpresa(entitySaved));
+		configEmpresaNFeService.persistList(entitySaved.getId(), entitySaved.getConfiguracoesNFe());
+		return entitySaved;
 	}
 
 	@Override
 	public void delete(Long id) {
-		Optional<ConfigEmpresa> configEmpresa = this.getById(id);
-		if (configEmpresa.isPresent()) {
-			configEmpresa.get().getConfiguracoesNFe().forEach(config -> {
-				configEmpresaNFeService.delete(config.getId());
-			});
+		Optional<ConfigEmpresa> optional = this.getById(id);
+		if (optional.isPresent()) {
+			configEmpresaNFeService.deleteList(optional.get().getConfiguracoesNFe());
 			repository.deleteById(id);
 		}
 	}

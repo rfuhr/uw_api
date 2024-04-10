@@ -1,10 +1,13 @@
 package br.com.ultraworks.erp.core.entity.specification;
 
+import java.util.List;
+
 import org.springframework.data.jpa.domain.Specification;
 
 import br.com.ultraworks.erp.core.dto.OpcaoFiltro;
 import br.com.ultraworks.erp.core.exception.BusinessException;
 import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Path;
@@ -110,4 +113,9 @@ public class FilterSpecification<T> {
 		}
 	}
 	
+	public static <T> Specification<T> createInIntegerSpecification(String chave, List<Long> ids) {
+		return (root, query, builder) -> {
+            return root.get(chave).in(ids);
+        };
+    }
 }

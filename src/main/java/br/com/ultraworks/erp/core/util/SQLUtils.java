@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidParameterException;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -33,7 +34,7 @@ public class SQLUtils {
 		return result.toString();
 	}
 
-	public static <T> Specification<T> buildQueryByFilters(LazyParams params) {
+	public static <T> Specification<T> buildQueryByFilters(LazyParams params, List<Long> ids) {
 		Specification<T> specification = null;
 
 		
@@ -70,6 +71,15 @@ public class SQLUtils {
 				}
 			}
 		}
+		if (!ids.isEmpty() ) {
+			Specification<T> createInIntegerSpecification = FilterSpecification.createInIntegerSpecification("id", ids);
+			if (specification == null) {
+				specification = createInIntegerSpecification;
+			} else {
+				specification = specification.and(createInIntegerSpecification);
+			}
+		}
+		
 		return specification;
 	}
 

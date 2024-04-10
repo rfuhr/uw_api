@@ -1,5 +1,7 @@
 package br.com.ultraworks.erp.api.tabela.domain.operacaointerna;
 
+import java.util.List;
+
 import br.com.ultraworks.erp.api.tabela.domain.naturezaOperacao.NaturezaOperacao;
 import br.com.ultraworks.erp.api.tabela.domain.operacaointernafiscal.OperacaoInternaFiscal;
 import br.com.ultraworks.erp.core.entity.UWEntityBase;
@@ -42,5 +44,5 @@ public class OperacaoInterna extends UWEntityBase {
 	private boolean caracteristicaFiscal;
 	
 	@Transient
-	private OperacaoInternaFiscal operacaoInternaFiscal;
+	private List<OperacaoInternaFiscal> operacoesInternasFiscal;
 }

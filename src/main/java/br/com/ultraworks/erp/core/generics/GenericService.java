@@ -43,15 +43,26 @@ public class GenericService<T, ID, D> {
 	}
 
 	public Page<T> getAllPaginada(LazyParams params) {
-		Page<T> resultados = getResultadosPaginado(params);
+		List<Long> ids = new ArrayList<>();
+		
+		Page<T> resultados = getResultadosPaginado(params, ids);
+
+		return resultados;
+	}
+	
+	public Page<T> getAllPaginadaFilterIds(LazyParams params, List<Long> ids) {
+		if (ids == null) 
+			ids = new ArrayList<>();
+		
+		Page<T> resultados = getResultadosPaginado(params, ids);
 
 		return resultados;
 	}
 	
 
-	private Page<T> getResultadosPaginado(LazyParams params) {
+	private Page<T> getResultadosPaginado(LazyParams params, List<Long> ids) {
 		
-		Specification<T> specification = SQLUtils.buildQueryByFilters(params);
+		Specification<T> specification = SQLUtils.buildQueryByFilters(params, ids);
 
 		Sort sort = Sort.unsorted();
 		if (params.getSortField() != null) {
