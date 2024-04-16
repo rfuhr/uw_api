@@ -45,10 +45,6 @@ public class ConfiguracaoFiscalIpi extends UWEntityBase {
 	@JoinColumn(name = "situacao_tributaria_id")
 	private SituacaoTributaria situacaoTributaria;
 	
-	@Convert(converter = ModalidadeBaseCalculoConverter.class)
-	@Column(name = "modalidade_base_calculo")
-	private ModalidadeBaseCalculo modalidadeBaseCalculo;
-	
 	@OneToOne
 	@JoinColumn(name = "enquadramento_id")
 	private Enquadramento enquadramento;

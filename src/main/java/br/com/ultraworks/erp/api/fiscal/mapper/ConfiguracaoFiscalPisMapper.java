@@ -4,7 +4,6 @@ import org.springframework.stereotype.Component;
 
 import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscalpis.ConfiguracaoFiscalPis;
 import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscalpis.ConfiguracaoFiscalPisDTO;
-import br.com.ultraworks.erp.api.fiscal.domain.modalidadebasecalculo.ModalidadeBaseCalculo;
 import br.com.ultraworks.erp.api.fiscal.domain.tipocalculo.TipoCalculo;
 import br.com.ultraworks.erp.api.fiscal.repository.ConfiguracaoFiscalPisRepository;
 import br.com.ultraworks.erp.api.fiscal.repository.ConfiguracaoFiscalRepository;
@@ -34,9 +33,10 @@ public class ConfiguracaoFiscalPisMapper extends GenericMapper<ConfiguracaoFisca
 		entity.setId(dto.getId());
 		entity.setConfiguracaoFiscal(configuracaoFiscalRepository.findById(dto.getConfiguracaoFiscalId())
 				.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Configuração Fiscal com id " + dto.getConfiguracaoFiscalId())));
-		entity.setSituacaoTributaria(situacaoTributariaRepository.findById(dto.getSituacaoTributariaId())
-				.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Situação Tributária com id " + dto.getSituacaoTributariaId())));
-		entity.setModalidadeBaseCalculo(ModalidadeBaseCalculo.fromValue(dto.getModalidadeBaseCalculo()));
+		if (dto.getSituacaoTributariaId() != null) {
+			entity.setSituacaoTributaria(situacaoTributariaRepository.findById(dto.getSituacaoTributariaId())
+					.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Situação Tributária com id " + dto.getSituacaoTributariaId())));			
+		}
 		entity.setTipoCalculo(TipoCalculo.fromValue(dto.getTipoCalculo()));
 		entity.setAliquota(dto.getAliquota());
 		entity.setTipoCalculoST(TipoCalculo.fromValue(dto.getTipoCalculoST()));
@@ -50,11 +50,14 @@ public class ConfiguracaoFiscalPisMapper extends GenericMapper<ConfiguracaoFisca
 		dto.setSituacaoTributariaId(entity.getSituacaoTributaria().getId());
 		dto.setSituacaoTributariaNome(entity.getSituacaoTributaria().getNome());
 		dto.setSituacaoTributariaCodigo(new Long(entity.getSituacaoTributaria().getCodigo()));
-		dto.setModalidadeBaseCalculo(entity.getModalidadeBaseCalculo().getValue());
-		dto.setAliquota(dto.getAliquota());
-		dto.setTipoCalculo(entity.getTipoCalculo().getValue());
-		dto.setAliquotaST(dto.getAliquotaST());
-		dto.setTipoCalculoST(entity.getTipoCalculoST().getValue());
+		dto.setAliquota(entity.getAliquota());
+		if (entity.getTipoCalculo() != null) {
+			dto.setTipoCalculo(entity.getTipoCalculo().getValue());			
+		}
+		dto.setAliquotaST(entity.getAliquotaST());
+		if (entity.getTipoCalculoST() != null) {
+			dto.setTipoCalculoST(entity.getTipoCalculoST().getValue());			
+		}
 	}
 	
 }

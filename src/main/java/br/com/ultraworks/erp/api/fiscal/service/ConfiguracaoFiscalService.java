@@ -85,22 +85,22 @@ public class ConfiguracaoFiscalService extends GenericService<ConfiguracaoFiscal
 
 		repository.save(entity);
 		
-		if (entity.getConfiguracaoFiscalIcms() != null) {
+		if (entity.getConfiguracaoFiscalIcms() != null && entity.getConfiguracaoFiscalIcms().getSituacaoTributaria() != null) {
 			entity.getConfiguracaoFiscalIcms().setConfiguracaoFiscal(entity);
 			configuracaoFiscalIcmsService.save(entity.getConfiguracaoFiscalIcms());
 		}
 		
-		if (entity.getConfiguracaoFiscalIpi() != null) {
+		if (entity.getConfiguracaoFiscalIpi() != null && entity.getConfiguracaoFiscalIpi().getSituacaoTributaria() != null) {
 			entity.getConfiguracaoFiscalIpi().setConfiguracaoFiscal(entity);
 			configuracaoFiscalIpiService.save(entity.getConfiguracaoFiscalIpi());
 		}
 		
-		if (entity.getConfiguracaoFiscalPis() != null) {
+		if (entity.getConfiguracaoFiscalPis() != null && entity.getConfiguracaoFiscalPis().getSituacaoTributaria() != null) {
 			entity.getConfiguracaoFiscalPis().setConfiguracaoFiscal(entity);
 			configuracaoFiscalPisService.save(entity.getConfiguracaoFiscalPis());
 		}
 		
-		if (entity.getConfiguracaoFiscalCofins() != null) {
+		if (entity.getConfiguracaoFiscalCofins() != null && entity.getConfiguracaoFiscalCofins().getSituacaoTributaria() != null) {
 			entity.getConfiguracaoFiscalCofins().setConfiguracaoFiscal(entity);
 			configuracaoFiscalCofinsService.save(entity.getConfiguracaoFiscalCofins());
 		}

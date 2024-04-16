@@ -65,8 +65,8 @@ public class ConfiguracaoFiscal extends UWEntityBase {
 	private Uf ufDestino;
 	
 	@Convert(converter = IndicadorOperacaoConverter.class)
-	@Column(name = "entrada_saida")
-	private IndicadorOperacao entradaSaida;
+	@Column(name = "indicador_operacao")
+	private IndicadorOperacao indicadorOperacao;
 	
 	@Column(name = "data_inicio_vigencia")
 	private LocalDate dataInicioVigencia;

@@ -1,0 +1,1 @@
+alter table configuracao_fiscal_ipi drop column modalidade_base_calculo;

@@ -5,6 +5,7 @@ import java.io.Serializable;
 import br.com.ultraworks.erp.core.annotation.UniqueValidation;
 import br.com.ultraworks.erp.core.annotation.UniqueValidationGroup;
 import br.com.ultraworks.erp.core.entity.UWEntityBase;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -37,5 +38,6 @@ public class RegimeTributario extends UWEntityBase implements Serializable{
 	private int codigo;
 	private String nome;
 
-
+	@Column(name = "simples_nacional")
+	private boolean simplesNacional;
 }

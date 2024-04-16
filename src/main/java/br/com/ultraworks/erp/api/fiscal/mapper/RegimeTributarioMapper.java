@@ -19,6 +19,7 @@ public class RegimeTributarioMapper extends GenericMapper<RegimeTributario, Regi
 		entity.setId(dto.getId());
 		entity.setCodigo(dto.getCodigo());
 		entity.setNome(dto.getNome());
+		entity.setSimplesNacional(dto.isSimplesNacional());
 	}
 
 	@Override
@@ -26,5 +27,6 @@ public class RegimeTributarioMapper extends GenericMapper<RegimeTributario, Regi
 		dto.setId(entity.getId());
 		dto.setCodigo(entity.getCodigo());
 		dto.setNome(entity.getNome());
+		dto.setSimplesNacional(entity.isSimplesNacional());
 	}
 }

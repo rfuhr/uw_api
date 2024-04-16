@@ -22,7 +22,7 @@ public class ConfiguracaoFiscalDTO {
 	private String ufDestinoNome;
 	private String ufDestinoSigla;
 	
-	private String entradaSaida;
+	private String indicadorOperacao;
 	
 	private LocalDate dataInicioVigencia;
 	private LocalDate dataFinalVigencia;
@@ -38,6 +38,7 @@ public class ConfiguracaoFiscalDTO {
 	private String ncmCodigo;
 	private Long regimeTributarioId;
 	private String regimeTributarioNome;
+	private Boolean regimeTributarioSimplesNacional;
 	private Long origemId;
 	private String origemNome;
 	private Long origemCodigo;

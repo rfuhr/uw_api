@@ -4,7 +4,6 @@ import org.springframework.stereotype.Component;
 
 import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscalipi.ConfiguracaoFiscalIpi;
 import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscalipi.ConfiguracaoFiscalIpiDTO;
-import br.com.ultraworks.erp.api.fiscal.domain.modalidadebasecalculo.ModalidadeBaseCalculo;
 import br.com.ultraworks.erp.api.fiscal.domain.tipocalculo.TipoCalculo;
 import br.com.ultraworks.erp.api.fiscal.repository.ConfiguracaoFiscalIpiRepository;
 import br.com.ultraworks.erp.api.fiscal.repository.ConfiguracaoFiscalRepository;
@@ -42,8 +41,7 @@ public class ConfiguracaoFiscalIpiMapper extends GenericMapper<ConfiguracaoFisca
 				.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Configuração Fiscal com id " + dto.getConfiguracaoFiscalId())));
 		entity.setSituacaoTributaria(situacaoTributariaRepository.findById(dto.getSituacaoTributariaId())
 				.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Situação Tributária com id " + dto.getSituacaoTributariaId())));
-		entity.setModalidadeBaseCalculo(ModalidadeBaseCalculo.fromValue(dto.getModalidadeBaseCalculo()));
-		entity.setEnquadramento(enquadramentoRepository.findById(dto.getSituacaoTributariaId())
+		entity.setEnquadramento(enquadramentoRepository.findById(dto.getEnquadramentoId())
 				.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Enquadramento com id " + dto.getEnquadramentoId())));
 		entity.setTipoCalculo(TipoCalculo.fromValue(dto.getTipoCalculo()));
 		entity.setAliquota(dto.getAliquota());
@@ -58,12 +56,15 @@ public class ConfiguracaoFiscalIpiMapper extends GenericMapper<ConfiguracaoFisca
 		dto.setSituacaoTributariaId(entity.getSituacaoTributaria().getId());
 		dto.setSituacaoTributariaNome(entity.getSituacaoTributaria().getNome());
 		dto.setSituacaoTributariaCodigo(new Long(entity.getSituacaoTributaria().getCodigo()));
-		dto.setModalidadeBaseCalculo(entity.getModalidadeBaseCalculo().getValue());
-		dto.setEnquadramentoId(entity.getEnquadramento().getId());
-		dto.setEnquadramentoNome(entity.getEnquadramento().getNome());
-		dto.setEnquadramentoCodigo(new Long(entity.getEnquadramento().getCodigo()));
+		if (entity.getEnquadramento() != null) {
+			dto.setEnquadramentoId(entity.getEnquadramento().getId());
+			dto.setEnquadramentoNome(entity.getEnquadramento().getNome());
+			dto.setEnquadramentoCodigo(new Long(entity.getEnquadramento().getCodigo()));
+		}
 		dto.setAliquota(dto.getAliquota());
-		dto.setTipoCalculo(entity.getTipoCalculo().getValue());
+		if (entity.getTipoCalculo() != null) {
+			dto.setTipoCalculo(entity.getTipoCalculo().getValue());
+		}
 		dto.setCodigoSelo(entity.getCodigoSelo());
 		dto.setQuantidadeSelo(entity.getQuantidadeSelo());
 	}

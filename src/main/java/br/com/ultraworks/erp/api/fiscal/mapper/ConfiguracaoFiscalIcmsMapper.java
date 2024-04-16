@@ -37,12 +37,14 @@ public class ConfiguracaoFiscalIcmsMapper extends GenericMapper<ConfiguracaoFisc
 	@Override
 	protected void setValuesToEntity(ConfiguracaoFiscalIcmsDTO dto, ConfiguracaoFiscalIcms entity) {
 		entity.setId(dto.getId());
-		entity.setConfiguracaoFiscal(configuracaoFiscalRepository.findById(dto.getConfiguracaoFiscalId())
-				.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Configuração Fiscal com id " + dto.getConfiguracaoFiscalId())));
+		if (dto.getConfiguracaoFiscalId() != null) {
+			entity.setConfiguracaoFiscal(configuracaoFiscalRepository.findById(dto.getConfiguracaoFiscalId())
+					.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Configuração Fiscal com id " + dto.getConfiguracaoFiscalId())));			
+		}
 		entity.setSituacaoTributaria(situacaoTributariaRepository.findById(dto.getSituacaoTributariaId())
 				.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Situação Tributária com id " + dto.getSituacaoTributariaId())));
 		entity.setModalidadeBaseCalculo(ModalidadeBaseCalculo.fromValue(dto.getModalidadeBaseCalculo()));
-		if (dto.getSituacaoTributariaId() != null) {
+		if (dto.getMotivoDesoneracaoId() != null) {
 			entity.setMotivoDesoneracao(motivoDesoneracaoRepository.findById(dto.getMotivoDesoneracaoId())
 					.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Motivo Desoneração com id " + dto.getSituacaoTributariaId())));
 		}

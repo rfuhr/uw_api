@@ -14,9 +14,6 @@ public class ConfiguracaoFiscalCofinsDTO {
 	private Long situacaoTributariaId;
 	private Long situacaoTributariaCodigo;
 	private String situacaoTributariaNome;
-	
-	@ValidaModalidadeBaseCalculo
-	private String modalidadeBaseCalculo;
 
 	@ValidaTipoCalculo
 	private String tipoCalculo;

@@ -66,7 +66,7 @@ public class ConfiguracaoFiscalMapper extends GenericMapper<ConfiguracaoFiscal, 
 		entity.setId(dto.getId());
 		entity.setDataInicioVigencia(dto.getDataInicioVigencia());
 		entity.setDataFinalVigencia(dto.getDataFinalVigencia());
-		entity.setEntradaSaida(IndicadorOperacao.fromValue(dto.getEntradaSaida()));
+		entity.setIndicadorOperacao(IndicadorOperacao.fromValue(dto.getIndicadorOperacao()));
 		entity.setUfOrigem(ufRepository.findById(dto.getUfOrigemId())
 				.orElseThrow(() -> new RegisterNotFoundException("Não encontrado UF Origem com id " + dto.getUfOrigemId())));
 		entity.setUfDestino(ufRepository.findById(dto.getUfDestinoId())
@@ -108,13 +108,13 @@ public class ConfiguracaoFiscalMapper extends GenericMapper<ConfiguracaoFiscal, 
 		if (dto.getConfiguracaoFiscalIcms().getSituacaoTributariaId() != null) {
 			entity.setConfiguracaoFiscalIcms(configuracaoFiscalIcmsMapper.toEntity(dto.getConfiguracaoFiscalIcms()));
 		}
-		if (dto.getConfiguracaoFiscalPis() != null) {
+		if (dto.getConfiguracaoFiscalPis().getSituacaoTributariaId() != null) {
 			entity.setConfiguracaoFiscalPis(configuracaoFiscalPisMapper.toEntity(dto.getConfiguracaoFiscalPis()));
 		}
 		if (dto.getConfiguracaoFiscalIpi().getSituacaoTributariaId() != null) {
 			entity.setConfiguracaoFiscalIpi(configuracaoFiscalIpiMapper.toEntity(dto.getConfiguracaoFiscalIpi()));
 		}
-		if (dto.getConfiguracaoFiscalCofins() != null) {
+		if (dto.getConfiguracaoFiscalCofins().getSituacaoTributariaId() != null) {
 			entity.setConfiguracaoFiscalCofins(configuracaoFiscalCofinsMapper.toEntity(dto.getConfiguracaoFiscalCofins()));
 		}
 
@@ -125,7 +125,7 @@ public class ConfiguracaoFiscalMapper extends GenericMapper<ConfiguracaoFiscal, 
 		dto.setId(entity.getId());
 		dto.setDataInicioVigencia(entity.getDataInicioVigencia());
 		dto.setDataFinalVigencia(entity.getDataFinalVigencia());
-		dto.setEntradaSaida(entity.getEntradaSaida().getValue());
+		dto.setIndicadorOperacao(entity.getIndicadorOperacao().getValue());
 		dto.setUfOrigemId(entity.getUfOrigem().getId());
 		dto.setUfOrigemNome(entity.getUfOrigem().getNome());
 		dto.setUfOrigemSigla(entity.getUfOrigem().getSigla());
@@ -152,6 +152,7 @@ public class ConfiguracaoFiscalMapper extends GenericMapper<ConfiguracaoFiscal, 
 		if (entity.getRegimeTributario() != null) {
 			dto.setRegimeTributarioId(entity.getRegimeTributario().getId());
 			dto.setRegimeTributarioNome(entity.getRegimeTributario().getNome());
+			dto.setRegimeTributarioSimplesNacional(entity.getRegimeTributario().isSimplesNacional());
 		}
 		if (entity.getOrigem() != null) {
 			dto.setOrigemId(entity.getOrigem().getId());
