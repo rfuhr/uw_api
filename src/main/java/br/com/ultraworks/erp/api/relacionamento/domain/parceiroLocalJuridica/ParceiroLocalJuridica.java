@@ -2,9 +2,14 @@ package br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocalJuridica;
 
 import java.sql.Date;
 
+import br.com.ultraworks.erp.api.fiscal.domain.indicadoriedestinatario.IndicadorIEDestinatario;
+import br.com.ultraworks.erp.api.fiscal.domain.indicadoriedestinatario.IndicadorIEDestinatarioConverter;
 import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocal.ParceiroLocal;
+import br.com.ultraworks.erp.api.tabela.domain.tipopessoa.TipoPessoa;
+import br.com.ultraworks.erp.api.tabela.domain.tipopessoa.TipoPessoaConverter;
 import br.com.ultraworks.erp.core.entity.UWEntityBase;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -36,4 +41,10 @@ public class ParceiroLocalJuridica extends UWEntityBase {
 	@Column(name = "data_fundacao")
 	private Date dataFundacao;
 	
+	@Convert(converter = IndicadorIEDestinatarioConverter.class)
+	@Column(name = "indicador_ie")
+	private IndicadorIEDestinatario indicadorIE;
+	
+	@Column(name = "suframa")
+	private String suframa;
 }

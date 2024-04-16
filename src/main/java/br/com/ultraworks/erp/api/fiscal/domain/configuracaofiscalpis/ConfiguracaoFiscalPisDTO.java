@@ -25,4 +25,7 @@ public class ConfiguracaoFiscalPisDTO {
 	@ValidaTipoCalculo
 	private String tipoCalculoST;
 	private BigDecimal aliquotaST;
+	
+	private String tipoCalculoNome;
+	private String tipoCalculoSTNome;
 }

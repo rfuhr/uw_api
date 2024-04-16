@@ -19,4 +19,7 @@ public class ParceiroLocalJuridicaDTO implements Serializable {
 	private String inscricaoEstadual;
 	
 	private Date dataFundacao;
+	
+	private String indicadorIE;
+	private String suframa;
 }

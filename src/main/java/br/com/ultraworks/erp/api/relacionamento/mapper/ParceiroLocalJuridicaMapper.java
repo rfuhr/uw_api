@@ -2,6 +2,7 @@ package br.com.ultraworks.erp.api.relacionamento.mapper;
 
 import org.springframework.stereotype.Component;
 
+import br.com.ultraworks.erp.api.fiscal.domain.indicadoriedestinatario.IndicadorIEDestinatario;
 import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocalFisica.ParceiroLocalFisica;
 import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocalFisica.ParceiroLocalFisicaDTO;
 import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocalJuridica.ParceiroLocalJuridica;
@@ -32,6 +33,8 @@ public class ParceiroLocalJuridicaMapper extends GenericMapper<ParceiroLocalJuri
 		}
 		entity.setDataFundacao(dto.getDataFundacao());
 		entity.setInscricaoEstadual(dto.getInscricaoEstadual());
+		entity.setIndicadorIE(IndicadorIEDestinatario.fromValue(dto.getIndicadorIE()));
+		entity.setSuframa(dto.getSuframa());
 	}
 
 	@Override
@@ -40,5 +43,7 @@ public class ParceiroLocalJuridicaMapper extends GenericMapper<ParceiroLocalJuri
 		dto.setParceiroLocalId(entity.getParceiroLocal().getId());
 		dto.setInscricaoEstadual(entity.getInscricaoEstadual());
 		dto.setDataFundacao(entity.getDataFundacao());
+		dto.setIndicadorIE(entity.getIndicadorIE().getValue());
+		dto.setSuframa(entity.getSuframa());
 	}
 }

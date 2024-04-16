@@ -1,0 +1,1 @@
+alter table parceiro_local_juridica add column suframa varchar(20);
