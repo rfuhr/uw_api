@@ -106,6 +106,7 @@ public class ItemMapper extends GenericMapper<Item, ItemDTO> {
 		dto.setQuantidadeAlertaEstoque(entity.getQuantidadeAlertaEstoque());
 
 		dto.setOrigemId(entity.getOrigem().getId());
+		dto.setOrigemNome(entity.getOrigem().getNome());
 		dto.setNcmId(entity.getNcm().getId());
 		dto.setNcmCodigo(entity.getNcm().getCodigo());
 		dto.setUnidadeMedidaTributavelId(entity.getUnidadeMedidaTributavel().getId());

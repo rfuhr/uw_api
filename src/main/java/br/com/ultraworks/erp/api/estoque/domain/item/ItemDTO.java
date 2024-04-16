@@ -50,6 +50,7 @@ public class ItemDTO {
 	private BigDecimal quantidadeAlertaEstoque;
 
 	private Long origemId;
+	private String origemNome;
 	private Long ncmId;
 	private String ncmCodigo;
 	private Long unidadeMedidaTributavelId;

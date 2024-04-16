@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
+import br.com.ultraworks.erp.api.tabela.domain.cidade.Cidade;
 import br.com.ultraworks.erp.core.UWRepository;
 import br.com.ultraworks.erp.core.dto.LazyParams;
 import br.com.ultraworks.erp.core.exception.RegisterNotFoundException;
@@ -129,5 +130,6 @@ public class GenericService<T, ID, D> {
 			return Optional.empty();
 		}
 	}
+
 
 }

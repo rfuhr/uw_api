@@ -1,5 +1,7 @@
 package br.com.ultraworks.erp.api.tabela.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,5 +22,9 @@ public class CidadeService extends GenericService<Cidade, Long, CidadeDTO> {
 		super(repository, mapper);
 		this.repository = repository;
 		this.mapper = mapper;
+	}
+	
+	public Optional<Cidade> getByIbge(Long ibge) {
+		return this.repository.findByCodigoIBGE(ibge);
 	}
 }
