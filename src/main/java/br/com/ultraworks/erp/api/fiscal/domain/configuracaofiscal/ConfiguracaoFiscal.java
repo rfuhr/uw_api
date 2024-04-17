@@ -106,6 +106,11 @@ public class ConfiguracaoFiscal extends UWEntityBase {
 	@JoinColumn(name = "item_id")
 	private Item item;
 	
+	private boolean icms;
+	private boolean ipi;
+	private boolean pis;
+	private boolean cofins;
+	
 	@Transient
 	private ConfiguracaoFiscalIcms configuracaoFiscalIcms;
 	

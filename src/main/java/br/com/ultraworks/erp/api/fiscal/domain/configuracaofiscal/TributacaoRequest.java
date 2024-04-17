@@ -14,4 +14,9 @@ public class TributacaoRequest {
 	private Long itemId;
 	private Long operacaoInternaId;
 	private LocalDateTime dataBase;
+	
+	private Long regimeTributarioId;
+	private Long classificacaoOperacaoId;
+	private Long origemId;
+
 }

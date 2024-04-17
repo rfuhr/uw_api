@@ -76,50 +76,78 @@ public class ConfiguracaoFiscalMapper extends GenericMapper<ConfiguracaoFiscal, 
 		if (dto.getGrupoTributacaoId() != null) {
 			entity.setGrupoTributacao(grupoTributacaoRepository.findById(dto.getGrupoTributacaoId())
 					.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Grupo de Tributação com id " + dto.getGrupoTributacaoId())));
+		} else {
+			entity.setGrupoTributacao(null);
 		}
 		if (dto.getCfopId() != null) {
 			entity.setCfop(cfopRepository.findById(dto.getCfopId())
 					.orElseThrow(() -> new RegisterNotFoundException("Não encontrado CFOP com id " + dto.getCfopId())));
+		} else {
+			entity.setCfop(null);
 		}
 		if (dto.getNcmId() != null) {
 			entity.setNcm(ncmRepository.findById(dto.getNcmId())
 					.orElseThrow(() -> new RegisterNotFoundException("Não encontrado NCM com id " + dto.getNcmId())));
+		} else {
+			entity.setNcm(null);
 		}
 		if (dto.getRegimeTributarioId() != null) {
 			entity.setRegimeTributario(regimeTributarioRepository.findById(dto.getRegimeTributarioId())
 					.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Regime Tributário com id " + dto.getRegimeTributarioId())));
+		} else {
+			entity.setRegimeTributario(null);
 		}
 		if (dto.getOrigemId() != null) {
 			entity.setOrigem(origemRepository.findById(dto.getOrigemId())
 					.orElseThrow(() -> new RegisterNotFoundException("Não encontrado NCM com id " + dto.getOrigemId())));
+		} else {
+			entity.setOrigem(null);
 		}
 		if (dto.getClassificacaoOperacaoId() != null) {
 			entity.setClassificacaoOperacao(classificacaoOperacaoRepository.findById(dto.getClassificacaoOperacaoId())
 					.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Classificação Operação com id " + dto.getClassificacaoOperacaoId())));
+		} else {
+			entity.setClassificacaoOperacao(null);
 		}
 		if (dto.getOperacaoInternaId() != null) {
 			entity.setOperacaoInterna(operacaoInternaRepository.findById(dto.getOperacaoInternaId())
 					.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Operação Interna com id " + dto.getOperacaoInternaId())));
+		} else {
+			entity.setOperacaoInterna(null);
 		}
 		if (dto.getItemId() != null) {
 			entity.setItem(itemRepository.findById(dto.getItemId())
 					.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Item com id " + dto.getItemId())));
+		} else {
+			entity.setItem(null);
 		}
 		if (dto.getConfiguracaoFiscalIcms().getSituacaoTributariaId() != null) {
 			entity.setConfiguracaoFiscalIcms(configuracaoFiscalIcmsMapper.toEntity(dto.getConfiguracaoFiscalIcms()));
+			entity.setIcms(true);
+		} else {
+			entity.setIcms(false);
 		}
 		if (dto.getConfiguracaoFiscalPis().getSituacaoTributariaId() != null) {
 			entity.setConfiguracaoFiscalPis(configuracaoFiscalPisMapper.toEntity(dto.getConfiguracaoFiscalPis()));
+			entity.setPis(true);
+		} else {
+			entity.setPis(false);
 		}
 		if (dto.getConfiguracaoFiscalIpi().getSituacaoTributariaId() != null) {
 			entity.setConfiguracaoFiscalIpi(configuracaoFiscalIpiMapper.toEntity(dto.getConfiguracaoFiscalIpi()));
+			entity.setIpi(true);
+		} else {
+			entity.setIpi(false);
 		}
 		if (dto.getConfiguracaoFiscalCofins().getSituacaoTributariaId() != null) {
 			entity.setConfiguracaoFiscalCofins(configuracaoFiscalCofinsMapper.toEntity(dto.getConfiguracaoFiscalCofins()));
+			entity.setCofins(true);
+		} else {
+			entity.setCofins(false);
 		}
-
 	}
 
+	@SuppressWarnings({ "deprecation" })
 	@Override
 	protected void setValuesToDto(ConfiguracaoFiscal entity, ConfiguracaoFiscalDTO dto) {
 		dto.setId(entity.getId());
@@ -134,6 +162,10 @@ public class ConfiguracaoFiscalMapper extends GenericMapper<ConfiguracaoFiscal, 
 		dto.setUfDestinoSigla(entity.getUfDestino().getSigla());
 		dto.setPaisDestinoId(entity.getPaisDestino().getId());
 		dto.setPaisDestinoNome(entity.getPaisDestino().getNome());
+		dto.setIcms(entity.isIcms());
+		dto.setIpi(entity.isIpi());
+		dto.setPis(entity.isPis());
+		dto.setCofins(entity.isCofins());
 		if (entity.getGrupoTributacao() != null) {
 			dto.setGrupoTributacaoId(entity.getGrupoTributacao().getId());
 			dto.setGrupoTributacaoNome(entity.getGrupoTributacao().getNome());

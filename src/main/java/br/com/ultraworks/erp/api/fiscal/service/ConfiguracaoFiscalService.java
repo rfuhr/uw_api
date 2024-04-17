@@ -13,8 +13,10 @@ import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscalcofins.Configur
 import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscalicms.ConfiguracaoFiscalIcms;
 import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscalipi.ConfiguracaoFiscalIpi;
 import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscalpis.ConfiguracaoFiscalPis;
+import br.com.ultraworks.erp.api.fiscal.domain.tipotributo.TipoTributo;
 import br.com.ultraworks.erp.api.fiscal.mapper.ConfiguracaoFiscalMapper;
 import br.com.ultraworks.erp.api.fiscal.repository.ConfiguracaoFiscalRepository;
+import br.com.ultraworks.erp.api.fiscal.repository.query.VerificaDuplicidadeConfiguracaoFiscalQuery;
 import br.com.ultraworks.erp.core.exception.RegisterNotFoundException;
 import br.com.ultraworks.erp.core.generics.GenericService;
 import lombok.NoArgsConstructor;
@@ -29,17 +31,20 @@ public class ConfiguracaoFiscalService extends GenericService<ConfiguracaoFiscal
 	ConfiguracaoFiscalIpiService configuracaoFiscalIpiService;
 	ConfiguracaoFiscalPisService configuracaoFiscalPisService;
 	ConfiguracaoFiscalCofinsService configuracaoFiscalCofinsService;
+	VerificaDuplicidadeConfiguracaoFiscalQuery verificaDuplicidadeConfiguracaoFiscalQuery;
 	
 	@Autowired
 	public ConfiguracaoFiscalService(ConfiguracaoFiscalRepository repository, ConfiguracaoFiscalMapper mapper,
 			ConfiguracaoFiscalIcmsService configuracaoFiscalIcmsService, ConfiguracaoFiscalIpiService configuracaoFiscalIpiService,
-			ConfiguracaoFiscalPisService configuracaoFiscalPisService, ConfiguracaoFiscalCofinsService configuracaoFiscalCofinsService) {
+			ConfiguracaoFiscalPisService configuracaoFiscalPisService, ConfiguracaoFiscalCofinsService configuracaoFiscalCofinsService,
+			VerificaDuplicidadeConfiguracaoFiscalQuery verificaDuplicidadeConfiguracaoFiscalQuery) {
 		super(repository, mapper);
 		this.repository = repository;
 		this.configuracaoFiscalIcmsService = configuracaoFiscalIcmsService;
 		this.configuracaoFiscalIpiService = configuracaoFiscalIpiService;
 		this.configuracaoFiscalPisService = configuracaoFiscalPisService;
 		this.configuracaoFiscalCofinsService = configuracaoFiscalCofinsService;
+		this.verificaDuplicidadeConfiguracaoFiscalQuery = verificaDuplicidadeConfiguracaoFiscalQuery;
 	}
 	
 	@Override
@@ -86,21 +91,25 @@ public class ConfiguracaoFiscalService extends GenericService<ConfiguracaoFiscal
 		repository.save(entity);
 		
 		if (entity.getConfiguracaoFiscalIcms() != null && entity.getConfiguracaoFiscalIcms().getSituacaoTributaria() != null) {
+			this.verificaDuplicidadeConfiguracaoFiscalQuery.executeSQL(entity, TipoTributo.ICMS);
 			entity.getConfiguracaoFiscalIcms().setConfiguracaoFiscal(entity);
 			configuracaoFiscalIcmsService.save(entity.getConfiguracaoFiscalIcms());
 		}
 		
 		if (entity.getConfiguracaoFiscalIpi() != null && entity.getConfiguracaoFiscalIpi().getSituacaoTributaria() != null) {
+			this.verificaDuplicidadeConfiguracaoFiscalQuery.executeSQL(entity, TipoTributo.IPI);
 			entity.getConfiguracaoFiscalIpi().setConfiguracaoFiscal(entity);
 			configuracaoFiscalIpiService.save(entity.getConfiguracaoFiscalIpi());
 		}
 		
 		if (entity.getConfiguracaoFiscalPis() != null && entity.getConfiguracaoFiscalPis().getSituacaoTributaria() != null) {
+			this.verificaDuplicidadeConfiguracaoFiscalQuery.executeSQL(entity, TipoTributo.PIS);
 			entity.getConfiguracaoFiscalPis().setConfiguracaoFiscal(entity);
 			configuracaoFiscalPisService.save(entity.getConfiguracaoFiscalPis());
 		}
 		
 		if (entity.getConfiguracaoFiscalCofins() != null && entity.getConfiguracaoFiscalCofins().getSituacaoTributaria() != null) {
+			this.verificaDuplicidadeConfiguracaoFiscalQuery.executeSQL(entity, TipoTributo.COFINS);
 			entity.getConfiguracaoFiscalCofins().setConfiguracaoFiscal(entity);
 			configuracaoFiscalCofinsService.save(entity.getConfiguracaoFiscalCofins());
 		}

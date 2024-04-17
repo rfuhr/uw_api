@@ -51,6 +51,10 @@ public class ConfiguracaoFiscalDTO {
 	private Long itemId;
 	private String itemNome;
 	private Long itemCodigo;
+	private boolean icms;
+	private boolean ipi;
+	private boolean pis;
+	private boolean cofins;
 	
 	@Valid
 	private ConfiguracaoFiscalIcmsDTO configuracaoFiscalIcms;

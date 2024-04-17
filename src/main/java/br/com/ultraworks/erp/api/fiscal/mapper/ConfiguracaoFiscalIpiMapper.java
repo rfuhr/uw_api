@@ -37,12 +37,16 @@ public class ConfiguracaoFiscalIpiMapper extends GenericMapper<ConfiguracaoFisca
 	@Override
 	protected void setValuesToEntity(ConfiguracaoFiscalIpiDTO dto, ConfiguracaoFiscalIpi entity) {
 		entity.setId(dto.getId());
-		entity.setConfiguracaoFiscal(configuracaoFiscalRepository.findById(dto.getConfiguracaoFiscalId())
-				.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Configuração Fiscal com id " + dto.getConfiguracaoFiscalId())));
+		if (dto.getConfiguracaoFiscalId() != null) {
+			entity.setConfiguracaoFiscal(configuracaoFiscalRepository.findById(dto.getConfiguracaoFiscalId())
+					.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Configuração Fiscal com id " + dto.getConfiguracaoFiscalId())));			
+		}
 		entity.setSituacaoTributaria(situacaoTributariaRepository.findById(dto.getSituacaoTributariaId())
 				.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Situação Tributária com id " + dto.getSituacaoTributariaId())));
-		entity.setEnquadramento(enquadramentoRepository.findById(dto.getEnquadramentoId())
-				.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Enquadramento com id " + dto.getEnquadramentoId())));
+		if (dto.getEnquadramentoId() != null) {
+			entity.setEnquadramento(enquadramentoRepository.findById(dto.getEnquadramentoId())
+					.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Enquadramento com id " + dto.getEnquadramentoId())));
+		}
 		entity.setTipoCalculo(TipoCalculo.fromValue(dto.getTipoCalculo()));
 		entity.setAliquota(dto.getAliquota());
 		entity.setCodigoSelo(dto.getCodigoSelo());
