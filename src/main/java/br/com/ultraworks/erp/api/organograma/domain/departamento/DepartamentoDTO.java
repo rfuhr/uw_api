@@ -21,4 +21,8 @@ public class DepartamentoDTO {
 	private String sigla;
 
 	private Long empresaFilialId;
+	private String empresaFilialNome;
+	
+	private Long empresaId;
+	private String empresaNome;
 }

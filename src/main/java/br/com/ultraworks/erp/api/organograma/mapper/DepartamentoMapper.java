@@ -34,6 +34,11 @@ public class DepartamentoMapper extends GenericMapper<Departamento, Departamento
 		dto.setNome(entity.getNome());
 		dto.setSigla(entity.getSigla());
 		dto.setEmpresaFilialId(entity.getEmpresaFilial().getId());
+		dto.setEmpresaFilialNome(entity.getEmpresaFilial().getNome());
+		
+		dto.setEmpresaId(entity.getEmpresaFilial().getEmpresa().getId());
+		dto.setEmpresaNome(entity.getEmpresaFilial().getEmpresa().getNome());
+		
 		
 	}	
 }

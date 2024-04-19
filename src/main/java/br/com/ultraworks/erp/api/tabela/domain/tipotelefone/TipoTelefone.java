@@ -22,6 +22,6 @@ public enum TipoTelefone {
 				return tipo;
 			}
 		}
-		return null; // Ou lançar uma exceção se preferir
+		return null; 
 	}
 }
