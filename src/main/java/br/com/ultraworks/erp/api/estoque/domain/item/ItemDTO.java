@@ -54,4 +54,6 @@ public class ItemDTO {
 	private Long ncmId;
 	private String ncmCodigo;
 	private Long unidadeMedidaTributavelId;
+	private Long grupoTributacaoId;
+	private String grupoTributacaoNome;
 }

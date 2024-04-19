@@ -8,6 +8,7 @@ import br.com.ultraworks.erp.api.estoque.repository.ItemRepository;
 import br.com.ultraworks.erp.api.estoque.service.LinhaService;
 import br.com.ultraworks.erp.api.estoque.service.MarcaService;
 import br.com.ultraworks.erp.api.estoque.service.PlanoClassificacaoItemService;
+import br.com.ultraworks.erp.api.fiscal.service.GrupoTributacaoService;
 import br.com.ultraworks.erp.api.fiscal.service.NcmService;
 import br.com.ultraworks.erp.api.fiscal.service.OrigemService;
 import br.com.ultraworks.erp.api.tabela.service.UnidadeMedidaService;
@@ -23,10 +24,11 @@ public class ItemMapper extends GenericMapper<Item, ItemDTO> {
 	private PlanoClassificacaoItemService planoClassificacaoItemService;
 	private OrigemService origemService;
 	private NcmService ncmService;
+	private GrupoTributacaoService grupoTributacaoService;
 
 	public ItemMapper(ItemRepository repository, UnidadeMedidaService unidadeMedidaService, MarcaService marcaService,
 			LinhaService linhaService, PlanoClassificacaoItemService planoClassificacaoItemService,
-			OrigemService origemService, NcmService ncmService) {
+			OrigemService origemService, NcmService ncmService, GrupoTributacaoService grupoTributacaoService) {
 		super(repository, Item::new, ItemDTO::new);
 		this.unidadeMedidaService = unidadeMedidaService;
 		this.marcaService = marcaService;
@@ -34,6 +36,7 @@ public class ItemMapper extends GenericMapper<Item, ItemDTO> {
 		this.planoClassificacaoItemService = planoClassificacaoItemService;
 		this.origemService = origemService;
 		this.ncmService = ncmService;
+		this.grupoTributacaoService = grupoTributacaoService;
 	}
 
 	@Override
@@ -76,7 +79,9 @@ public class ItemMapper extends GenericMapper<Item, ItemDTO> {
 		entity.setUnidadeMedidaTributavel(unidadeMedidaService.getById(dto.getUnidadeMedidaTributavelId())
 				.orElseThrow(() -> new RegisterNotFoundException(
 						"Não encontrado unidade de medida tributável com id " + dto.getUnidadeMedidaTributavelId())));
-
+		if (dto.getGrupoTributacaoId() != null && dto.getGrupoTributacaoId() > 0)
+			entity.setGrupoTributacao(grupoTributacaoService.getById(dto.getGrupoTributacaoId()).orElseThrow(
+					() -> new RegisterNotFoundException("Não encontrado Grupo Tributação com id " + dto.getGrupoTributacaoId())));
 	}
 
 	@Override
@@ -111,5 +116,9 @@ public class ItemMapper extends GenericMapper<Item, ItemDTO> {
 		dto.setNcmCodigo(entity.getNcm().getCodigo());
 		dto.setUnidadeMedidaTributavelId(entity.getUnidadeMedidaTributavel().getId());
 		dto.setProdutoProprio(entity.isProdutoProprio());
+		if (entity.getGrupoTributacao() != null) {
+			dto.setGrupoTributacaoId(entity.getGrupoTributacao().getId());
+			dto.setGrupoTributacaoNome(entity.getGrupoTributacao().getNome());
+		}
 	}
 }

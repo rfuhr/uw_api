@@ -2,7 +2,6 @@ package br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscalipi;
 
 import java.math.BigDecimal;
 
-import br.com.ultraworks.erp.api.fiscal.domain.modalidadebasecalculo.validador.ValidaModalidadeBaseCalculo;
 import br.com.ultraworks.erp.api.fiscal.domain.tipocalculo.validador.ValidaTipoCalculo;
 import lombok.Data;
 
@@ -14,9 +13,6 @@ public class ConfiguracaoFiscalIpiDTO {
 	private Long situacaoTributariaId;
 	private Long situacaoTributariaCodigo;
 	private String situacaoTributariaNome;
-	
-	@ValidaModalidadeBaseCalculo
-	private String modalidadeBaseCalculo;
 	
 	private Long enquadramentoId;
 	private Long enquadramentoCodigo;

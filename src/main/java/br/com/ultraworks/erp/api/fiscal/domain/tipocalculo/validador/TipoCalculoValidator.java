@@ -28,7 +28,7 @@ public class TipoCalculoValidator implements ConstraintValidator<ValidaTipoCalcu
     @Override
     public boolean isValid(String tipoCalculoCodigo, ConstraintValidatorContext context) {
         if (tipoCalculoCodigo == null) {
-            return false; // Permitir valores nulos, se necessário
+            return true; // Permitir valores nulos, se necessário
         }
 
         boolean isValid = codigosValidos.contains(tipoCalculoCodigo);

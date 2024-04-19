@@ -18,5 +18,6 @@ public class RegimeTributarioDTO {
 	@FriendlyName("Nome")
 	private String nome;
 	private int codigo;
+	private boolean simplesNacional;
 
 }

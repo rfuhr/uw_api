@@ -44,10 +44,6 @@ public class ConfiguracaoFiscalCofins extends UWEntityBase {
 	@JoinColumn(name = "situacao_tributaria_id")
 	private SituacaoTributaria situacaoTributaria;
 	
-	@Convert(converter = ModalidadeBaseCalculoConverter.class)
-	@Column(name = "modalidade_base_calculo")
-	private ModalidadeBaseCalculo modalidadeBaseCalculo;
-	
 	@Column(name = "aliquota")
 	private BigDecimal aliquota;
 	
