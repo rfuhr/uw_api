@@ -1,7 +1,5 @@
 package br.com.ultraworks.erp.api.fiscal.controller;
 
-import java.math.BigDecimal;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,9 +10,6 @@ import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscal.ConfiguracaoFi
 import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscal.ConfiguracaoFiscalDTO;
 import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscal.TributacaoRequest;
 import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscal.TributacaoResponse;
-import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscalcofins.ConfiguracaoFiscalCofinsDTO;
-import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscalicms.ConfiguracaoFiscalIcmsDTO;
-import br.com.ultraworks.erp.api.fiscal.domain.tipocalculo.TipoCalculo;
 import br.com.ultraworks.erp.api.fiscal.mapper.ConfiguracaoFiscalMapper;
 import br.com.ultraworks.erp.api.fiscal.service.ConfiguracaoFiscalService;
 import br.com.ultraworks.erp.core.generics.GenericController;
@@ -23,26 +18,31 @@ import br.com.ultraworks.erp.core.generics.GenericController;
 @RequestMapping("/fiscal/configuracao-fiscal")
 public class ConfiguracaoFiscalController extends GenericController<ConfiguracaoFiscal, Long, ConfiguracaoFiscalDTO> {
 
+	ConfiguracaoFiscalService service;
+	
 	public ConfiguracaoFiscalController(ConfiguracaoFiscalService service, ConfiguracaoFiscalMapper mapper) {
 		super(service, mapper);
+		this.service = service;
 	}
 
 	@PostMapping("/services/tributacao")
 	public ResponseEntity<TributacaoResponse> getTributacao(@RequestBody TributacaoRequest request) {
-
-		TributacaoResponse response = new TributacaoResponse();
 		
-		response.setTemIcms(true);
-		ConfiguracaoFiscalIcmsDTO configuracaoFiscalIcmsDTO = new ConfiguracaoFiscalIcmsDTO();
-		configuracaoFiscalIcmsDTO.setId(6L);
-		configuracaoFiscalIcmsDTO.setSituacaoTributariaId(6L);
-		configuracaoFiscalIcmsDTO.setSituacaoTributariaCodigo(10L);
-		configuracaoFiscalIcmsDTO.setSituacaoTributariaNome("Com redução de base de cálculo e cobrança do ICMS por Substituição Tributária");
-		configuracaoFiscalIcmsDTO.setModalidadeBaseCalculo("3");
-		configuracaoFiscalIcmsDTO.setAliquota(BigDecimal.valueOf(12));
-		configuracaoFiscalIcmsDTO.setReducaoBaseCalculo(BigDecimal.valueOf(2));
-		configuracaoFiscalIcmsDTO.setMotivoDesoneracaoId(1L);
-		configuracaoFiscalIcmsDTO.setDiferencialAliquota(BigDecimal.valueOf(11));
+		return ResponseEntity.ok(this.service.buscaConfiguracaoFiscalParaTributacao(request));
+
+//		TributacaoResponse response = new TributacaoResponse();
+//		
+//		response.setTemIcms(true);
+//		ConfiguracaoFiscalIcmsDTO configuracaoFiscalIcmsDTO = new ConfiguracaoFiscalIcmsDTO();
+//		configuracaoFiscalIcmsDTO.setId(6L);
+//		configuracaoFiscalIcmsDTO.setSituacaoTributariaId(6L);
+//		configuracaoFiscalIcmsDTO.setSituacaoTributariaCodigo(10L);
+//		configuracaoFiscalIcmsDTO.setSituacaoTributariaNome("Com redução de base de cálculo e cobrança do ICMS por Substituição Tributária");
+//		configuracaoFiscalIcmsDTO.setModalidadeBaseCalculo("3");
+//		configuracaoFiscalIcmsDTO.setAliquota(BigDecimal.valueOf(12));
+//		configuracaoFiscalIcmsDTO.setReducaoBaseCalculo(BigDecimal.valueOf(2));
+//		configuracaoFiscalIcmsDTO.setMotivoDesoneracaoId(1L);
+//		configuracaoFiscalIcmsDTO.setDiferencialAliquota(BigDecimal.valueOf(11));
 		
 //		configuracaoFiscalIcmsDTO.setModalidadeBaseCalculoST("5");
 //		configuracaoFiscalIcmsDTO.setMargemValorAgregadoST(BigDecimal.valueOf(1.5));
@@ -53,7 +53,7 @@ public class ConfiguracaoFiscalController extends GenericController<Configuracao
 		
 //		configuracaoFiscalIcmsDTO.setAliquotaCredito(BigDecimal.valueOf(12));
 		
-		response.setConfiguracaoFiscalIcms(configuracaoFiscalIcmsDTO);
+//		response.setConfiguracaoFiscalIcms(configuracaoFiscalIcmsDTO);
 		
 //		response.setTemIpi(true);
 //		ConfiguracaoFiscalIpiDTO configuracaoFiscalIpiDTO = new ConfiguracaoFiscalIpiDTO();
@@ -67,19 +67,19 @@ public class ConfiguracaoFiscalController extends GenericController<Configuracao
 //		
 //		response.setConfiguracaoFiscalIpi(configuracaoFiscalIpiDTO);
 		
-		response.setTemCofins(true);
-		ConfiguracaoFiscalCofinsDTO configuracaoFiscalCofinsDTO = new ConfiguracaoFiscalCofinsDTO();
-		configuracaoFiscalCofinsDTO.setSituacaoTributariaId(1L);
-		configuracaoFiscalCofinsDTO.setSituacaoTributariaCodigo(54L);
-		configuracaoFiscalCofinsDTO.setSituacaoTributariaNome("Operação Tributável com Alíquota Básica");
-		configuracaoFiscalCofinsDTO.setTipoCalculo(TipoCalculo.PERCENTUAL.getValue());
-		configuracaoFiscalCofinsDTO.setTipoCalculoNome(TipoCalculo.PERCENTUAL.getName());
-		configuracaoFiscalCofinsDTO.setAliquota(BigDecimal.valueOf(12));
+//		response.setTemCofins(true);
+//		ConfiguracaoFiscalCofinsDTO configuracaoFiscalCofinsDTO = new ConfiguracaoFiscalCofinsDTO();
+//		configuracaoFiscalCofinsDTO.setSituacaoTributariaId(1L);
+//		configuracaoFiscalCofinsDTO.setSituacaoTributariaCodigo(54L);
+//		configuracaoFiscalCofinsDTO.setSituacaoTributariaNome("Operação Tributável com Alíquota Básica");
+//		configuracaoFiscalCofinsDTO.setTipoCalculo(TipoCalculo.PERCENTUAL.getValue());
+//		configuracaoFiscalCofinsDTO.setTipoCalculoNome(TipoCalculo.PERCENTUAL.getName());
+//		configuracaoFiscalCofinsDTO.setAliquota(BigDecimal.valueOf(12));
 //		configuracaoFiscalPisDTO.setTipoCalculoST(TipoCalculo.PERCENTUAL.getValue());
 //		configuracaoFiscalPisDTO.setTipoCalculoSTNome(TipoCalculo.PERCENTUAL.getName());
 		
 		
-		response.setConfiguracaoFiscalCofins(configuracaoFiscalCofinsDTO);
-		return ResponseEntity.ok(response);
+//		response.setConfiguracaoFiscalCofins(configuracaoFiscalCofinsDTO);
+//		return ResponseEntity.ok(response);
 	}
 }

@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscal.ConfiguracaoFiscal;
 import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscal.ConfiguracaoFiscalDTO;
+import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscal.TributacaoRequest;
+import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscal.TributacaoResponse;
 import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscalcofins.ConfiguracaoFiscalCofins;
 import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscalicms.ConfiguracaoFiscalIcms;
 import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscalipi.ConfiguracaoFiscalIpi;
@@ -17,6 +19,7 @@ import br.com.ultraworks.erp.api.fiscal.domain.tipotributo.TipoTributo;
 import br.com.ultraworks.erp.api.fiscal.mapper.ConfiguracaoFiscalMapper;
 import br.com.ultraworks.erp.api.fiscal.repository.ConfiguracaoFiscalRepository;
 import br.com.ultraworks.erp.api.fiscal.repository.query.VerificaDuplicidadeConfiguracaoFiscalQuery;
+import br.com.ultraworks.erp.api.fiscal.repository.query.buscaConfiguracaoFiscalPorTributoQuery;
 import br.com.ultraworks.erp.core.exception.RegisterNotFoundException;
 import br.com.ultraworks.erp.core.generics.GenericService;
 import lombok.NoArgsConstructor;
@@ -32,6 +35,7 @@ public class ConfiguracaoFiscalService extends GenericService<ConfiguracaoFiscal
 	ConfiguracaoFiscalPisService configuracaoFiscalPisService;
 	ConfiguracaoFiscalCofinsService configuracaoFiscalCofinsService;
 	VerificaDuplicidadeConfiguracaoFiscalQuery verificaDuplicidadeConfiguracaoFiscalQuery;
+	buscaConfiguracaoFiscalPorTributoQuery buscaConfiguracaoFiscalPorTributoQuery;
 	
 	@Autowired
 	public ConfiguracaoFiscalService(ConfiguracaoFiscalRepository repository, ConfiguracaoFiscalMapper mapper,
@@ -45,6 +49,7 @@ public class ConfiguracaoFiscalService extends GenericService<ConfiguracaoFiscal
 		this.configuracaoFiscalPisService = configuracaoFiscalPisService;
 		this.configuracaoFiscalCofinsService = configuracaoFiscalCofinsService;
 		this.verificaDuplicidadeConfiguracaoFiscalQuery = verificaDuplicidadeConfiguracaoFiscalQuery;
+		this.buscaConfiguracaoFiscalPorTributoQuery = buscaConfiguracaoFiscalPorTributoQuery;
 	}
 	
 	@Override
@@ -150,6 +155,10 @@ public class ConfiguracaoFiscalService extends GenericService<ConfiguracaoFiscal
 			configuracaoFiscalCofinsService.delete(configuracaoFiscal.getConfiguracaoFiscalCofins().getId());
 		}
 		repository.deleteById(id);
+	}
+	
+	public TributacaoResponse buscaConfiguracaoFiscalParaTributacao(TributacaoRequest tributacaoRequest) {
+		return this.buscaConfiguracaoFiscalPorTributoQuery.executeSQL(tributacaoRequest);
 	}
 
 }
