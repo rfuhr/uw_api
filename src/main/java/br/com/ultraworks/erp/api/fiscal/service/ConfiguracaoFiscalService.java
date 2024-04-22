@@ -18,8 +18,8 @@ import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscalpis.Configuraca
 import br.com.ultraworks.erp.api.fiscal.domain.tipotributo.TipoTributo;
 import br.com.ultraworks.erp.api.fiscal.mapper.ConfiguracaoFiscalMapper;
 import br.com.ultraworks.erp.api.fiscal.repository.ConfiguracaoFiscalRepository;
+import br.com.ultraworks.erp.api.fiscal.repository.query.BuscaConfiguracaoFiscalPorTributoQuery;
 import br.com.ultraworks.erp.api.fiscal.repository.query.VerificaDuplicidadeConfiguracaoFiscalQuery;
-import br.com.ultraworks.erp.api.fiscal.repository.query.buscaConfiguracaoFiscalPorTributoQuery;
 import br.com.ultraworks.erp.core.exception.RegisterNotFoundException;
 import br.com.ultraworks.erp.core.generics.GenericService;
 import lombok.NoArgsConstructor;
@@ -35,13 +35,14 @@ public class ConfiguracaoFiscalService extends GenericService<ConfiguracaoFiscal
 	ConfiguracaoFiscalPisService configuracaoFiscalPisService;
 	ConfiguracaoFiscalCofinsService configuracaoFiscalCofinsService;
 	VerificaDuplicidadeConfiguracaoFiscalQuery verificaDuplicidadeConfiguracaoFiscalQuery;
-	buscaConfiguracaoFiscalPorTributoQuery buscaConfiguracaoFiscalPorTributoQuery;
+	BuscaConfiguracaoFiscalPorTributoQuery buscaConfiguracaoFiscalPorTributoQuery;
 	
 	@Autowired
 	public ConfiguracaoFiscalService(ConfiguracaoFiscalRepository repository, ConfiguracaoFiscalMapper mapper,
 			ConfiguracaoFiscalIcmsService configuracaoFiscalIcmsService, ConfiguracaoFiscalIpiService configuracaoFiscalIpiService,
 			ConfiguracaoFiscalPisService configuracaoFiscalPisService, ConfiguracaoFiscalCofinsService configuracaoFiscalCofinsService,
-			VerificaDuplicidadeConfiguracaoFiscalQuery verificaDuplicidadeConfiguracaoFiscalQuery) {
+			VerificaDuplicidadeConfiguracaoFiscalQuery verificaDuplicidadeConfiguracaoFiscalQuery,
+			BuscaConfiguracaoFiscalPorTributoQuery buscaConfiguracaoFiscalPorTributoQuery) {
 		super(repository, mapper);
 		this.repository = repository;
 		this.configuracaoFiscalIcmsService = configuracaoFiscalIcmsService;

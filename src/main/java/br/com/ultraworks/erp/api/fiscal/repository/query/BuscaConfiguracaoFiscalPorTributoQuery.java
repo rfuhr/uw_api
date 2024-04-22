@@ -32,7 +32,7 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class buscaConfiguracaoFiscalPorTributoQuery {
+public class BuscaConfiguracaoFiscalPorTributoQuery {
 
 	EntityManager em;
 	ItemService itemService;
@@ -59,7 +59,7 @@ public class buscaConfiguracaoFiscalPorTributoQuery {
 					.setParameter("ufDestinoId", tributacaoRequest.getUfDestino())
 					.setParameter("regimeTributarioId", tributacaoRequest.getRegimeTributarioId())
 					.setParameter("indicadorOperacao", tributacaoRequest.getIndicadorOperacaoValue())
-					.setParameter("dataInicio", tributacaoRequest.getDataBase())
+					.setParameter("dataEmissao", tributacaoRequest.getDataBase())
 					.setParameter("cfopId", tributacaoRequest.getCfopId())
 					.setParameter("ncmId", item.get().getNcm().getId())
 					.setParameter("origemId", tributacaoRequest.getOrigemId())
@@ -70,6 +70,10 @@ public class buscaConfiguracaoFiscalPorTributoQuery {
 					.setParameter("validaIpi", tipoTributo.getValue().equals(TipoTributo.IPI.getValue()) ? 0 : 1)
 					.setParameter("validaPis", tipoTributo.getValue().equals(TipoTributo.PIS.getValue()) ? 0 : 1)
 					.setParameter("validaCofins", tipoTributo.getValue().equals(TipoTributo.COFINS.getValue()) ? 0 : 1)
+					.setParameter("icms", tipoTributo.getValue().equals(TipoTributo.ICMS.getValue()) ? true : false)
+					.setParameter("ipi", tipoTributo.getValue().equals(TipoTributo.IPI.getValue()) ? true : false)
+					.setParameter("pis", tipoTributo.getValue().equals(TipoTributo.PIS.getValue()) ? true : false)
+					.setParameter("cofins", tipoTributo.getValue().equals(TipoTributo.COFINS.getValue()) ? true : false)					
 					.getResultList();
 			
 			if (resultTuples == null || resultTuples.size() == 0) {

@@ -23,9 +23,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode(callSuper=false)
-@UniqueValidationGroup({
-    @UniqueValidation(fields = {"tipo_tributo","codigo"}, label = "Já existe Situação Tributária com esse código para o Tipo de Tributo")
-})
+//@UniqueValidationGroup({
+//    @UniqueValidation(fields = {"tipo_tributo","codigo"}, label = "Já existe Situação Tributária com esse código para o Tipo de Tributo")
+//})
 public class SituacaoTributaria extends UWEntityBase {
 	
 	@Id

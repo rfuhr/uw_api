@@ -18,6 +18,7 @@ public class ConfiguracaoFiscalIpiDTO {
 	private Long enquadramentoCodigo;
 	private String enquadramentoNome;
 	private BigDecimal aliquota;
+	private BigDecimal valorUnidade;
 
 	@ValidaTipoCalculo
 	private String tipoCalculo;
