@@ -25,4 +25,6 @@ public class DepartamentoDTO {
 	
 	private Long empresaId;
 	private String empresaNome;
+	
+	private Long parceiroLocalFilialId;
 }

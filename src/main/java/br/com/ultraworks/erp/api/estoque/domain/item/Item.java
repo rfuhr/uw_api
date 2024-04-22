@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import br.com.ultraworks.erp.api.estoque.domain.linha.Linha;
 import br.com.ultraworks.erp.api.estoque.domain.marca.Marca;
 import br.com.ultraworks.erp.api.estoque.domain.planoclassificacaoitem.PlanoClassificacaoItem;
+import br.com.ultraworks.erp.api.fiscal.domain.classificacaooperacao.ClassificacaoOperacao;
 import br.com.ultraworks.erp.api.fiscal.domain.grupotributacao.GrupoTributacao;
 import br.com.ultraworks.erp.api.fiscal.domain.ncm.Ncm;
 import br.com.ultraworks.erp.api.fiscal.domain.origem.Origem;
@@ -100,4 +101,8 @@ public class Item extends UWEntityBase {
 	@OneToOne
 	@JoinColumn(name = "grupo_tributacao_id")
 	private GrupoTributacao grupoTributacao;
+	
+	@OneToOne
+	@JoinColumn(name = "classificacao_operacao_id")
+	private ClassificacaoOperacao classificacaoOperacao;
 }

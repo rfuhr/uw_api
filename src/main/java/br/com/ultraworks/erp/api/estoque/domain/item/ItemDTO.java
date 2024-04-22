@@ -56,4 +56,6 @@ public class ItemDTO {
 	private Long unidadeMedidaTributavelId;
 	private Long grupoTributacaoId;
 	private String grupoTributacaoNome;
+	private Long classificacaoOperacaoId;
+	private String classificacaoOperacaoNome;
 }

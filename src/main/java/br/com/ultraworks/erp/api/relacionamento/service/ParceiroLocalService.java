@@ -62,6 +62,11 @@ public class ParceiroLocalService extends GenericService<ParceiroLocal, Long, Pa
 		return listRegistros;
 	}
 
+	@Override
+	public Optional<ParceiroLocal> getById(Long id) {
+		return repository.findById(id);
+	}
+	
 	private void getDadosListasDependentes(ParceiroLocal parceiroLocal) {
 		parceiroLocal.getDadosPessoaFisica()
 				.addAll(parceiroFisicaService.getAllByParceiroLocal(parceiroLocal.getId()));
@@ -72,15 +77,6 @@ public class ParceiroLocalService extends GenericService<ParceiroLocal, Long, Pa
 		parceiroLocal.getTelefones()
 				.addAll(parceiroLocalTelefoneService.getAllByParceiroLocal(parceiroLocal.getId()));
 		parceiroLocal.getEmails().addAll(parceiroLocalEmailService.getAllByParceiroLocal(parceiroLocal.getId()));
-	}
-
-	@Override
-	public Optional<ParceiroLocal> getById(Long id) {
-		Optional<ParceiroLocal> parceiroLocal = repository.findById(id);
-		if (parceiroLocal.isPresent()) {
-			getDadosListasDependentes(parceiroLocal.get());
-		}
-		return parceiroLocal;
 	}
 
 	@Override
@@ -236,5 +232,4 @@ public class ParceiroLocalService extends GenericService<ParceiroLocal, Long, Pa
 		getDadosListasDependentes(parceiroLocal);
 		return parceiroLocal;
 	}
-	
 }
