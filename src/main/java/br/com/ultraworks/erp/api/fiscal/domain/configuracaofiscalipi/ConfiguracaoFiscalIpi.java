@@ -4,8 +4,6 @@ import java.math.BigDecimal;
 
 import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscal.ConfiguracaoFiscal;
 import br.com.ultraworks.erp.api.fiscal.domain.enquadramento.Enquadramento;
-import br.com.ultraworks.erp.api.fiscal.domain.modalidadebasecalculo.ModalidadeBaseCalculo;
-import br.com.ultraworks.erp.api.fiscal.domain.modalidadebasecalculo.ModalidadeBaseCalculoConverter;
 import br.com.ultraworks.erp.api.fiscal.domain.situacaotributaria.SituacaoTributaria;
 import br.com.ultraworks.erp.api.fiscal.domain.tipocalculo.TipoCalculo;
 import br.com.ultraworks.erp.api.fiscal.domain.tipocalculo.TipoCalculoConverter;
@@ -51,6 +49,9 @@ public class ConfiguracaoFiscalIpi extends UWEntityBase {
 	
 	@Column(name = "aliquota")
 	private BigDecimal aliquota;
+	
+	@Column(name = "valor_unidade")
+	private BigDecimal valorUnidade;
 	
 	@Convert(converter = TipoCalculoConverter.class)
 	@Column(name = "tipo_calculo")

@@ -6,8 +6,8 @@ import java.util.List;
 import br.com.ultraworks.erp.core.dto.EnumResponse;
 
 public enum TipoCalculo {
-    PERCENTUAL("P", "Percentual"),
-    VALOR("V", "Valor");
+    QUANTIDADE("Q", "Quantidade"),
+    ALIQUOTA("A", "Aliquota");
 
     private String value;
     private String name;

@@ -1,0 +1,1 @@
+alter table configuracao_fiscal_ipi add column valor_unidade decimal(15,5);
