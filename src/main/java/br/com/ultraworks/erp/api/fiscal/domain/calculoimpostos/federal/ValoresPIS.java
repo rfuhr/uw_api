@@ -9,11 +9,13 @@ import lombok.NoArgsConstructor;
 @Data
 public class ValoresPIS {
 	
-    private Long cST;
+    private int cST;
     private BigDecimal vBC;
-    private BigDecimal pCOFINS;
+    private BigDecimal pPIS;
     private BigDecimal qBCProd;
     private BigDecimal vAliqProd;
-    private BigDecimal vCOFINS;
+    private BigDecimal vPIS;
+    private BigDecimal vPISST;
+    private BigDecimal vAliqProdST;
 
 }

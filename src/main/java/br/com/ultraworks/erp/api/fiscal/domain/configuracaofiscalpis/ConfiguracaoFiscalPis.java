@@ -55,5 +55,11 @@ public class ConfiguracaoFiscalPis extends UWEntityBase {
 	@Convert(converter = TipoCalculoConverter.class)
 	@Column(name = "tipo_calculo_st")
 	private TipoCalculo tipoCalculoST;
+	
+	@Column(name = "valor_unidade")
+	private BigDecimal valorUnidade;
+	
+	@Column(name = "valor_unidade_st")
+	private BigDecimal valorUnidadeST;
 
 }

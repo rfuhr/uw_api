@@ -49,8 +49,6 @@ public class ConfiguracaoFiscalIpiMapper extends GenericMapper<ConfiguracaoFisca
 		}
 		entity.setTipoCalculo(TipoCalculo.fromValue(dto.getTipoCalculo()));
 		entity.setAliquota(dto.getAliquota());
-		entity.setCodigoSelo(dto.getCodigoSelo());
-		entity.setQuantidadeSelo(dto.getQuantidadeSelo());
 	}
 
 	@Override
@@ -65,12 +63,11 @@ public class ConfiguracaoFiscalIpiMapper extends GenericMapper<ConfiguracaoFisca
 			dto.setEnquadramentoNome(entity.getEnquadramento().getNome());
 			dto.setEnquadramentoCodigo(new Long(entity.getEnquadramento().getCodigo()));
 		}
-		dto.setAliquota(dto.getAliquota());
+		dto.setAliquota(entity.getAliquota());
 		if (entity.getTipoCalculo() != null) {
 			dto.setTipoCalculo(entity.getTipoCalculo().getValue());
+			dto.setTipoCalculoName(entity.getTipoCalculo().getName());
 		}
-		dto.setCodigoSelo(entity.getCodigoSelo());
-		dto.setQuantidadeSelo(entity.getQuantidadeSelo());
 	}
 	
 }

@@ -27,4 +27,14 @@ public class Imposto {
     public ValoresCOFINS valoresCOFINS;
     public ValoresISSQN valoresISSQN;
 
+    public BigDecimal calcularBasePISCOFINS (Imposto impostoCalculo, CalculoImpostoRequest calculoImpostoRequest) {
+    	BigDecimal base = calculoImpostoRequest.getValorTotal();
+    	
+    	if (impostoCalculo.getValoresICMS() != null && impostoCalculo.getValoresICMS().getVICMS() != null) {
+    		base = base.subtract(impostoCalculo.getValoresICMS().getVICMS());
+    	}
+    	
+    	return base;
+    }
+    
 }

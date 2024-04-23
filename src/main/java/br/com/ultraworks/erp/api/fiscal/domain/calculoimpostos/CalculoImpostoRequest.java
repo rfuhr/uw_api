@@ -15,6 +15,7 @@ public class CalculoImpostoRequest {
 	private BigDecimal valorSeguro;
 	private BigDecimal valorFrete;
 	private BigDecimal valorOutros;
+	private BigDecimal valorTotal;
 
 	private Long configuracaoFiscalIcmsId;
 	private Long configuracaoFiscalIpiId;

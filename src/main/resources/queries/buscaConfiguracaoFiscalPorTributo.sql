@@ -9,10 +9,10 @@ select cf.id,
        cf.operacao_interna_id,
        cf.classificacao_operacao_id,
        cf.item_id,
-       cf_icms.configuracao_fiscal_id as icms_id, 
-       cf_ipi.configuracao_fiscal_id as ipi_id, 
-       cf_pis.configuracao_fiscal_id as pis_id,
-       cf_cofins.configuracao_fiscal_id as cofins_id
+       cf_icms.id as icms_id, 
+       cf_ipi.id as ipi_id, 
+       cf_pis.id as pis_id,
+       cf_cofins.id as cofins_id
 from configuracao_fiscal cf
 left outer join configuracao_fiscal_icms cf_icms on cf.id = cf_icms.configuracao_fiscal_id
 left outer join configuracao_fiscal_ipi cf_ipi on cf.id = cf_ipi.configuracao_fiscal_id

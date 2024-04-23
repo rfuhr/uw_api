@@ -9,11 +9,13 @@ import lombok.NoArgsConstructor;
 @Data
 public class ValoresCOFINS {
 	
-    private Long cST;
+    private Integer cST;
     private BigDecimal vBC;
     private BigDecimal pCOFINS;
     private BigDecimal qBCProd;
     private BigDecimal vAliqProd;
     private BigDecimal vCOFINS;
+    private BigDecimal vCOFINSST;
+    private BigDecimal vAliqProdST;
 
 }

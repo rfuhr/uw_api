@@ -20,5 +20,6 @@ public class ValoresIPI {
     private BigDecimal vUnid;
     private BigDecimal pIPI;
     private BigDecimal vIPI;
+    private String tipoCalculo;
 
 }
