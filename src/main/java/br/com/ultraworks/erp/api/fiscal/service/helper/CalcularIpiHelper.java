@@ -14,14 +14,11 @@ public class CalcularIpiHelper {
 		
 		ValoresIPI valoresIPI = new ValoresIPI();
 		valoresIPI.setCST(configuracaoFiscalIpi.getSituacaoTributaria().getCodigo());
-		valoresIPI.setCNPJProd(calculoImpostoRequest.getCnpjProdutor());
 		valoresIPI.setCEnq(configuracaoFiscalIpi.getEnquadramento().getCodigo());
-		valoresIPI.setCSelo(configuracaoFiscalIpi.getCodigoSelo());
-		valoresIPI.setQSelo(configuracaoFiscalIpi.getQuantidadeSelo());
 		
 		if (!configuracaoFiscalIpi.getSituacaoTributaria().isAliquotaZero()) {
 			if (TipoCalculo.ALIQUOTA.getValue().equals(configuracaoFiscalIpi.getTipoCalculo().getValue())) {
-				valoresIPI.setVBC(calculoImpostoRequest.getValor().subtract(calculoImpostoRequest.getValorDesconto()));
+				valoresIPI.setVBC(calculoImpostoRequest.getValorUnitario().subtract(calculoImpostoRequest.getValorDesconto()));
 				valoresIPI.setPIPI(configuracaoFiscalIpi.getAliquota());
 				valoresIPI.setVIPI(valoresIPI.getVBC().divide(configuracaoFiscalIpi.getAliquota().divide(new BigDecimal(100))));	
 			} else if (TipoCalculo.QUANTIDADE.getValue().equals(configuracaoFiscalIpi.getTipoCalculo().getValue())) {

@@ -55,8 +55,8 @@ public class BuscaConfiguracaoFiscalPorTributoQuery {
 
 			List<Tuple> resultTuples = em
 					.createNativeQuery(SQLUtils.obterQuery("buscaConfiguracaoFiscalPorTributo"), Tuple.class)
-					.setParameter("ufOrigemId", tributacaoRequest.getUfOrigem())
-					.setParameter("ufDestinoId", tributacaoRequest.getUfDestino())
+					.setParameter("ufOrigemId", tributacaoRequest.getUfOrigemId())
+					.setParameter("ufDestinoId", tributacaoRequest.getUfDestinoId())
 					.setParameter("regimeTributarioId", tributacaoRequest.getRegimeTributarioId())
 					.setParameter("indicadorOperacao", tributacaoRequest.getIndicadorOperacaoValue())
 					.setParameter("dataEmissao", tributacaoRequest.getDataBase())
@@ -76,7 +76,7 @@ public class BuscaConfiguracaoFiscalPorTributoQuery {
 					.setParameter("cofins", tipoTributo.getValue().equals(TipoTributo.COFINS.getValue()) ? true : false)					
 					.getResultList();
 			
-			if (resultTuples == null || resultTuples.size() == 0) {
+			if (resultTuples == null || resultTuples.size() == 0 && !tipoTributo.equals(TipoTributo.IPI)) {
 				ValidationErrorResponse validationErrorResponse = new ValidationErrorResponse();
 				String label = "Configuração Fiscal do Tributo " + tipoTributo.getValue(); 
 				validationErrorResponse.getErrors().add(new ValidationError(label,
@@ -86,24 +86,30 @@ public class BuscaConfiguracaoFiscalPorTributoQuery {
 						"Não foi encontrada a Configuração Fiscal do "+ tipoTributo.getValue());
 			}
 			
+			if (resultTuples == null || resultTuples.size() == 0 && tipoTributo.equals(TipoTributo.IPI)) {
+				response.setTemIpi(false);
+				continue;
+			}
+			
+			
 			if (tipoTributo.getValue().equals(TipoTributo.ICMS.getValue())) {
 				response.setTemIcms(true);
 				response.setTemIcmsParaUfDestino(false);
 				response.setTemRepasseIcms(false);
 				response.setTemPartilhaIcms(false);
-				Optional<ConfiguracaoFiscalIcms> configuracaoFiscalIcms = configuracaoFiscalIcmsService.getById(new Long(resultTuples.iterator().next().get("icmsId").toString()));
+				Optional<ConfiguracaoFiscalIcms> configuracaoFiscalIcms = configuracaoFiscalIcmsService.getById(new Long(resultTuples.iterator().next().get("icms_id").toString()));
 				 if (configuracaoFiscalIcms.isPresent()) {
 					 response.setConfiguracaoFiscalIcms(configuracaoFiscalIcmsMapper.toDto(configuracaoFiscalIcms.get()));
 				 }
 			} else if (tipoTributo.getValue().equals(TipoTributo.IPI.getValue())) {
 				response.setTemIpi(true);
-				Optional<ConfiguracaoFiscalIpi> configuracaoFiscalIpi = configuracaoFiscalIpiService.getById(new Long(resultTuples.iterator().next().get("ipiId").toString()));
+				Optional<ConfiguracaoFiscalIpi> configuracaoFiscalIpi = configuracaoFiscalIpiService.getById(new Long(resultTuples.iterator().next().get("ipi_id").toString()));
 				 if (configuracaoFiscalIpi.isPresent()) {
 					 response.setConfiguracaoFiscalIpi(configuracaoFiscalIpiMapper.toDto(configuracaoFiscalIpi.get()));
 				 }
 			} else if (tipoTributo.getValue().equals(TipoTributo.PIS.getValue())) {
 				response.setTemPis(true);
-				Optional<ConfiguracaoFiscalPis> configuracaoFiscalPis = configuracaoFiscalPisService.getById(new Long(resultTuples.iterator().next().get("pisId").toString()));
+				Optional<ConfiguracaoFiscalPis> configuracaoFiscalPis = configuracaoFiscalPisService.getById(new Long(resultTuples.iterator().next().get("pis_id").toString()));
 				 if (configuracaoFiscalPis.isPresent()) {
 					 response.setConfiguracaoFiscalPis(configuracaoFiscalPisMapper.toDto(configuracaoFiscalPis.get()));
 					 if (configuracaoFiscalPis.get().getAliquotaST() != null && configuracaoFiscalPis.get().getAliquotaST().doubleValue() > 0 ) {
@@ -114,7 +120,7 @@ public class BuscaConfiguracaoFiscalPorTributoQuery {
 				 }
 			} else if (tipoTributo.getValue().equals(TipoTributo.COFINS.getValue())) {
 				response.setTemCofins(true);
-				Optional<ConfiguracaoFiscalCofins> configuracaoFiscalCofins = configuracaoFiscalCofinsService.getById(new Long(resultTuples.iterator().next().get("cofinsId").toString()));
+				Optional<ConfiguracaoFiscalCofins> configuracaoFiscalCofins = configuracaoFiscalCofinsService.getById(new Long(resultTuples.iterator().next().get("cofins_id").toString()));
 				 if (configuracaoFiscalCofins.isPresent()) {
 					 response.setConfiguracaoFiscalCofins(configuracaoFiscalCofinsMapper.toDto(configuracaoFiscalCofins.get()));
 					 if (configuracaoFiscalCofins.get().getAliquotaST() != null && configuracaoFiscalCofins.get().getAliquotaST().doubleValue() > 0 ) {

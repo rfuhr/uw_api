@@ -18,7 +18,7 @@ public class TributacaoRequest {
 	private Long regimeTributarioId;
 	private Long classificacaoOperacaoId;
 	private Long origemId;
-	private String ufOrigem;
-	private String ufDestino;
+	private Long ufOrigemId;
+	private Long ufDestinoId;
 
 }

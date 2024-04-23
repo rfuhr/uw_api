@@ -20,7 +20,6 @@ import br.com.ultraworks.erp.core.exception.RegisterNotFoundException;
 import lombok.NoArgsConstructor;
 
 @Service
-@NoArgsConstructor
 public class CalcularImpostoService {
 	
 	ConfiguracaoFiscalIpiRepository configuracaoFiscalIpiRepository;
@@ -33,11 +32,27 @@ public class CalcularImpostoService {
 	CalcularPisHelper calcularPisHelper = new CalcularPisHelper();
 	CalcularCofinsHelper calcularCofinsHelper = new CalcularCofinsHelper();
 	
+	public CalcularImpostoService(ConfiguracaoFiscalIpiRepository configuracaoFiscalIpiRepository, 
+			ConfiguracaoFiscalIcmsRepository configuracaoFiscalIcmsRepository,
+			ConfiguracaoFiscalPisRepository configuracaoFiscalPisRepository,
+			ConfiguracaoFiscalCofinsRepository configuracaoFiscalCofinsRepository
+			) {
+				this.configuracaoFiscalIpiRepository = configuracaoFiscalIpiRepository;
+				this.configuracaoFiscalIcmsRepository = configuracaoFiscalIcmsRepository;
+				this.configuracaoFiscalPisRepository = configuracaoFiscalPisRepository;
+				this.configuracaoFiscalCofinsRepository = configuracaoFiscalCofinsRepository;
+
+	}
+	
 	public Imposto calcularImpostos(CalculoImpostoRequest calculoImpostoRequest) {
 		Imposto imposto = new Imposto();
 		
-		ConfiguracaoFiscalIpi configuracaoFiscalIpi = configuracaoFiscalIpiRepository.findById(calculoImpostoRequest.getConfiguracaoFiscalIpiId())
+		ConfiguracaoFiscalIpi configuracaoFiscalIpi = null;
+		if (calculoImpostoRequest.getConfiguracaoFiscalIpiId() != null) {
+			configuracaoFiscalIpi = configuracaoFiscalIpiRepository.findById(calculoImpostoRequest.getConfiguracaoFiscalIpiId())
 				.orElseThrow(() -> new RegisterNotFoundException("Não encontrada a Configuração Fiscal do IPI com id " + calculoImpostoRequest.getConfiguracaoFiscalIpiId()));
+			imposto = calcularIpiHelper.calcularIPI(imposto, configuracaoFiscalIpi, calculoImpostoRequest);
+		}
 		
 		ConfiguracaoFiscalIcms configuracaoFiscalIcms = configuracaoFiscalIcmsRepository.findById(calculoImpostoRequest.getConfiguracaoFiscalIcmsId())
 				.orElseThrow(() -> new RegisterNotFoundException("Não encontrada a Configuração Fiscal do ICMS com id " + calculoImpostoRequest.getConfiguracaoFiscalIcmsId()));
@@ -48,7 +63,6 @@ public class CalcularImpostoService {
 		ConfiguracaoFiscalCofins configuracaoFiscalCofins = configuracaoFiscalCofinsRepository.findById(calculoImpostoRequest.getConfiguracaoFiscalCofinsId())
 				.orElseThrow(() -> new RegisterNotFoundException("Não encontrada a Configuração Fiscal do COFINS com id " + calculoImpostoRequest.getConfiguracaoFiscalCofinsId()));
 		
-		imposto = calcularIpiHelper.calcularIPI(imposto, configuracaoFiscalIpi, calculoImpostoRequest);
 		imposto = calcularIcmsHelper.calcularICMS(imposto, configuracaoFiscalIcms, calculoImpostoRequest);
 		imposto = calcularPisHelper.calcularPIS(imposto, configuracaoFiscalPis, calculoImpostoRequest);
 		imposto = calcularCofinsHelper.calcularCOFINS(imposto, configuracaoFiscalCofins, calculoImpostoRequest);

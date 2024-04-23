@@ -7,12 +7,10 @@ import lombok.Data;
 @Data
 public class CalculoImpostoRequest {
 
-	private String cnpjProdutor;
 	private Long itemId;
-	private Integer codigoOrigem;
-	private String siglaUnidadeMedida;
+	private Long unidadeMedidaId;
 	private BigDecimal quantidade;
-	private BigDecimal valor;
+	private BigDecimal valorUnitario;
 	private BigDecimal valorDesconto;
 	private BigDecimal valorSeguro;
 	private BigDecimal valorFrete;
