@@ -1,0 +1,1 @@
+alter table config_empresa add column contribuinte_ipi boolean not null default false;

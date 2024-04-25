@@ -1,0 +1,1 @@
+alter table situacao_tributaria rename exige_aliquota_desonerada to destaca_icms_desonerada;

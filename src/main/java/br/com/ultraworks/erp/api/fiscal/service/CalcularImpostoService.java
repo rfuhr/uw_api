@@ -1,9 +1,16 @@
 package br.com.ultraworks.erp.api.fiscal.service;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
+import br.com.ultraworks.erp.api.configuracao.domain.configempresa.ConfigEmpresa;
+import br.com.ultraworks.erp.api.configuracao.repository.ConfigEmpresaRepository;
+import br.com.ultraworks.erp.api.estoque.domain.item.Item;
+import br.com.ultraworks.erp.api.estoque.repository.ItemRepository;
 import br.com.ultraworks.erp.api.fiscal.domain.calculoimpostos.CalculoImpostoRequest;
 import br.com.ultraworks.erp.api.fiscal.domain.calculoimpostos.Imposto;
+import br.com.ultraworks.erp.api.fiscal.domain.calculoimpostos.estadual.ValoresICMS;
 import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscalcofins.ConfiguracaoFiscalCofins;
 import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscalicms.ConfiguracaoFiscalIcms;
 import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscalipi.ConfiguracaoFiscalIpi;
@@ -25,6 +32,8 @@ public class CalcularImpostoService {
 	ConfiguracaoFiscalIcmsRepository configuracaoFiscalIcmsRepository;
 	ConfiguracaoFiscalPisRepository configuracaoFiscalPisRepository;
 	ConfiguracaoFiscalCofinsRepository configuracaoFiscalCofinsRepository;
+	ItemRepository itemRepository;
+	ConfigEmpresaRepository configEmpresaRepository;
 	
 	CalcularIpiHelper calcularIpiHelper = new CalcularIpiHelper();
 	CalcularIcmsHelper calcularIcmsHelper = new CalcularIcmsHelper();
@@ -34,17 +43,27 @@ public class CalcularImpostoService {
 	public CalcularImpostoService(ConfiguracaoFiscalIpiRepository configuracaoFiscalIpiRepository, 
 			ConfiguracaoFiscalIcmsRepository configuracaoFiscalIcmsRepository,
 			ConfiguracaoFiscalPisRepository configuracaoFiscalPisRepository,
-			ConfiguracaoFiscalCofinsRepository configuracaoFiscalCofinsRepository
+			ConfiguracaoFiscalCofinsRepository configuracaoFiscalCofinsRepository,
+			ItemRepository itemRepository, ConfigEmpresaRepository configEmpresaRepository
 			) {
 				this.configuracaoFiscalIpiRepository = configuracaoFiscalIpiRepository;
 				this.configuracaoFiscalIcmsRepository = configuracaoFiscalIcmsRepository;
 				this.configuracaoFiscalPisRepository = configuracaoFiscalPisRepository;
 				this.configuracaoFiscalCofinsRepository = configuracaoFiscalCofinsRepository;
+				this.itemRepository = itemRepository;
+				this.configEmpresaRepository = configEmpresaRepository;
 
 	}
 	
 	public Imposto calcularImpostos(CalculoImpostoRequest calculoImpostoRequest) {
 		Imposto imposto = new Imposto();
+		
+		Optional<ConfigEmpresa> configEmpresa = configEmpresaRepository.findByEmpresaId(calculoImpostoRequest.getEmpresaId());
+		if (configEmpresa.isPresent()) {
+			imposto.setContribuinteIPI(configEmpresa.get().isContribuinteIpi());
+		} else {
+			return imposto;
+		}
 		
 		ConfiguracaoFiscalIpi configuracaoFiscalIpi = null;
 		if (calculoImpostoRequest.getConfiguracaoFiscalIpiId() != null) {
@@ -57,6 +76,11 @@ public class CalcularImpostoService {
 		if (calculoImpostoRequest.getConfiguracaoFiscalIcmsId() != null) {
 			configuracaoFiscalIcms = configuracaoFiscalIcmsRepository.findById(calculoImpostoRequest.getConfiguracaoFiscalIcmsId())
 					.orElseThrow(() -> new RegisterNotFoundException("Não encontrada a Configuração Fiscal do ICMS com id " + calculoImpostoRequest.getConfiguracaoFiscalIcmsId()));
+			Item item = itemRepository.findById(calculoImpostoRequest.getItemId())
+					.orElseThrow(() -> new RegisterNotFoundException("Não encontrada o Produto com id " + calculoImpostoRequest.getItemId()));
+			ValoresICMS valoresICMS = new ValoresICMS();
+			valoresICMS.setOrig(item.getOrigem().getCodigo());
+			imposto.setValoresICMS(valoresICMS);
 			imposto = calcularIcmsHelper.calcularICMS(imposto, configuracaoFiscalIcms, calculoImpostoRequest);
 		}
 		

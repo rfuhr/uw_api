@@ -39,6 +39,7 @@ public class ConfigEmpresaMapper extends GenericMapper<ConfigEmpresa, ConfigEmpr
 		entity.setRegimeTributario(regimeTributarioService.getById(dto.getRegimeTributarioId())
 				.orElseThrow(() -> new RegisterNotFoundException(
 						"Não encontrado regime tributário com id " + dto.getRegimeTributarioId())));
+		entity.setContribuinteIpi(dto.isContribuinteIpi());
 
 	}
 
@@ -52,5 +53,7 @@ public class ConfigEmpresaMapper extends GenericMapper<ConfigEmpresa, ConfigEmpr
 			dto.getConfiguracoesNFe().addAll(configEmpresaNFeMapper.toDto(entity.getConfiguracoesNFe()));
 		}
 		dto.setRegimeTributarioId(entity.getRegimeTributario().getId());
+		dto.setRegimeTributarioNome(entity.getRegimeTributario().getNome());
+		dto.setContribuinteIpi(entity.isContribuinteIpi());
 	}
 }

@@ -53,14 +53,14 @@ public class SituacaoTributaria extends UWEntityBase {
 	@Column(name = "destaca_st_saida")
 	private boolean destacaStSaida;
 	
-	@Column(name = "exige_aliquota_desonerada")
-	private boolean exigeAliquotaDesonerada;
+	@Column(name = "destaca_icms_desonerada")
+	private boolean destacaIcmsDesonerada;
 	
 	@Column(name = "controla_imposto_retido")
 	private boolean controlaImpostoRetido;
 	
-	@Column(name = "excluir_icms_base_calculo")
-	private boolean excluirIcmsBaseCalculo;
+	@Column(name = "destaca_icms")
+	private boolean destacaIcms;
 	
 	@Column(name = "excluir_icms_bc_piscofins")
 	private boolean excluirIcmsBcPiscofins;

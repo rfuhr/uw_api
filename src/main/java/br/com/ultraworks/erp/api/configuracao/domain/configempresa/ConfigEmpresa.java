@@ -7,6 +7,7 @@ import br.com.ultraworks.erp.api.fiscal.domain.regimetributario.RegimeTributario
 import br.com.ultraworks.erp.api.organograma.domain.empresa.Empresa;
 import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocalTelefone.ParceiroLocalTelefone;
 import br.com.ultraworks.erp.core.entity.UWEntityBase;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -40,6 +41,9 @@ public class ConfigEmpresa extends UWEntityBase {
 	@OneToOne
 	@JoinColumn(name = "regime_tributario_id")
 	private RegimeTributario regimeTributario;
+	
+	@Column(name = "contribuinte_ipi")
+	private boolean contribuinteIpi;
 	
 	@Transient
 	private List<ConfigEmpresaNFe> configuracoesNFe;	

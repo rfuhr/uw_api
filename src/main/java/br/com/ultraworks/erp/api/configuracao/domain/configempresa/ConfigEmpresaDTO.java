@@ -18,6 +18,8 @@ public class ConfigEmpresaDTO {
 	private Long empresaId;
 	private String empresaNome;
 	private Long regimeTributarioId;
+	private String regimeTributarioNome;
+	private boolean contribuinteIpi;
 	
 	@Valid
 	private List<ConfigEmpresaNFeDTO> configuracoesNFe;

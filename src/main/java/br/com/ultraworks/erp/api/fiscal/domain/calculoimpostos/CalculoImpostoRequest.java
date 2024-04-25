@@ -7,6 +7,7 @@ import lombok.Data;
 @Data
 public class CalculoImpostoRequest {
 
+	private Long empresaId;
 	private Long itemId;
 	private Long unidadeMedidaId;
 	private BigDecimal quantidade;

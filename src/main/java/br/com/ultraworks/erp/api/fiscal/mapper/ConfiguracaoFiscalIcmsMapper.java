@@ -50,6 +50,7 @@ public class ConfiguracaoFiscalIcmsMapper extends GenericMapper<ConfiguracaoFisc
 		}
 		entity.setReducaoBaseCalculo(dto.getReducaoBaseCalculo());
 		entity.setSomaIpiBaseCalculo(dto.isSomaIpiBaseCalculo());
+		entity.setSomaFreteBaseCalculo(dto.isSomaFreteBaseCalculo());
 		entity.setAliquota(dto.getAliquota());
 		entity.setAliquotaCredito(dto.getAliquotaCredito());
 		entity.setDiferencialAliquota(dto.getDiferencialAliquota());
@@ -62,6 +63,7 @@ public class ConfiguracaoFiscalIcmsMapper extends GenericMapper<ConfiguracaoFisc
 		}
 		entity.setReducaoBaseCalculoST(dto.getReducaoBaseCalculoST());
 		entity.setSomaIpiBaseCalculoST(dto.isSomaIpiBaseCalculoST());
+		entity.setSomaFreteBaseCalculoST(dto.isSomaFreteBaseCalculoST());
 		entity.setAliquotaST(dto.getAliquotaST());
 		entity.setMargemValorAgregadoST(dto.getMargemValorAgregadoST());
 	}
@@ -83,6 +85,7 @@ public class ConfiguracaoFiscalIcmsMapper extends GenericMapper<ConfiguracaoFisc
 		}
 		dto.setReducaoBaseCalculo(entity.getReducaoBaseCalculo());
 		dto.setSomaIpiBaseCalculo(entity.isSomaIpiBaseCalculo());
+		dto.setSomaFreteBaseCalculo(entity.isSomaFreteBaseCalculo());
 		dto.setAliquota(entity.getAliquota());
 		dto.setAliquotaCredito(entity.getAliquotaCredito());
 		dto.setDiferencialAliquota(entity.getDiferencialAliquota());
@@ -96,6 +99,7 @@ public class ConfiguracaoFiscalIcmsMapper extends GenericMapper<ConfiguracaoFisc
 		}
 		dto.setReducaoBaseCalculoST(entity.getReducaoBaseCalculoST());
 		dto.setSomaIpiBaseCalculoST(entity.isSomaIpiBaseCalculoST());
+		dto.setSomaFreteBaseCalculoST(entity.isSomaFreteBaseCalculoST());
 		dto.setAliquotaST(entity.getAliquotaST());
 		dto.setMargemValorAgregadoST(entity.getMargemValorAgregadoST());
 	}
