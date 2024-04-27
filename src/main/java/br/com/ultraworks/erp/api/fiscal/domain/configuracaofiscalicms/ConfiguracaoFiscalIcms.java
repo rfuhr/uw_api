@@ -57,6 +57,9 @@ public class ConfiguracaoFiscalIcms extends UWEntityBase {
 	@Column(name = "soma_ipi_base_calculo")
 	private boolean somaIpiBaseCalculo;
 	
+	@Column(name = "soma_frete_base_calculo")
+	private boolean somaFreteBaseCalculo;
+	
 	@Column(name = "aliquota")
 	private BigDecimal aliquota;
 	
@@ -79,6 +82,9 @@ public class ConfiguracaoFiscalIcms extends UWEntityBase {
 	
 	@Column(name = "soma_ipi_base_calculo_st")
 	private boolean somaIpiBaseCalculoST;
+	
+	@Column(name = "soma_frete_base_calculo_st")
+	private boolean somaFreteBaseCalculoST;
 	
 	@Column(name = "aliquota_st")
 	private BigDecimal aliquotaST;

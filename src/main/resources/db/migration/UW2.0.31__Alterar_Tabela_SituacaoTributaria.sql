@@ -1,0 +1,1 @@
+alter table situacao_tributaria rename excluir_icms_base_calculo to destaca_icms;

@@ -56,10 +56,5 @@ public class ConfiguracaoFiscalIpi extends UWEntityBase {
 	@Convert(converter = TipoCalculoConverter.class)
 	@Column(name = "tipo_calculo")
 	private TipoCalculo tipoCalculo;
-	
-	@Column(name = "codigo_selo")
-	private String codigoSelo;
-	
-	@Column(name = "quantidade_selo")
-	private int quantidadeSelo;
+
 }

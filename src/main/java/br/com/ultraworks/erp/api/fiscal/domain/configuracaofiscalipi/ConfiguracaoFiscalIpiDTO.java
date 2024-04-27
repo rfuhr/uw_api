@@ -23,7 +23,5 @@ public class ConfiguracaoFiscalIpiDTO {
 	@ValidaTipoCalculo
 	private String tipoCalculo;
 	private String tipoCalculoName;
-	
-	private String codigoSelo;
-	private int quantidadeSelo;
+
 }

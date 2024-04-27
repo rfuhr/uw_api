@@ -26,5 +26,48 @@ public class Imposto {
     public ValoresPIS valoresPIS;
     public ValoresCOFINS valoresCOFINS;
     public ValoresISSQN valoresISSQN;
+    public Boolean contribuinteIPI;
 
+    public BigDecimal calcularBasePISCOFINS (Imposto impostoCalculo, CalculoImpostoRequest calculoImpostoRequest) {
+    	BigDecimal base = calculoImpostoRequest.getValorTotal()
+    			.add(calculoImpostoRequest.getValorFrete())
+    			.add(calculoImpostoRequest.getValorSeguro())
+    			.add(calculoImpostoRequest.getValorOutros())
+    			.subtract(calculoImpostoRequest.getValorDesconto());
+    	
+    	if (impostoCalculo.getValoresICMS() != null && impostoCalculo.getValoresICMS().getVICMS() != null) {
+    		base = base.subtract(impostoCalculo.getValoresICMS().getVICMS());
+    	}
+    	
+    	return base;
+    }
+    
+    public BigDecimal calcularBaseICMSFicto (Imposto impostoCalculo, CalculoImpostoRequest calculoImpostoRequest) {
+    	BigDecimal base = calculoImpostoRequest.getValorTotal()
+    			.add(calculoImpostoRequest.getValorFrete())
+    			.add(calculoImpostoRequest.getValorSeguro())
+    			.add(calculoImpostoRequest.getValorOutros())
+    			.subtract(calculoImpostoRequest.getValorDesconto());
+    	
+    	return base;
+    }
+    
+    public BigDecimal calcularBaseICMS (Imposto impostoCalculo, CalculoImpostoRequest calculoImpostoRequest) {
+    	BigDecimal base = calculoImpostoRequest.getValorTotal()
+    			.add(calculoImpostoRequest.getValorSeguro())
+    			.add(calculoImpostoRequest.getValorOutros())
+    			.subtract(calculoImpostoRequest.getValorDesconto());
+    	
+    	if (impostoCalculo.getValoresICMS().getIncluirFreteBC()) {
+    		base = base.add(calculoImpostoRequest.getValorFrete());
+    	}
+    	
+    	if (impostoCalculo.getValoresICMS().getIncluirIPIBC() && impostoCalculo.getContribuinteIPI() 
+    			&& impostoCalculo.getValoresIPI().getVIPI() != null) {
+    		base = base.add(impostoCalculo.getValoresIPI().getVIPI());
+    	}
+    	
+    	return base;
+    }
+    
 }

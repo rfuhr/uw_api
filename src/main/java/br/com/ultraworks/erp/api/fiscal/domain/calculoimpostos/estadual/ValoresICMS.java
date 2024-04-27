@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @Data
 public class ValoresICMS {
 	
-    private Long orig;
-    private Long cST;
-    private Long cSOSN;
+    private Integer orig;
+    private Integer cST;
+    private Integer cSOSN;
     private String modBC;
     private BigDecimal pRedBC;
     private BigDecimal vBC;
@@ -36,10 +36,15 @@ public class ValoresICMS {
     private BigDecimal vBCSTRet;
     private BigDecimal vICMSSTRet;
     private BigDecimal vICMSDeson;
-    private Long motDesICMS;
+    private Integer motDesICMS;
     private BigDecimal pCredSN;
     private BigDecimal vCredICMSSN;
     private BigDecimal vBCSTDest;
     private BigDecimal vICMSSTDest;
-
+    private BigDecimal vICMSFicto = BigDecimal.ZERO;
+    private Boolean incluirFreteBC = Boolean.FALSE;
+    private Boolean incluirIPIBC = Boolean.FALSE;
+    private Boolean incluirFreteBCST = Boolean.FALSE;
+    private Boolean incluirIPIBCST = Boolean.FALSE;
+    
 }

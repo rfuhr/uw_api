@@ -24,9 +24,9 @@ public class SituacaoTributariaMapper extends GenericMapper<SituacaoTributaria, 
 		entity.setAliquotaZero(dto.isAliquotaZero());
 		entity.setControlaImpostoRetido(dto.isControlaImpostoRetido());
 		entity.setDestacaStSaida(dto.isDestacaStSaida());
-		entity.setExcluirIcmsBaseCalculo(dto.isExcluirIcmsBaseCalculo());
+		entity.setDestacaIcms(dto.isDestacaIcms());
 		entity.setExcluirIcmsBcPiscofins(dto.isExcluirIcmsBcPiscofins());
-		entity.setExigeAliquotaDesonerada(dto.isExigeAliquotaDesonerada());
+		entity.setDestacaIcmsDesonerada(dto.isDestacaIcmsDesonerada());
 		entity.setNaoExcluirIcmsEntrada(dto.isNaoExcluirIcmsEntrada());
 		entity.setRequerMensagemFiscal(dto.isRequerMensagemFiscal());
 		entity.setSimplesNacional(dto.isSimplesNacional());
@@ -41,9 +41,9 @@ public class SituacaoTributariaMapper extends GenericMapper<SituacaoTributaria, 
 		dto.setAliquotaZero(entity.isAliquotaZero());
 		dto.setControlaImpostoRetido(entity.isControlaImpostoRetido());
 		dto.setDestacaStSaida(entity.isDestacaStSaida());
-		dto.setExcluirIcmsBaseCalculo(entity.isExcluirIcmsBaseCalculo());
+		dto.setDestacaIcms(entity.isDestacaIcms());
 		dto.setExcluirIcmsBcPiscofins(entity.isExcluirIcmsBcPiscofins());
-		dto.setExigeAliquotaDesonerada(entity.isExigeAliquotaDesonerada());
+		dto.setDestacaIcmsDesonerada(entity.isDestacaIcmsDesonerada());
 		dto.setNaoExcluirIcmsEntrada(entity.isNaoExcluirIcmsEntrada());
 		dto.setRequerMensagemFiscal(entity.isRequerMensagemFiscal());
 		dto.setSimplesNacional(entity.isSimplesNacional());

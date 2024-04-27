@@ -31,16 +31,20 @@ public class ConfiguracaoFiscalPisMapper extends GenericMapper<ConfiguracaoFisca
 	@Override
 	protected void setValuesToEntity(ConfiguracaoFiscalPisDTO dto, ConfiguracaoFiscalPis entity) {
 		entity.setId(dto.getId());
-		entity.setConfiguracaoFiscal(configuracaoFiscalRepository.findById(dto.getConfiguracaoFiscalId())
-				.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Configuração Fiscal com id " + dto.getConfiguracaoFiscalId())));
+		if (dto.getConfiguracaoFiscalId() != null) {
+			entity.setConfiguracaoFiscal(configuracaoFiscalRepository.findById(dto.getConfiguracaoFiscalId())
+					.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Configuração Fiscal com id " + dto.getConfiguracaoFiscalId())));
+		}
 		if (dto.getSituacaoTributariaId() != null) {
 			entity.setSituacaoTributaria(situacaoTributariaRepository.findById(dto.getSituacaoTributariaId())
 					.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Situação Tributária com id " + dto.getSituacaoTributariaId())));			
 		}
 		entity.setTipoCalculo(TipoCalculo.fromValue(dto.getTipoCalculo()));
 		entity.setAliquota(dto.getAliquota());
+		entity.setValorUnidade(dto.getValorUnidade());
 		entity.setTipoCalculoST(TipoCalculo.fromValue(dto.getTipoCalculoST()));
 		entity.setAliquotaST(dto.getAliquotaST());
+		entity.setValorUnidadeST(dto.getValorUnidadeST());
 	}
 
 	@Override
@@ -51,10 +55,12 @@ public class ConfiguracaoFiscalPisMapper extends GenericMapper<ConfiguracaoFisca
 		dto.setSituacaoTributariaNome(entity.getSituacaoTributaria().getNome());
 		dto.setSituacaoTributariaCodigo(new Long(entity.getSituacaoTributaria().getCodigo()));
 		dto.setAliquota(entity.getAliquota());
+		dto.setValorUnidade(entity.getValorUnidade());
 		if (entity.getTipoCalculo() != null) {
 			dto.setTipoCalculo(entity.getTipoCalculo().getValue());			
 		}
 		dto.setAliquotaST(entity.getAliquotaST());
+		dto.setValorUnidadeST(entity.getValorUnidadeST());
 		if (entity.getTipoCalculoST() != null) {
 			dto.setTipoCalculoST(entity.getTipoCalculoST().getValue());			
 		}

@@ -22,6 +22,7 @@ public class ConfiguracaoFiscalIcmsDTO {
 	private String motivoDesoneracaoNome;
 	private BigDecimal reducaoBaseCalculo;
 	private boolean somaIpiBaseCalculo;
+	private boolean somaFreteBaseCalculo;
 	private BigDecimal aliquota;
 	private BigDecimal aliquotaCredito;
 	private BigDecimal diferencialAliquota;
@@ -34,6 +35,7 @@ public class ConfiguracaoFiscalIcmsDTO {
 	private String motivoDesoneracaoSTNome;
 	private BigDecimal reducaoBaseCalculoST;
 	private boolean somaIpiBaseCalculoST;
+	private boolean somaFreteBaseCalculoST;
 	private BigDecimal aliquotaST;
 	private BigDecimal margemValorAgregadoST;
 }

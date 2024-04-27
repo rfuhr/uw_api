@@ -25,9 +25,9 @@ public class SituacaoTributariaDTO {
 	private boolean aliquotaZero;
 	private boolean requerMensagemFiscal;
 	private boolean destacaStSaida;
-	private boolean exigeAliquotaDesonerada;
+	private boolean destacaIcmsDesonerada;
 	private boolean controlaImpostoRetido;
-	private boolean excluirIcmsBaseCalculo;
+	private boolean destacaIcms;
 	private boolean excluirIcmsBcPiscofins;
 	private boolean naoExcluirIcmsEntrada;
 }

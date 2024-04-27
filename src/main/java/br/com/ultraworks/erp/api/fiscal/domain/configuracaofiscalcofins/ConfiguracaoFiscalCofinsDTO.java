@@ -18,10 +18,12 @@ public class ConfiguracaoFiscalCofinsDTO {
 	@ValidaTipoCalculo
 	private String tipoCalculo;
 	private BigDecimal aliquota;
+	private BigDecimal valorUnidade;
 	
 	@ValidaTipoCalculo
 	private String tipoCalculoST;
 	private BigDecimal aliquotaST;
+	private BigDecimal valorUnidadeST;
 	
 	private String tipoCalculoNome;
 	private String tipoCalculoSTNome;

@@ -15,13 +15,15 @@ public class CalcularIpiHelper {
 		ValoresIPI valoresIPI = new ValoresIPI();
 		valoresIPI.setCST(configuracaoFiscalIpi.getSituacaoTributaria().getCodigo());
 		valoresIPI.setCEnq(configuracaoFiscalIpi.getEnquadramento().getCodigo());
+		valoresIPI.setTipoCalculo(configuracaoFiscalIpi.getTipoCalculo().getValue());
 		
 		if (!configuracaoFiscalIpi.getSituacaoTributaria().isAliquotaZero()) {
-			if (TipoCalculo.ALIQUOTA.getValue().equals(configuracaoFiscalIpi.getTipoCalculo().getValue())) {
-				valoresIPI.setVBC(calculoImpostoRequest.getValorUnitario().subtract(calculoImpostoRequest.getValorDesconto()));
+			if (TipoCalculo.PERCENTUAL.getValue().equals(configuracaoFiscalIpi.getTipoCalculo().getValue())) {
+				valoresIPI.setVBC(calculoImpostoRequest.getValorTotal());
 				valoresIPI.setPIPI(configuracaoFiscalIpi.getAliquota());
-				valoresIPI.setVIPI(valoresIPI.getVBC().divide(configuracaoFiscalIpi.getAliquota().divide(new BigDecimal(100))));	
-			} else if (TipoCalculo.QUANTIDADE.getValue().equals(configuracaoFiscalIpi.getTipoCalculo().getValue())) {
+				BigDecimal aliquota = configuracaoFiscalIpi.getAliquota().divide(new BigDecimal(100));
+				valoresIPI.setVIPI(valoresIPI.getVBC().multiply(aliquota));	
+			} else if (TipoCalculo.VALOR.getValue().equals(configuracaoFiscalIpi.getTipoCalculo().getValue())) {
 				valoresIPI.setQUnid(calculoImpostoRequest.getQuantidade());
 				valoresIPI.setVUnid(configuracaoFiscalIpi.getValorUnidade());
 				valoresIPI.setVIPI(valoresIPI.getQUnid().multiply(valoresIPI.getVUnid()));
