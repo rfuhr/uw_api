@@ -132,7 +132,7 @@ import br.com.ultraworks.erp.core.exception.BusinessException;
 
 @Service
 @Scope("prototype")
-public class ServicoIntegracaoNFeImpl implements IServicoIntegracaoNFe {
+public class ServicoEnvioNFeImpl implements IServicoEnvioNFe {
 
 	private ConfigEmpresaNFeService configEmpresaNFeService;
 	private EmpresaCertificadoService empresaCertificadoService;
@@ -140,7 +140,7 @@ public class ServicoIntegracaoNFeImpl implements IServicoIntegracaoNFe {
 	private ParceiroLocalService parceiroLocalService;
 
 	@Autowired
-	public ServicoIntegracaoNFeImpl(ConfigEmpresaNFeService configEmpresaNFeService,
+	public ServicoEnvioNFeImpl(ConfigEmpresaNFeService configEmpresaNFeService,
 			EmpresaCertificadoService empresaCertificadoService, ParceiroLocalService parceiroLocalService,
 			ResourceLoader resourceLoader) {
 		this.configEmpresaNFeService = configEmpresaNFeService;

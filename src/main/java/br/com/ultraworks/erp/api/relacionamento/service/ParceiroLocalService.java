@@ -64,7 +64,12 @@ public class ParceiroLocalService extends GenericService<ParceiroLocal, Long, Pa
 
 	@Override
 	public Optional<ParceiroLocal> getById(Long id) {
-		return repository.findById(id);
+		Optional<ParceiroLocal> opt = repository.findById(id);
+		if (opt.isPresent()) {
+			getDadosListasDependentes(opt.get());
+			return opt;
+		}
+		return null;
 	}
 	
 	private void getDadosListasDependentes(ParceiroLocal parceiroLocal) {
