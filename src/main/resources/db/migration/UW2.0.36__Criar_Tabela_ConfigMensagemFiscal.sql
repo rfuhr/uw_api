@@ -2,7 +2,6 @@ create sequence seq_config_mensagem_fiscal start with 1;
 
 create table config_mensagem_fiscal (
 	id					bigint not null constraint config_mensagem_fiscal_pkey primary key,
-	codigo				integer not null,
 	mensagem_fiscal_id	bigint not null,
 	data_inicio_vigencia 		date not null,
 	data_final_vigencia 		date not null,

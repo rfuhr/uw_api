@@ -2,6 +2,7 @@ create sequence seq_config_mensagem_fiscal_oper_interna start with 1;
 
 create table config_mensagem_fiscal_oper_interna (
 	id					bigint not null constraint config_mensagem_fiscal_oper_interna_pkey primary key,
+	config_mensagem_fiscal_id	bigint not null,
 	operacao_interna_id	bigint 		not null,
 	data_inicio_vigencia 		date not null,
 	data_final_vigencia 		date not null,
@@ -9,5 +10,6 @@ create table config_mensagem_fiscal_oper_interna (
 	date_create			timestamp with time zone 	 not null,
 	user_update     	bigint,
 	date_update			timestamp with time zone,
-	CONSTRAINT config_mensagem_fiscal_oper_interna_operacao_interna_id_foreign FOREIGN KEY (operacao_interna_id) REFERENCES operacao_interna (id)
+	CONSTRAINT config_mensagem_fiscal_oper_interna_operacao_interna_id_foreign FOREIGN KEY (operacao_interna_id) REFERENCES operacao_interna (id),
+	CONSTRAINT config_mensagem_fiscal_oper_interna_config_fiscal_config_mensagem_fiscal_id_foreign FOREIGN KEY (config_mensagem_fiscal_id) REFERENCES config_mensagem_fiscal (id)
 );
