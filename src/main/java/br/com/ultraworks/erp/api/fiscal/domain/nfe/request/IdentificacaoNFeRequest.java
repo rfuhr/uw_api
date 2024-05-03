@@ -1,6 +1,7 @@
 package br.com.ultraworks.erp.api.fiscal.domain.nfe.request;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class IdentificacaoNFeRequest {
 
-	private Long departamentoId;
+	private Long emitenteId;
 	private Long operacaoInternaId;
 	private String indicadorOperacao;
 	private String naturezaOperacao;
@@ -33,7 +34,7 @@ public class IdentificacaoNFeRequest {
 	private boolean autorizarObterXml;
 	
 	private LocalRetiradaRequest localRetirada;
-	private DocumentosReferenciadosRequest documentosReferenciados;
-	private AutorizacoesRequest autorizacoes;
+	private List<DocumentoReferenciadoRequest> documentosReferenciados;
+	private List<AutorizacaoRequest> autorizacoes;
 	
 }

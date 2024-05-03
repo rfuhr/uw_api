@@ -1,4 +1,6 @@
-package br.com.ultraworks.erp.api.fiscal.domain.nfe;
+package br.com.ultraworks.erp.api.fiscal.domain.nfe.entity;
+
+import java.util.List;
 
 import br.com.ultraworks.erp.api.organograma.domain.empresaFilial.EmpresaFilial;
 import br.com.ultraworks.erp.api.tabela.domain.situacaodocumento.SituacaoDocumento;
@@ -11,6 +13,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
@@ -39,14 +42,49 @@ public class NFe extends UWEntityBase {
 	@Column(name = "chave_nfe")
 	private String chaveNfe;
 
+	private String cstat;
+	private String crejeicao;
+	private String cdenegado;
+	private String nprotnfe;
+	private String nrecibo;
+	private String xmotivo;
+	private byte[] xml;
+
 	@Convert(converter = SituacaoDocumentoConverter.class)
 	@Column(name = "situacao")
 	private SituacaoDocumento situacao;
 
 	@OneToOne(mappedBy = "nfe", cascade = CascadeType.ALL, orphanRemoval = true)
-    private NFeIde nfeIde;
-	
+	private NFeIde nfeIde;
+
 	@OneToOne(mappedBy = "nfe", cascade = CascadeType.ALL, orphanRemoval = true)
-    private NFeEmit nfeEmit;
-	
+	private NFeEmit nfeEmit;
+
+	@OneToOne(mappedBy = "nfe", cascade = CascadeType.ALL, orphanRemoval = true)
+	private NFeDest nfeDest;
+
+	@OneToOne(mappedBy = "nfe", cascade = CascadeType.ALL, orphanRemoval = true)
+	private NFeRetirada nfeRetirada;
+
+	@OneToOne(mappedBy = "nfe", cascade = CascadeType.ALL, orphanRemoval = true)
+	private NFeEntrega nfeEntrega;
+
+	@OneToMany(mappedBy = "nfe", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<NFeAut> autorizacoes;
+
+	@OneToMany(mappedBy = "nfe", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<NFeDetItem> itens;
+
+	@OneToOne(mappedBy = "nfe", cascade = CascadeType.ALL, orphanRemoval = true)
+	private NFeTotais nfeTotais;
+
+	@OneToOne(mappedBy = "nfe", cascade = CascadeType.ALL, orphanRemoval = true)
+	private NFeTransporte nfeTransporte;
+
+	@OneToOne(mappedBy = "nfe", cascade = CascadeType.ALL, orphanRemoval = true)
+	private NFePagamento nfePagamento;
+
+	@OneToOne(mappedBy = "nfe", cascade = CascadeType.ALL, orphanRemoval = true)
+	private NFeInfoAdic nfeInfoAdic;
+
 }

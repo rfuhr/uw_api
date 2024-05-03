@@ -1,4 +1,4 @@
-package br.com.ultraworks.erp.api.fiscal.domain.nfe;
+package br.com.ultraworks.erp.api.fiscal.domain.nfe.cache;
 
 import br.com.ultraworks.erp.core.entity.UWEntityBase;
 import jakarta.persistence.Column;

@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import br.com.ultraworks.erp.api.fiscal.domain.nfe.ItemListaNFeResponse;
+import br.com.ultraworks.erp.api.fiscal.domain.nfe.response.ItemListaNFeResponse;
 import br.com.ultraworks.erp.core.util.SQLUtils;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Tuple;

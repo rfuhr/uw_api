@@ -1,15 +1,17 @@
-package br.com.ultraworks.erp.api.fiscal.domain.nfe;
+package br.com.ultraworks.erp.api.fiscal.domain.nfe.entity;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import br.com.ultraworks.erp.core.entity.UWEntityBase;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
@@ -32,7 +34,7 @@ public class NFeIde extends UWEntityBase {
 	private Long id;
 
 	@OneToOne
-	@JoinColumn(name = "nfeid")
+	@JoinColumn(name = "nfe_id")
 	@JsonBackReference
 	private NFe nfe;
 
@@ -59,4 +61,7 @@ public class NFeIde extends UWEntityBase {
 	private int verproc;
 	private LocalDateTime dhcont;
 	private String xjust;
+	
+	@OneToMany(mappedBy = "nfe", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<NFeRef> nfesRefs;
 }

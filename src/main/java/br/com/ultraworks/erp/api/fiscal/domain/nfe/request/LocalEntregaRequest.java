@@ -1,26 +1,16 @@
 package br.com.ultraworks.erp.api.fiscal.domain.nfe.request;
 
-import java.util.List;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class TransporteNFeRequest {
+public class LocalEntregaRequest {
 
-	private String modalidadeFrete;
-	private String tipoTransporte;
-	private String placaVeiculo;
-	private String siglaUf;
-	private String rntc;
-	private String vagao;
-	private String balsa;
 	private String tipoPessoa;
 	private String cnpj;
 	private String cpf;
 	private String nomeRazaoSocial;
-	private String inscricaoEstadual;
 	private String cep;
 	private String endereco;
 	private String numero;
@@ -29,11 +19,6 @@ public class TransporteNFeRequest {
 	private Long paisId;
 	private Long ufId;
 	private Long cidadeId;
-
-	private boolean possuiReboque;
-	private boolean possuiVolume;
-	
-
-	private List<ReboqueNFeRequest> reboques;
-	private List<VolumeNFeRequest> volumes;
+	private String telefone;
+	private String email;
 }

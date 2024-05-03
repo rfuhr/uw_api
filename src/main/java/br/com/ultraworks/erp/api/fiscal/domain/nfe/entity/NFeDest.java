@@ -1,4 +1,4 @@
-package br.com.ultraworks.erp.api.fiscal.domain.nfe;
+package br.com.ultraworks.erp.api.fiscal.domain.nfe.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -16,27 +16,27 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "emit_nfe")
+@Table(name = "dest_nfe")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class NFeEmit extends UWEntityBase {
+public class NFeDest extends UWEntityBase {
 
 	@Id
-	@SequenceGenerator(name = "nfeEmitSeq", sequenceName = "emit_nfe_seq", allocationSize = 1)
-	@GeneratedValue(generator = "nfeEmitSeq")
+	@SequenceGenerator(name = "nfeDestSeq", sequenceName = "dest_nfe_seq", allocationSize = 1)
+	@GeneratedValue(generator = "nfeDestSeq")
 	private Long id;
 
 	@OneToOne
-	@JoinColumn(name = "nfeid")
+	@JoinColumn(name = "nfe_id")
 	@JsonBackReference
 	private NFe nfe;
 
 	private String cnpj;
 	private String cpf;
+	private String idestrangeiro;
 	private String xnome;
-	private String xfant;
 	private String xlgr;
 	private String nro;
 	private String xcpl;
@@ -48,9 +48,9 @@ public class NFeEmit extends UWEntityBase {
 	private String cpais;
 	private String xpais;
 	private String fone;
+	private String indieest;
 	private String ie;
-	private String iest;
+	private String isuf;
 	private String im;
-	private String cnae;
-	private int crt;
+	private String email;
 }

@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class PagamentosNFeRequest {
+public class PagamentoNFeRequest {
 
 	private String meioPagamento;
 	private String indicadorFormaPagamento;

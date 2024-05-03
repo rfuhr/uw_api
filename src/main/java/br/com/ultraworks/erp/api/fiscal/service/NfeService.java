@@ -7,7 +7,10 @@ import java.time.ZoneId;
 import java.util.List;
 import java.util.Random;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import br.com.swconsultoria.nfe.dom.enuns.EstadosEnum;
@@ -17,15 +20,19 @@ import br.com.ultraworks.erp.api.configuracao.domain.configempresanfe.ConfigEmpr
 import br.com.ultraworks.erp.api.configuracao.service.ConfigEmpresaNFeService;
 import br.com.ultraworks.erp.api.configuracao.service.ConfigEmpresaService;
 import br.com.ultraworks.erp.api.configuracao.service.ControleNumeracaoService;
-import br.com.ultraworks.erp.api.fiscal.domain.nfe.CacheNFe;
-import br.com.ultraworks.erp.api.fiscal.domain.nfe.ChacheNFeRequest;
-import br.com.ultraworks.erp.api.fiscal.domain.nfe.ItemListaNFeResponse;
-import br.com.ultraworks.erp.api.fiscal.domain.nfe.NFe;
-import br.com.ultraworks.erp.api.fiscal.domain.nfe.NFeEmit;
-import br.com.ultraworks.erp.api.fiscal.domain.nfe.NFeIde;
-import br.com.ultraworks.erp.api.fiscal.domain.nfe.NovaNFeResponse;
+import br.com.ultraworks.erp.api.fiscal.domain.nfe.cache.CacheNFe;
+import br.com.ultraworks.erp.api.fiscal.domain.nfe.cache.ChacheNFeRequest;
+import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFe;
+import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFeEmit;
+import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFeIde;
+import br.com.ultraworks.erp.api.fiscal.domain.nfe.request.NFeRequest;
+import br.com.ultraworks.erp.api.fiscal.domain.nfe.response.ItemListaNFeResponse;
+import br.com.ultraworks.erp.api.fiscal.domain.nfe.response.NovaNFeResponse;
 import br.com.ultraworks.erp.api.fiscal.domain.tipoimpressaodanfe.TipoImpressaoDanfe;
 import br.com.ultraworks.erp.api.fiscal.domain.tipoprocessoemissao.TipoProcessoEmissao;
+import br.com.ultraworks.erp.api.fiscal.integrator.nfe.IServicoEnvioNFe;
+import br.com.ultraworks.erp.api.fiscal.integrator.nfe.IServicoImpressaoNFe;
+import br.com.ultraworks.erp.api.fiscal.integrator.nfe.dto.RetornoNFeIntegracao;
 import br.com.ultraworks.erp.api.fiscal.repository.CacheNFeRepository;
 import br.com.ultraworks.erp.api.fiscal.repository.NFeRepository;
 import br.com.ultraworks.erp.api.fiscal.repository.query.BuscaListagemNFeQuery;
@@ -43,14 +50,12 @@ import br.com.ultraworks.erp.api.tabela.domain.tipodocumento.TipoDocumento;
 import br.com.ultraworks.erp.api.tabela.service.TipoDocumentoService;
 import br.com.ultraworks.erp.core.exception.BusinessException;
 import br.com.ultraworks.erp.core.exception.RegisterNotFoundException;
-import lombok.NoArgsConstructor;
 
 @Service
-@NoArgsConstructor
 public class NfeService {
 
-//	private final ResourceLoader resourceLoader;
-//	private final ApplicationContext context;
+	private ResourceLoader resourceLoader;
+	private ApplicationContext context;
 	private TipoDocumentoService tipoDocumentoService;
 	private EmpresaFilialService empresaFilialService;
 	private NFeRepository nfeRepository;
@@ -63,15 +68,19 @@ public class NfeService {
 	private ParceiroLocalTelefoneService parceiroLocalTelefoneService;
 	private BuscaListagemNFeQuery buscaListagemNFeQuery;
 	private CacheNFeRepository cacheNFeRepository;
+	private MergeNFeRequestToNFeEntityService mergeNFeRequestToNFeEntityService;
 
 	@Autowired
-	public NfeService(EmpresaFilialService empresaFilialService, NFeRepository nfeRepository,
+	public NfeService(ResourceLoader resourceLoader, ApplicationContext context, EmpresaFilialService empresaFilialService, NFeRepository nfeRepository,
 			ConfigEmpresaService configEmpresaService, ConfigEmpresaNFeService configEmpresaNFeService,
 			TipoDocumentoService tipoDocumentoService, ControleNumeracaoService controleNumeracaoService,
 			ParceiroLocalEnderecoService parceiroLocalEnderecoService,
 			ParceiroLocalEnderecoMapper parceiroLocalEnderecoMapper,
 			ParceiroLocalTelefoneService parceiroLocalTelefoneService, ParceiroLocalService parceiroLocalService,
-			BuscaListagemNFeQuery buscaListagemNFeQuery, CacheNFeRepository cacheNFeRepository) {
+			BuscaListagemNFeQuery buscaListagemNFeQuery, CacheNFeRepository cacheNFeRepository,
+			MergeNFeRequestToNFeEntityService mergeNFeRequestToNFeEntityService) {
+		this.resourceLoader = resourceLoader;
+		resourceLoader = context;
 		this.empresaFilialService = empresaFilialService;
 		this.nfeRepository = nfeRepository;
 		this.configEmpresaService = configEmpresaService;
@@ -84,6 +93,7 @@ public class NfeService {
 		this.parceiroLocalService = parceiroLocalService;
 		this.buscaListagemNFeQuery = buscaListagemNFeQuery;
 		this.cacheNFeRepository = cacheNFeRepository;
+		this.mergeNFeRequestToNFeEntityService = mergeNFeRequestToNFeEntityService;
 	}
 
 //	public NfeService(
@@ -275,6 +285,23 @@ public class NfeService {
 				.orElseThrow(() -> new RegisterNotFoundException("Não foi encontrada cache para nfe informada"));
 		byte[] cache = cacheNFe.getCache();
 		return new String(cache, StandardCharsets.UTF_8);
+	}
+
+	public void salvarNFe(NFeRequest nFeRequest) {
+		NFe nfe = nfeRepository.findById(nFeRequest.getNfeId()).orElse(new NFe());		nfe = mergeNFeRequestToNFeEntityService.merge(nfe, nFeRequest);
+		nfe = this.save(nfe);
+	}
+
+	public byte[] enviarNFe(Long nfeId) {
+		NFe nfe = nfeRepository.findById(nfeId).orElseThrow(() -> new RegisterNotFoundException("Não encontrado nfe para o id informado"));
+		IServicoEnvioNFe servicoIntegracaoNFe = context.getBean(IServicoEnvioNFe.class);
+		RetornoNFeIntegracao retornoNfeIntegracao = servicoIntegracaoNFe
+				.enviarNFe(nfe);
+		if (StringUtils.isNotBlank(retornoNfeIntegracao.getXml())) {
+			IServicoImpressaoNFe servicoImpressaoNFe = context.getBean(IServicoImpressaoNFe.class);
+			return servicoImpressaoNFe.imprimeParaBytes(retornoNfeIntegracao.getXml());
+		}
+		return null;
 	}
 
 }

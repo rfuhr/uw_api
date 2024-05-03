@@ -1,6 +1,7 @@
 package br.com.ultraworks.erp.api.fiscal.domain.nfe.request;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,5 +11,5 @@ import lombok.NoArgsConstructor;
 public class FinanceiroNFeRequest {
 
 	private BigDecimal valorTroco;
-	private PagamentosNFeRequest pagamentos;
+	private List<PagamentoNFeRequest> pagamentos;
 }

@@ -3,6 +3,7 @@ package br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -13,6 +14,9 @@ import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocalFisica.Parce
 import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocalJuridica.ParceiroLocalJuridica;
 import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocalTelefone.ParceiroLocalTelefone;
 import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocalTipoParceiro.ParceiroLocalTipoParceiro;
+import br.com.ultraworks.erp.api.tabela.domain.tipoemail.TipoEmail;
+import br.com.ultraworks.erp.api.tabela.domain.tipoendereco.TipoEndereco;
+import br.com.ultraworks.erp.api.tabela.domain.tipotelefone.TipoTelefone;
 import br.com.ultraworks.erp.core.annotation.UniqueValidation;
 import br.com.ultraworks.erp.core.annotation.UniqueValidationGroup;
 import br.com.ultraworks.erp.core.entity.UWEntityBase;
@@ -101,6 +105,37 @@ public class ParceiroLocal extends UWEntityBase {
 		return result;
 	}	
 
+	public ParceiroLocalEndereco getEnderecoNFe() {
+		List<ParceiroLocalEndereco> enderecos = this.getEnderecos();
+		Optional<ParceiroLocalEndereco> endereco = enderecos.stream().filter(end -> end.getTipoEndereco().equals(TipoEndereco.FISCAL)).findFirst();
+		if (endereco.isPresent()) return endereco.get();
+		
+		endereco = enderecos.stream().filter(end -> end.getTipoEndereco().equals(TipoEndereco.COMERCIAL)).findFirst();
+		if (endereco.isPresent()) return endereco.get();
+		
+		if (!enderecos.isEmpty()) return enderecos.get(0);
+		
+		return null;
+	}
 	
+	public ParceiroLocalTelefone getTelefoneNFe() {
+		List<ParceiroLocalTelefone> telefones = this.telefones;
+		Optional<ParceiroLocalTelefone> telefone = telefones.stream()
+				.filter(tel -> tel.getTipoTelefone().equals(TipoTelefone.COMERCIAL)).findFirst();
+		if (telefone.isPresent())
+			return telefone.get();
+
+		return null;
+	}
+	
+	public ParceiroLocalEmail getEmailNFe() {
+		List<ParceiroLocalEmail> emails = this.emails;
+		Optional<ParceiroLocalEmail> email = emails.stream()
+				.filter(em -> em.getTipoEmail().equals(TipoEmail.DIVERSOS)).findFirst();
+		if (email.isPresent())
+			return email.get();
+
+		return null;
+	}
 	
 }

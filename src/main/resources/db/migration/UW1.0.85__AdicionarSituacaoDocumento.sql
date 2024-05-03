@@ -1,0 +1,1 @@
+insert into situacao_documento values ('10', 'Aguardando Envio');

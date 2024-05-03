@@ -15,7 +15,8 @@ public enum SituacaoDocumento {
     INUTILIZADO("6", "Inutilizado"),
     REJEITADO("7", "Rejeitado"),
     DENEGADO("8", "Denegado"),
-    CANCELADO("9", "Cancelado");
+    CANCELADO("9", "Cancelado"),
+    AGUARDANDOENVIO("10","Aguardando Envio");
 
     private String value;
     private String name;

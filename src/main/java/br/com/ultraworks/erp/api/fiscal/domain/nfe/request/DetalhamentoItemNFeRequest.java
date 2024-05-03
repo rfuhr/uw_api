@@ -11,6 +11,7 @@ public class DetalhamentoItemNFeRequest {
 
 	private Long itemId;
 	private Long cfopId;
+	private Long unidadeMedidaId;
 	private BigDecimal quantidade;
 	private BigDecimal valorUnitario;
 	private BigDecimal percentualDesconto;

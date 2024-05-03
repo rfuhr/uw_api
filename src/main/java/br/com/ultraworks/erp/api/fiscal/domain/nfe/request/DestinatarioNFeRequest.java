@@ -12,4 +12,5 @@ public class DestinatarioNFeRequest {
 	private Long telefoneId;
 	private Long emailId;
 	private boolean outroLocalEntrega;
+	private LocalEntregaRequest localEntrega;
 }

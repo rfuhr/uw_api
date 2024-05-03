@@ -4,12 +4,12 @@ create table nfe (
 	id					bigint not null constraint nfe_pkey primary key,
 	empresa_filial_id   bigint not null,
 	chave_nfe			varchar(47) not null,
-	c_stat				varchar(5),
-	c_rejeicao			varchar(5),
-	c_denegado			varchar(5),
-	n_prot_nfe			varchar(100),
-	n_recibo			varchar(100),
-	x_motivo			varchar(500),
+	cstat				varchar(5),
+	crejeicao			varchar(5),
+	cdenegado			varchar(5),
+	nprotnfe			varchar(100),
+	nrecibo				varchar(100),
+	xmotivo				varchar(500),
 	xml					BYTEA,
 	user_create     	bigint 		 not null,
 	date_create			timestamp with time zone 	 not null,
@@ -21,8 +21,8 @@ create table nfe (
 create sequence ide_nfe_seq;
 
 create table ide_nfe (
-	id					bigint not null,
-	nfeid				bigint not null,
+	id					bigint not null constraint ide_nfe_pkey primary key,
+	nfe_id				bigint not null,
 	cuf 				integer not null,
 	cnf					integer not null,
 	natop				varchar(60) not null,
@@ -49,15 +49,16 @@ create table ide_nfe (
 	user_create     	bigint 		 not null,
 	date_create			timestamp with time zone 	 not null,
 	user_update     	bigint,
-	date_update			timestamp with time zone	
+	date_update			timestamp with time zone,
+	constraint nfe_id_ide_nfe_foreign foreign key (nfe_id) references nfe (id)
 );
 
 create sequence nfe_ref_seq;
 
 create table nfe_ref (
-	id					bigint not null,
+	id					bigint not null constraint nfe_ref_pkey primary key,
 	ide_nfe_id			bigint not null,
-	ref_nfe				varchar(44),
+	refnfe				varchar(44),
 	cuf					integer,
 	aamm				integer,
 	cnpj				varchar(14),
@@ -72,14 +73,15 @@ create table nfe_ref (
 	user_create     	bigint 		 not null,
 	date_create			timestamp with time zone 	 not null,
 	user_update     	bigint,
-	date_update			timestamp with time zone
+	date_update			timestamp with time zone,
+	constraint ide_nfe_id_nfe_ref_foreign foreign key (ide_nfe_id) references ide_nfe (id)
 );
 
 create sequence emit_nfe_seq;
 
 create table emit_nfe (
-	id					bigint not null,
-	nfeid				bigint not null,
+	id					bigint not null constraint emit_nfe_pkey primary key,
+	nfe_id				bigint not null,
 	cnpj				varchar(14),
 	cpf					varchar(11),
 	xnome				varchar(60),
@@ -103,13 +105,14 @@ create table emit_nfe (
 	user_create     	bigint 		 not null,
 	date_create			timestamp with time zone 	 not null,
 	user_update     	bigint,
-	date_update			timestamp with time zone		
+	date_update			timestamp with time zone,
+	constraint nfe_id_emit_nfe_foreign foreign key (nfe_id) references nfe (id)	
 );
 
 create sequence dest_nfe_seq;
 
 create table dest_nfe (
-	id					bigint not null,
+	id					bigint not null constraint dest_nfe_pkey primary key,
 	nfe_id				bigint not null,
 	cnpj				varchar(14),
 	cpf					varchar(11),
@@ -134,13 +137,14 @@ create table dest_nfe (
 	user_create     	bigint 		 not null,
 	date_create			timestamp with time zone 	 not null,
 	user_update     	bigint,
-	date_update			timestamp with time zone		
+	date_update			timestamp with time zone,
+	constraint nfe_id_dest_nfe_foreign foreign key (nfe_id) references nfe (id)		
 );
 
 create sequence local_retirada_nfe_seq;
 
 create table local_retirada_nfe (
-	id					bigint not null,
+	id					bigint not null constraint local_retirada_nfe_pkey primary key,
 	nfe_id				bigint not null,
 	cnpj				varchar(14),
 	cpf					varchar(11),
@@ -161,13 +165,14 @@ create table local_retirada_nfe (
 	user_create     	bigint 		 not null,
 	date_create			timestamp with time zone 	 not null,
 	user_update     	bigint,
-	date_update			timestamp with time zone		
+	date_update			timestamp with time zone,
+	constraint nfe_id_local_retirada_nfe_foreign foreign key (nfe_id) references nfe (id)	
 );
 
 create sequence local_entrega_nfe_seq;
 
 create table local_entrega_nfe (
-	id					bigint not null,
+	id					bigint not null constraint local_entrega_nfe_pkey primary key,
 	nfe_id				bigint not null,
 	cnpj				varchar(14),
 	cpf					varchar(11),
@@ -188,38 +193,41 @@ create table local_entrega_nfe (
 	user_create     	bigint 		 not null,
 	date_create			timestamp with time zone 	 not null,
 	user_update     	bigint,
-	date_update			timestamp with time zone		
+	date_update			timestamp with time zone,
+	constraint nfe_id_local_entrega_nfe_foreign foreign key (nfe_id) references nfe (id)		
 );
 
 create sequence aut_xml_nfe_seq;
 
 create table aut_xml_nfe (
-	id					bigint not null,
+	id					bigint not null constraint aut_xml_nfe_pkey primary key,
 	nfe_id				bigint not null,
 	cnpj				varchar(14),
 	cpf					varchar(11),
 	user_create     	bigint 		 not null,
 	date_create			timestamp with time zone 	 not null,
 	user_update     	bigint,
-	date_update			timestamp with time zone		
+	date_update			timestamp with time zone,
+	constraint nfe_id_aut_xml_nfe_foreign foreign key (nfe_id) references nfe (id)		
 );
 
 create sequence det_item_nfe_seq;
 
 create table det_item_nfe (
-	id					bigint not null,
+	id					bigint not null constraint det_item_nfe_pkey primary key,
 	nfe_id				bigint not null,
 	nitem				integer not null,
 	user_create     	bigint 		 not null,
 	date_create			timestamp with time zone 	 not null,
 	user_update     	bigint,
-	date_update			timestamp with time zone		
+	date_update			timestamp with time zone,
+	constraint nfe_id_det_item_nfe_foreign foreign key (nfe_id) references nfe (id)		
 );
 
 create sequence prod_item_nfe_seq;
 
 create table prod_item_nfe (
-	id					bigint not null,
+	id					bigint not null constraint prod_item_nfe_pkey primary key,
 	det_item_nfe_id		bigint not null,
 	cprod				varchar(60),
 	cean				varchar(14),
@@ -248,13 +256,14 @@ create table prod_item_nfe (
 	user_create     	bigint 		 not null,
 	date_create			timestamp with time zone 	 not null,
 	user_update     	bigint,
-	date_update			timestamp with time zone		
+	date_update			timestamp with time zone,
+	constraint det_item_nfe_id_prod_item_nfe_foreign foreign key (det_item_nfe_id) references det_item_nfe (id)		
 );
 	
 create sequence di_item_nfe_seq;
 
 create table di_item_nfe (
-	id					bigint not null,
+	id					bigint not null constraint di_item_nfe_pkey primary key,
 	prod_item_nfe_id	bigint not null,	
 	ndi					varchar(12),
 	ddi					varchar(10),
@@ -270,13 +279,14 @@ create table di_item_nfe (
 	user_create     	bigint 		 not null,
 	date_create			timestamp with time zone 	 not null,
 	user_update     	bigint,
-	date_update			timestamp with time zone		
+	date_update			timestamp with time zone,
+	constraint prod_item_nfe_id_prod_item_nfe_foreign foreign key (prod_item_nfe_id) references prod_item_nfe (id)			
 );
 
 create sequence adicao_di_item_nfe_seq;
 
 create table adicao_di_item_nfe (
-	id					bigint not null,
+	id					bigint not null constraint adicao_di_item_nfe_pkey primary key,
 	di_item_nfe_id		bigint not null,	
 	nadicao				integer,
 	nseqadic			integer,
@@ -286,13 +296,14 @@ create table adicao_di_item_nfe (
 	user_create     	bigint 		 not null,
 	date_create			timestamp with time zone 	 not null,
 	user_update     	bigint,
-	date_update			timestamp with time zone		
+	date_update			timestamp with time zone,
+	constraint adicao_di_item_nfe_id_di_item_nfe_foreign foreign key (di_item_nfe_id) references di_item_nfe (id)	
 );
 
 create sequence export_item_nfe_seq;
 
 create table export_item_nfe (
-	id					bigint not null,
+	id					bigint not null constraint export_item_nfe_pkey primary key,
 	prod_item_nfe_id	bigint not null,
 	ndraw				varchar(11),
 	nre					varchar(12),
@@ -301,25 +312,71 @@ create table export_item_nfe (
 	user_create     	bigint 		 not null,
 	date_create			timestamp with time zone 	 not null,
 	user_update     	bigint,
-	date_update			timestamp with time zone		
+	date_update			timestamp with time zone,
+	constraint export_item_nfe_id_prod_item_nfe_foreign foreign key (prod_item_nfe_id) references prod_item_nfe (id)			
+);
+
+create sequence ped_compra_item_nfe_seq;
+
+create table ped_compra_item_nfe (
+	id					bigint not null constraint ped_compra_item_nfe_pkey primary key,
+	prod_item_nfe_id	bigint not null,
+	xped				varchar(15),
+	nitemped			varchar(6),
+	user_create     	bigint 		 not null,
+	date_create			timestamp with time zone 	 not null,
+	user_update     	bigint,
+	date_update			timestamp with time zone,
+	constraint ped_compra_item_nfe_id_prod_item_nfe_foreign foreign key (prod_item_nfe_id) references prod_item_nfe (id)			
+);
+
+create sequence grupo_div_item_nfe_seq;
+
+create table grupo_div_item_nfe (
+	id					bigint not null constraint ped_compra_item_nfe_pkey primary key,
+	prod_item_nfe_id	bigint not null,
+	nfci				varchar(36),
+	user_create     	bigint 		 not null,
+	date_create			timestamp with time zone 	 not null,
+	user_update     	bigint,
+	date_update			timestamp with time zone,
+	constraint grupo_div_item_nfe_id_prod_item_nfe_foreign foreign key (prod_item_nfe_id) references prod_item_nfe (id)			
+);
+
+create sequence rastreab_item_nfe_seq;
+
+create table rastreab_item_nfe (
+	id					bigint not null constraint rastreab_item_nfe_pkey primary key,
+	prod_item_nfe_id	bigint not null,
+	nlote				varchar(20),
+	qlote				decimal(15,5),
+	dfab				date,
+	dval				date,
+	cagreg				varchar(20),
+	user_create     	bigint 		 not null,
+	date_create			timestamp with time zone 	 not null,
+	user_update     	bigint,
+	date_update			timestamp with time zone,
+	constraint rastreab_item_nfe_id_prod_item_nfe_foreign foreign key (prod_item_nfe_id) references prod_item_nfe (id)			
 );
 
 create sequence impostos_item_nfe_seq;
 
 create table impostos_item_nfe (
-	id					bigint not null,
+	id					bigint not null constraint impostos_nfe_pkey primary key,
 	det_item_nfe_id		bigint not null,
 	vtottrib			decimal(20,10),
 	user_create     	bigint 		 not null,
 	date_create			timestamp with time zone 	 not null,
 	user_update     	bigint,
-	date_update			timestamp with time zone		
+	date_update			timestamp with time zone,
+	constraint impostos_item_nfe_id_det_item_nfe_foreign foreign key (det_item_nfe_id) references det_item_nfe (id)			
 );
 
 create sequence icms_item_nfe_seq;
 
 create table icms_item_nfe (
-	id						bigint not null,
+	id						bigint not null constraint icms_item_nfe_pkey primary key,
 	impostos_item_nfe_id	bigint not null,
 	cst						varchar(2),
 	orig					integer,
@@ -362,14 +419,15 @@ create table icms_item_nfe (
 	user_create     	bigint 		 not null,
 	date_create			timestamp with time zone 	 not null,
 	user_update     	bigint,
-	date_update			timestamp with time zone		
+	date_update			timestamp with time zone,
+	constraint icms_item_nfe_id_impostos_item_nfe_foreign foreign key (impostos_item_nfe_id) references impostos_item_nfe (id)		
 	
 );
 
 create sequence icms_uf_dest_item_nfe_seq;
 
 create table icms_uf_dest_item_nfe (
-	id						bigint not null,
+	id						bigint not null constraint icms_uf_dest_item_nfe_pkey primary key,
 	impostos_item_nfe_id	bigint not null,
 	vbcufdest				decimal(15,5),
 	vbcfcpufdest			decimal(15,5),
@@ -383,13 +441,14 @@ create table icms_uf_dest_item_nfe (
 	user_create     	bigint 		 not null,
 	date_create			timestamp with time zone 	 not null,
 	user_update     	bigint,
-	date_update			timestamp with time zone		
+	date_update			timestamp with time ,
+	constraint icms_uf_dest_item_nfe_id_impostos_item_nfe_foreign foreign key (impostos_item_nfe_id) references impostos_item_nfe (id)				
 );
 
 create sequence ipi_item_nfe_seq;
 
 create table ipi_item_nfe (
-	id						bigint not null,
+	id						bigint not null constraint ipi_item_nfe_pkey primary key,
 	impostos_item_nfe_id	bigint not null,
 	cnpjprod				varchar(14),
 	cselo					varchar(60),
@@ -403,13 +462,14 @@ create table ipi_item_nfe (
 	user_create     	bigint 		 not null,
 	date_create			timestamp with time zone 	 not null,
 	user_update     	bigint,
-	date_update			timestamp with time zone		
+	date_update			timestamp with time zone,
+	constraint ipi_item_nfe_id_impostos_item_nfe_foreign foreign key (impostos_item_nfe_id) references impostos_item_nfe (id)				
 );
 
 create sequence ii_item_nfe_seq;
 
 create table ii_item_nfe (
-	id						bigint not null,
+	id						bigint not null constraint ii_item_nfe_pkey primary key,
 	impostos_item_nfe_id	bigint not null,
 	vbc						decimal(15,5),
 	vdespadu				decimal(15,5),
@@ -418,13 +478,14 @@ create table ii_item_nfe (
 	user_create     	bigint 		 not null,
 	date_create			timestamp with time zone 	 not null,
 	user_update     	bigint,
-	date_update			timestamp with time zone		
+	date_update			timestamp with time zone,
+	constraint ii_item_nfe_id_impostos_item_nfe_foreign foreign key (impostos_item_nfe_id) references impostos_item_nfe (id)				
 );
 
 create sequence pis_item_nfe_seq;
 
 create table pis_item_nfe (
-	id						bigint not null,
+	id						bigint not null constraint pis_item_nfe_pkey primary key,
 	impostos_item_nfe_id	bigint not null,
 	cst						varchar(2),
 	vbc						decimal(15,5),
@@ -435,13 +496,14 @@ create table pis_item_nfe (
 	user_create     	bigint 		 not null,
 	date_create			timestamp with time zone 	 not null,
 	user_update     	bigint,
-	date_update			timestamp with time zone		
+	date_update			timestamp with time zone,
+	constraint pis_item_nfe_id_impostos_item_nfe_foreign foreign key (impostos_item_nfe_id) references impostos_item_nfe (id)				
 );
 
 create sequence cofins_item_nfe_seq;
 
 create table cofins_item_nfe (
-	id						bigint not null,
+	id						bigint not null constraint cofins_item_nfe_pkey primary key,
 	impostos_item_nfe_id	bigint not null,
 	cst						varchar(2),
 	vbc						decimal(15,5),
@@ -452,39 +514,42 @@ create table cofins_item_nfe (
 	user_create     	bigint 		 not null,
 	date_create			timestamp with time zone 	 not null,
 	user_update     	bigint,
-	date_update			timestamp with time zone		
+	date_update			timestamp with time zone,
+	constraint cofins_item_nfe_id_impostos_item_nfe_foreign foreign key (impostos_item_nfe_id) references impostos_item_nfe (id)				
 );
 	
 	
 create sequence trib_incid_item_nfe_seq;
 
 create table trib_incid_item_nfe (
-	id					bigint not null,
+	id					bigint not null constraint trib_incid_item_nfe_pkey primary key,
 	det_item_nfe_id		bigint not null,
 	pdevol				decimal(15,5),
 	vipidevol			decimal(15,5),
 	user_create     	bigint 		 not null,
 	date_create			timestamp with time zone 	 not null,
 	user_update     	bigint,
-	date_update			timestamp with time zone		
+	date_update			timestamp with time zone,
+	constraint trib_incid_item_nfe_id_det_item_nfe_foreign foreign key (det_item_nfe_id) references det_item_nfe (id)				
 );
 
 create sequence info_adic_item_nfe_seq;
 
 create table info_adic_item_nfe (
-	id					bigint not null,
+	id					bigint not null constraint info_adic_item_nfe_pkey primary key,
 	det_item_nfe_id		bigint not null,
 	infadprod			varchar(500),
 	user_create     	bigint 		 not null,
 	date_create			timestamp with time zone 	 not null,
 	user_update     	bigint,
-	date_update			timestamp with time zone		
+	date_update			timestamp with time zone,
+	constraint info_adic_item_nfe_id_det_item_nfe_foreign foreign key (det_item_nfe_id) references det_item_nfe (id)
 );
 
 create sequence totais_nfe_seq;
 
 create table totais_nfe (
-	id					bigint not null,
+	id					bigint not null constraint totais_nfe_pkey primary key,
 	nfe_id				bigint not null,
 	vbc					decimal(15,5),
 	vicms				decimal(15,5),
@@ -512,13 +577,14 @@ create table totais_nfe (
 	user_create     	bigint 		 not null,
 	date_create			timestamp with time zone 	 not null,
 	user_update     	bigint,
-	date_update			timestamp with time zone		
+	date_update			timestamp with time zone,
+	constraint totais_nfe_id_nfe_foreign foreign key (nfe_id) references nfe (id)		
 );
 
 create sequence transp_nfe_seq;
 
 create table transp_nfe (
-	id					bigint not null,
+	id					bigint not null constraint transp_nfe_pkey primary key,
 	nfe_id				bigint not null,
 	modfrete			integer,
 	cnpj				varchar(14),
@@ -542,28 +608,30 @@ create table transp_nfe (
 	user_create     	bigint 		 not null,
 	date_create			timestamp with time zone 	 not null,
 	user_update     	bigint,
-	date_update			timestamp with time zone		
+	date_update			timestamp with time zone,
+	constraint transp_nfe_id_nfe_foreign foreign key (nfe_id) references nfe (id)			
 );
 
 create sequence reb_transp_nfe_seq;
 
 create table reb_transp_nfe (
-	id					bigint not null,
-	reb_transp_nfe_id	bigint not null,
+	id					bigint not null constraint reb_transp_nfe_pkey primary key,
+	transp_nfe_id		bigint not null,
 	placa				varchar(7),
 	ufplaca				varchar(2),
 	rntc				varchar(20),
 	user_create     	bigint 		 not null,
 	date_create			timestamp with time zone 	 not null,
 	user_update     	bigint,
-	date_update			timestamp with time zone		
+	date_update			timestamp with time zone,
+	constraint reb_nfe_id_transp_nfe_foreign foreign key (transp_nfe_id) references transp_nfe (id)		
 );	
 
 create sequence vol_transp_nfe_seq;
 
 create table vol_transp_nfe (
-	id					bigint not null,
-	reb_transp_nfe_id	bigint not null,
+	id					bigint not null constraint vol_transp_nfe_pkey primary key,
+	transp_nfe_id	bigint not null,
 	qvol				decimal(15,5),
 	esp					varchar(60),
 	marca				varchar(60),
@@ -573,37 +641,40 @@ create table vol_transp_nfe (
 	user_create     	bigint 		 not null,
 	date_create			timestamp with time zone 	 not null,
 	user_update     	bigint,
-	date_update			timestamp with time zone		
+	date_update			timestamp with time zone,
+	constraint volume_nfe_id_transp_nfe_foreign foreign key (transp_nfe_id) references transp_nfe (id)			
 );
 
 create sequence lacres_transp_nfe_seq;
 
 create table lacres_transp_nfe (
-	id					bigint not null,
-	reb_transp_nfe_id	bigint not null,
+	id					bigint not null constraint lacres_transp_nfe_pkey primary key,
+	vol_transp_nfe_id	bigint not null,
 	nlacre				varchar(60),
 	user_create     	bigint 		 not null,
 	date_create			timestamp with time zone 	 not null,
 	user_update     	bigint,
-	date_update			timestamp with time zone		
+	date_update			timestamp with time zone,
+	constraint lacre_nfe_id_vol_transp_nfe_foreign foreign key (vol_transp_nfe_id) references vol_transp_nfe (id)		
 );
 
 create sequence pagamentos_nfe_seq;
 
 create table pagamentos_nfe (
-	id					bigint not null,
+	id					bigint not null constraint pagamentos_nfe_pkey primary key,
 	nfe_id				bigint not null,
 	vtroco				decimal(15,5),
 	user_create     	bigint 		 not null,
 	date_create			timestamp with time zone 	 not null,
 	user_update     	bigint,
-	date_update			timestamp with time zone		
+	date_update			timestamp with time zone,
+	constraint pagamentos_nfe_id_nfe_foreign foreign key (nfe_id) references nfe (id)		
 );
 
 create sequence det_pag_nfe_seq;
 
 create table det_pag_nfe (
-	id					bigint not null,
+	id					bigint not null constraint det_pag_nfe_pkey primary key,
 	pagamentos_nfe_id	bigint not null,
 	indpag				integer,
 	tpag				varchar(2),
@@ -615,57 +686,62 @@ create table det_pag_nfe (
 	user_create     	bigint 		 not null,
 	date_create			timestamp with time zone 	 not null,
 	user_update     	bigint,
-	date_update			timestamp with time zone		
+	date_update			timestamp with time zone,
+	constraint det_pag_nfe_id_pagamentos_nfe_foreign foreign key (pagamentos_nfe_id) references pagamentos_nfe (id)
 );
 
 create sequence info_adic_nfe_seq;
 
 create table info_adic_nfe (
-	id					bigint not null,
+	id					bigint not null constraint info_adic_nfe_pkey primary key,
 	nfe_id				bigint not null,
 	infadfisco			varchar(2000),
 	infcpl				varchar(5000),
 	user_create     	bigint 		 not null,
 	date_create			timestamp with time zone 	 not null,
 	user_update     	bigint,
-	date_update			timestamp with time zone		
+	date_update			timestamp with time zone,
+	constraint info_adic_nfe_id_nfe_foreign foreign key (nfe_id) references nfe (id)
 );
 
 create sequence obs_cont_info_adic_nfe_seq;
 
 create table obs_cont_info_adic_nfe (
-	id					bigint not null,
+	id					bigint not null constraint obs_cont_info_adic_nfe_pkey primary key,
 	info_adic_nfe_id	bigint not null,
 	xcampo				varchar(20),
 	xtexto				varchar(60),
 	user_create     	bigint 		 not null,
 	date_create			timestamp with time zone 	 not null,
 	user_update     	bigint,
-	date_update			timestamp with time zone		
+	date_update			timestamp with time zone		,
+	constraint obs_cont_nfe_id_info_adic_nfe_foreign foreign key (info_adic_nfe_id) references info_adic_nfe (id)
 );
 
 create sequence obs_fisco_info_adic_nfe_seq;
 
 create table obs_fisco_info_adic_nfe (
-	id					bigint not null,
+	id					bigint not null constraint obs_fisco_info_adic_nfe_pkey primary key,
 	info_adic_nfe_id	bigint not null,
 	xcampo				varchar(20),
 	xtexto				varchar(60),
 	user_create     	bigint 		 not null,
 	date_create			timestamp with time zone 	 not null,
 	user_update     	bigint,
-	date_update			timestamp with time zone		
+	date_update			timestamp with time zone,
+	constraint obs_fisco_nfe_id_info_adic_nfe_foreign foreign key (info_adic_nfe_id) references info_adic_nfe (id)
 );
 
 create sequence proc_ref_info_adic_nfe_seq;
 
 create table proc_ref_info_adic_nfe (
-	id					bigint not null,
+	id					bigint not null constraint proc_ref_info_adic_nfe_pkey primary key,
 	info_adic_nfe_id	bigint not null,
 	nproc				varchar(60),
 	indproc				integer,
 	user_create     	bigint 		 not null,
 	date_create			timestamp with time zone 	 not null,
 	user_update     	bigint,
-	date_update			timestamp with time zone		
+	date_update			timestamp with time zone,
+	constraint proc_ref_nfe_id_info_adic_nfe_foreign foreign key (info_adic_nfe_id) references info_adic_nfe (id)		
 );

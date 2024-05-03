@@ -1,4 +1,4 @@
-package br.com.ultraworks.erp.api.fiscal.domain.nfe;
+package br.com.ultraworks.erp.api.fiscal.domain.nfe.response;
 
 import java.time.Instant;
 

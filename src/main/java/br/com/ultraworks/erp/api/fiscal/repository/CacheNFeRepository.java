@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
-import br.com.ultraworks.erp.api.fiscal.domain.nfe.CacheNFe;
+import br.com.ultraworks.erp.api.fiscal.domain.nfe.cache.CacheNFe;
 import br.com.ultraworks.erp.core.UWRepository;
 
 @Repository

@@ -1,12 +1,10 @@
 package br.com.ultraworks.erp.api.fiscal.integrator.nfe;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,7 +93,6 @@ import br.com.swconsultoria.nfe.schema_4.enviNFe.TNFe.InfNFe.Total.ICMSTot;
 import br.com.swconsultoria.nfe.schema_4.enviNFe.TNFe.InfNFe.Total.ISSQNtot;
 import br.com.swconsultoria.nfe.schema_4.enviNFe.TNFe.InfNFe.Total.RetTrib;
 import br.com.swconsultoria.nfe.schema_4.enviNFe.TNFe.InfNFe.Transp;
-import br.com.swconsultoria.nfe.schema_4.enviNFe.TNFe.InfNFe.Transp.RetTransp;
 import br.com.swconsultoria.nfe.schema_4.enviNFe.TNFe.InfNFe.Transp.Transporta;
 import br.com.swconsultoria.nfe.schema_4.enviNFe.TNFe.InfNFe.Transp.Vol;
 import br.com.swconsultoria.nfe.schema_4.enviNFe.TNFe.InfNFe.Transp.Vol.Lacres;
@@ -104,7 +101,6 @@ import br.com.swconsultoria.nfe.schema_4.enviNFe.TUf;
 import br.com.swconsultoria.nfe.schema_4.enviNFe.TUfEmi;
 import br.com.swconsultoria.nfe.schema_4.enviNFe.TVeiculo;
 import br.com.swconsultoria.nfe.schema_4.retConsReciNFe.TRetConsReciNFe;
-import br.com.swconsultoria.nfe.util.ChaveUtil;
 import br.com.swconsultoria.nfe.util.ConstantesUtil;
 import br.com.swconsultoria.nfe.util.RetornoUtil;
 import br.com.swconsultoria.nfe.util.XmlNfeUtil;
@@ -112,23 +108,33 @@ import br.com.ultraworks.erp.api.configuracao.domain.certificado.EmpresaCertific
 import br.com.ultraworks.erp.api.configuracao.domain.configempresanfe.ConfigEmpresaNFe;
 import br.com.ultraworks.erp.api.configuracao.service.ConfigEmpresaNFeService;
 import br.com.ultraworks.erp.api.configuracao.service.EmpresaCertificadoService;
-import br.com.ultraworks.erp.api.estoque.domain.item.Item;
-import br.com.ultraworks.erp.api.fiscal.domain.indicadoriedestinatario.IndicadorIEDestinatario;
-import br.com.ultraworks.erp.api.fiscal.integrator.nfe.dto.ContainerIntegracaoNFe;
-import br.com.ultraworks.erp.api.fiscal.integrator.nfe.dto.ContainerIntegracaoNFeAutorizacao;
-import br.com.ultraworks.erp.api.fiscal.integrator.nfe.dto.ContainerIntegracaoNFeIdentificacao;
-import br.com.ultraworks.erp.api.fiscal.integrator.nfe.dto.ContainerIntegracaoNFeItem;
-import br.com.ultraworks.erp.api.fiscal.integrator.nfe.dto.ContainerIntegracaoNFeLocalRetirada;
+import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFe;
+import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFeAut;
+import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFeCofinsItem;
+import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFeDest;
+import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFeDetItem;
+import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFeDetPagamento;
+import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFeEmit;
+import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFeIcmsItem;
+import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFeImpostosItem;
+import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFeInfoAdic;
+import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFeIpiItem;
+import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFeObsCont;
+import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFeObsFisco;
+import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFePagamento;
+import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFePisItem;
+import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFeProcReferenciado;
+import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFeProdItem;
+import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFeReboque;
+import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFeRef;
+import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFeRetirada;
+import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFeTotais;
+import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFeTransporte;
+import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFeVolume;
 import br.com.ultraworks.erp.api.fiscal.integrator.nfe.dto.RetornoNFeIntegracao;
-import br.com.ultraworks.erp.api.relacionamento.domain.parceiro.Parceiro;
-import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocal.ParceiroLocal;
-import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocalEmail.ParceiroLocalEmail;
-import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocalEndereco.ParceiroLocalEndereco;
-import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocalJuridica.ParceiroLocalJuridica;
-import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocalTelefone.ParceiroLocalTelefone;
 import br.com.ultraworks.erp.api.relacionamento.service.ParceiroLocalService;
-import br.com.ultraworks.erp.api.tabela.domain.tipopessoa.TipoPessoa;
 import br.com.ultraworks.erp.core.exception.BusinessException;
+import br.com.ultraworks.erp.core.util.BigDecimalHelper;
 
 @Service
 @Scope("prototype")
@@ -151,29 +157,27 @@ public class ServicoEnvioNFeImpl implements IServicoEnvioNFe {
 	}
 
 	@Override
-	public RetornoNFeIntegracao emitirNFe(ContainerIntegracaoNFe containerNFe) throws BusinessException {
+	public RetornoNFeIntegracao enviarNFe(NFe nfe) throws BusinessException {
 		ConfigEmpresaNFe configEmpresaNFe = configEmpresaNFeService
-				.getByEmpresaFilialId(containerNFe.getEmpresaFilialEmissorId());
+				.getByEmpresaFilialId(nfe.getEmpresaFilial().getId());
 		ConfiguracoesNfe configuracoesNfe = criarConfiguracoesNfe(configEmpresaNFe);
-		ChaveUtil chaveUtil = montaChaveNFe(configuracoesNfe.getEstado(), configEmpresaNFe,
-				containerNFe.getNfeIdentificacao());
-		TEnviNFe enviNFe = criaEnviNFe(configuracoesNfe, chaveUtil, containerNFe, configEmpresaNFe);
+		TEnviNFe enviNFe = criaEnviNFe(configuracoesNfe, nfe, configEmpresaNFe);
 
-		try {
-			enviNFe = Nfe.montaNfe(configuracoesNfe, enviNFe, true);
-		} catch (NfeException e) {
-			throw new BusinessException(
-					"Erro ao realizar assinatura e validação da NFe. " + "Motivo: " + e.getMessage());
-		}
+//		try {
+//			enviNFe = Nfe.montaNfe(configuracoesNfe, enviNFe, true);
+//		} catch (NfeException e) {
+//			throw new BusinessException(
+//					"Erro ao realizar assinatura e validação da NFe. " + "Motivo: " + e.getMessage());
+//		}
 
-		TRetEnviNFe retorno;
-		try {
-			retorno = Nfe.enviarNfe(configuracoesNfe, enviNFe, DocumentoEnum.NFE);
-		} catch (NfeException e) {
-			throw new BusinessException("Erro ao enviar da NFe. " + "Motivo: " + e.getMessage());
-		}
+		TRetEnviNFe retorno = null;
+//		try {
+//			retorno = Nfe.enviarNfe(configuracoesNfe, enviNFe, DocumentoEnum.NFE);
+//		} catch (NfeException e) {
+//			throw new BusinessException("Erro ao enviar da NFe. " + "Motivo: " + e.getMessage());
+//		}
 
-		String xmlFinal;
+		String xmlFinal = null;
 		RetornoNFeIntegracao retornoNFeIntegracao = new RetornoNFeIntegracao();
 		retornoNFeIntegracao.setRecibo(retorno.getInfRec().getNRec());
 		try {
@@ -184,7 +188,7 @@ public class ServicoEnvioNFeImpl implements IServicoEnvioNFe {
 					RetornoUtil.validaAssincrono(tRetConsReciNFe);
 					retornoNFeIntegracao.setStatus(tRetConsReciNFe.getProtNFe().get(0).getInfProt().getCStat());
 					retornoNFeIntegracao.setProtocolo(tRetConsReciNFe.getProtNFe().get(0).getInfProt().getNProt());
-					xmlFinal = XmlNfeUtil.criaNfeProc(enviNFe, tRetConsReciNFe.getProtNFe().get(0));
+//					xmlFinal = XmlNfeUtil.criaNfeProc(enviNFe, tRetConsReciNFe.getProtNFe().get(0));
 					retornoNFeIntegracao.setXml(xmlFinal);
 				} else {
 					retornoNFeIntegracao.setStatus(tRetConsReciNFe.getCStat());
@@ -193,7 +197,7 @@ public class ServicoEnvioNFeImpl implements IServicoEnvioNFe {
 				RetornoUtil.validaSincrono(retorno);
 				retornoNFeIntegracao.setStatus(retorno.getProtNFe().getInfProt().getCStat());
 				retornoNFeIntegracao.setProtocolo(retorno.getProtNFe().getInfProt().getNProt());
-				xmlFinal = XmlNfeUtil.criaNfeProc(enviNFe, retorno.getProtNFe());
+//				xmlFinal = XmlNfeUtil.criaNfeProc(enviNFe, retorno.getProtNFe());
 				retornoNFeIntegracao.setXml(xmlFinal);
 			}
 		} catch (Exception e) {
@@ -224,46 +228,43 @@ public class ServicoEnvioNFeImpl implements IServicoEnvioNFe {
 		return retornoConsulta;
 	}
 
-	private TEnviNFe criaEnviNFe(ConfiguracoesNfe configuracoesNfe, ChaveUtil chaveUtil,
-			ContainerIntegracaoNFe containerIntegracaoNFe, ConfigEmpresaNFe configEmpresaNFe) {
+	private TEnviNFe criaEnviNFe(ConfiguracoesNfe configuracoesNfe, NFe uwNFe, ConfigEmpresaNFe configEmpresaNFe) {
 		TEnviNFe enviNFe = new TEnviNFe();
 		enviNFe.setVersao(ConstantesUtil.VERSAO.NFE);
 		enviNFe.setIdLote("1");
 		enviNFe.setIndSinc("1");
 
 		TNFe nfe = new TNFe();
-		TNFe.InfNFe infNFe = getInfNFe(configuracoesNfe, chaveUtil, containerIntegracaoNFe, configEmpresaNFe);
+		TNFe.InfNFe infNFe = getInfNFe(configuracoesNfe, uwNFe, configEmpresaNFe);
 		nfe.setInfNFe(infNFe);
 		enviNFe.getNFe().add(nfe);
 
 		return enviNFe;
 	}
 
-	private InfNFe getInfNFe(ConfiguracoesNfe configuracoesNfe, ChaveUtil chaveUtil,
-			ContainerIntegracaoNFe containerIntegracaoNFe, ConfigEmpresaNFe configEmpresaNFe) {
+	private InfNFe getInfNFe(ConfiguracoesNfe configuracoesNfe, NFe uwNFe, ConfigEmpresaNFe configEmpresaNFe) {
 		TNFe.InfNFe infNFe = new TNFe.InfNFe();
-		infNFe.setId(chaveUtil.getChaveNF());
+		infNFe.setId(uwNFe.getChaveNfe());
 		infNFe.setVersao(ConstantesUtil.VERSAO.NFE);
-		infNFe.setIde(montaIde(configuracoesNfe, chaveUtil, containerIntegracaoNFe, configEmpresaNFe));
-		infNFe.setEmit(montaEmitente(configEmpresaNFe));
-		infNFe.setDest(montaDestinatario(containerIntegracaoNFe));
-		if (containerIntegracaoNFe.getNfeLocalRetirada() != null)
-			infNFe.setRetirada(montaLocalRetirada(containerIntegracaoNFe.getNfeLocalRetirada()));
-		if (containerIntegracaoNFe.getNfeAutorizacaoXML() != null
-				&& containerIntegracaoNFe.getNfeAutorizacaoXML().size() > 0) {
-			infNFe.getAutXML().addAll(montaAutorizacaoXML(containerIntegracaoNFe.getNfeAutorizacaoXML()));
+		infNFe.setIde(montaIde(configuracoesNfe, uwNFe, configEmpresaNFe));
+		infNFe.setEmit(montaEmitente(configEmpresaNFe, uwNFe));
+		infNFe.setDest(montaDestinatario(uwNFe));
+		if (uwNFe.getNfeRetirada() != null)
+			infNFe.setRetirada(montaLocalRetirada(uwNFe.getNfeRetirada()));
+		if (uwNFe.getAutorizacoes() != null && !uwNFe.getAutorizacoes().isEmpty()) {
+			infNFe.getAutXML().addAll(montaAutorizacaoXML(uwNFe.getAutorizacoes()));
 		}
-		infNFe.getDet().addAll(montaDetalhamentoProdutosServicos(containerIntegracaoNFe));
-		infNFe.setTotal(montaTotal());
-		infNFe.setTransp(montaTransportadora());
-		infNFe.setCobr(montaCobranca());
-		infNFe.setPag(pagamento());
-		infNFe.setInfIntermed(montaInformacaoIntermediador());
-		infNFe.setInfAdic(montaInfAdicionais());
-		infNFe.setExporta(montaInfExportacao());
-		infNFe.setCompra(montaInfCompra());
-		infNFe.setCana(montaInfAquisicaoCana());
-		infNFe.setInfRespTec(montaRespTecnico());
+		infNFe.getDet().addAll(montaDetalhamentoProdutosServicos(uwNFe));
+		infNFe.setTotal(montaTotal(uwNFe));
+		infNFe.setTransp(montaTransportadora(uwNFe));
+//		infNFe.setCobr(montaCobranca());
+		infNFe.setPag(pagamento(uwNFe));
+//		infNFe.setInfIntermed(montaInformacaoIntermediador());
+		infNFe.setInfAdic(montaInfAdicionais(uwNFe));
+//		infNFe.setExporta(montaInfExportacao());
+//		infNFe.setCompra(montaInfCompra());
+//		infNFe.setCana(montaInfAquisicaoCana());
+//		infNFe.setInfRespTec(montaRespTecnico());
 
 		return infNFe;
 	}
@@ -335,44 +336,53 @@ public class ServicoEnvioNFeImpl implements IServicoEnvioNFe {
 		return exporta;
 	}
 
-	private InfAdic montaInfAdicionais() {
+	private InfAdic montaInfAdicionais(NFe uwNFe) {
+		NFeInfoAdic nfeInfoAdic = uwNFe.getNfeInfoAdic();
 		TNFe.InfNFe.InfAdic infAdicionais = new TNFe.InfNFe.InfAdic();
-		infAdicionais.setInfAdFisco("");
-		infAdicionais.setInfCpl("");
-		infAdicionais.getObsCont().addAll(montaInfAdicionaisCont());
-		infAdicionais.getObsFisco().addAll(montaInfAdicionaisObsFisco());
-		infAdicionais.getProcRef().addAll(montaInfAdicionaisProcRef());
+		infAdicionais.setInfAdFisco(nfeInfoAdic.getInfadfisco());
+		infAdicionais.setInfCpl(nfeInfoAdic.getInfcpl());
+		if (nfeInfoAdic.getObservacoesContribuinte() != null && !nfeInfoAdic.getObservacoesContribuinte().isEmpty())
+			infAdicionais.getObsCont().addAll(montaInfAdicionaisCont(nfeInfoAdic.getObservacoesContribuinte()));
+		if (nfeInfoAdic.getObservacoesFisco() != null && !nfeInfoAdic.getObservacoesFisco().isEmpty())
+			infAdicionais.getObsFisco().addAll(montaInfAdicionaisObsFisco(nfeInfoAdic.getObservacoesFisco()));
+		if (nfeInfoAdic.getProcessosReferenciados() != null && !nfeInfoAdic.getProcessosReferenciados().isEmpty())
+			infAdicionais.getProcRef().addAll(montaInfAdicionaisProcRef(nfeInfoAdic.getProcessosReferenciados()));
 
 		return infAdicionais;
 	}
 
-	private Collection<? extends ProcRef> montaInfAdicionaisProcRef() {
+	private Collection<? extends ProcRef> montaInfAdicionaisProcRef(List<NFeProcReferenciado> list) {
 		List<ProcRef> listaProcRef = new ArrayList<>();
-		ProcRef proc = new ProcRef();
-		proc.setNProc("");
-		proc.setIndProc("");
+		list.forEach(inf -> {
+			ProcRef proc = new ProcRef();
+			proc.setNProc(inf.getNproc());
+			proc.setIndProc(inf.getIndproc());
 
-		listaProcRef.add(proc);
-
+			listaProcRef.add(proc);
+		});
 		return listaProcRef;
 	}
 
-	private Collection<? extends ObsFisco> montaInfAdicionaisObsFisco() {
+	private Collection<? extends ObsFisco> montaInfAdicionaisObsFisco(List<NFeObsFisco> list) {
 		List<ObsFisco> listaObsFisco = new ArrayList<>();
-		ObsFisco obs = new ObsFisco();
-		obs.setXCampo("");
-		obs.setXTexto("");
-		listaObsFisco.add(obs);
-
+		list.forEach(inf -> {
+			ObsFisco obs = new ObsFisco();
+			obs.setXCampo(inf.getXcampo());
+			obs.setXTexto(inf.getXtexto());
+			listaObsFisco.add(obs);
+		});
 		return listaObsFisco;
 	}
 
-	private Collection<? extends ObsCont> montaInfAdicionaisCont() {
+	private Collection<? extends ObsCont> montaInfAdicionaisCont(List<NFeObsCont> list) {
 		List<ObsCont> listaObsCont = new ArrayList<>();
-		ObsCont obs = new ObsCont();
-		obs.setXCampo("");
-		obs.setXTexto("");
-		listaObsCont.add(obs);
+
+		list.forEach(inf -> {
+			ObsCont obs = new ObsCont();
+			obs.setXCampo(inf.getXcampo());
+			obs.setXTexto(inf.getXtexto());
+			listaObsCont.add(obs);
+		});
 
 		return listaObsCont;
 	}
@@ -385,31 +395,36 @@ public class ServicoEnvioNFeImpl implements IServicoEnvioNFe {
 		return infIntermed;
 	}
 
-	private Pag pagamento() {
+	private Pag pagamento(NFe uwNFe) {
+		NFePagamento nfePagamento = uwNFe.getNfePagamento();
 		TNFe.InfNFe.Pag pag = new TNFe.InfNFe.Pag();
 
-		pag.getDetPag().addAll(montaDetalhePagamento());
-		pag.setVTroco("");
+		pag.getDetPag().addAll(montaDetalhePagamento(nfePagamento.getDetalhesPagamento()));
+		pag.setVTroco(BigDecimalHelper.toString(nfePagamento.getVtroco(), 2));
 
 		return pag;
 
 	}
 
-	private Collection<? extends DetPag> montaDetalhePagamento() {
+	private Collection<? extends DetPag> montaDetalhePagamento(List<NFeDetPagamento> listPags) {
 		List<DetPag> listaDetPag = new ArrayList<>();
 
-		DetPag detPag = new DetPag();
-		detPag.setIndPag("");
-		detPag.setTPag("");
-		detPag.setVPag("");
+		listPags.forEach(pag -> {
+			DetPag detPag = new DetPag();
+			detPag.setIndPag(Integer.toString(pag.getIndpag()));
+			detPag.setTPag(pag.getTpag());
+			detPag.setVPag(BigDecimalHelper.toString(pag.getVpag(), 2));
 
-		Card card = new Card();
-		card.setTpIntegra("");
-		card.setCNPJ("");
-		card.setTBand("");
-		card.setCAut("");
-		detPag.setCard(card);
-		listaDetPag.add(detPag);
+			if (StringUtils.containsAny(pag.getTpag(), "03", "04")) {
+				Card card = new Card();
+				card.setTpIntegra(Integer.toString(pag.getTpintegra()));
+				card.setCNPJ(pag.getCnpj());
+				card.setTBand(pag.getTband());
+				card.setCAut(pag.getCaut());
+				detPag.setCard(card);
+			}
+			listaDetPag.add(detPag);
+		});
 
 		return listaDetPag;
 	}
@@ -442,60 +457,68 @@ public class ServicoEnvioNFeImpl implements IServicoEnvioNFe {
 		return listaDup;
 	}
 
-	private Transp montaTransportadora() {
+	private Transp montaTransportadora(NFe uwNFe) {
+		NFeTransporte nfeTransporte = uwNFe.getNfeTransporte();
 		TNFe.InfNFe.Transp transp = new TNFe.InfNFe.Transp();
 
-		transp.setModFrete("");
+		transp.setModFrete(Integer.toString(nfeTransporte.getModfrete()));
 
-		Transporta transporta = new Transporta();
-		transporta.setCNPJ("");
-		transporta.setCPF("");
-		transporta.setXNome("");
-		transporta.setIE("");
-		transporta.setXEnder("");
-		transporta.setXMun("");
-		transporta.setUF(TUf.PR);
-		transp.setTransporta(transporta);
+		if (nfeTransporte.getModfrete() != 9) {
 
-		RetTransp rettransp = new RetTransp();
-		rettransp.setVServ("");
-		rettransp.setVBCRet("");
-		rettransp.setPICMSRet("");
-		rettransp.setVICMSRet("");
-		rettransp.setCFOP("");
-		rettransp.setCMunFG("");
-		transp.setRetTransp(rettransp);
+			Transporta transporta = new Transporta();
+			transporta.setCNPJ(nfeTransporte.getCnpj());
+			transporta.setCPF(nfeTransporte.getCpf());
+			transporta.setXNome(nfeTransporte.getXnome());
+			transporta.setIE(nfeTransporte.getIe());
+			transporta.setXEnder(nfeTransporte.getXender());
+			transporta.setXMun(nfeTransporte.getXmun());
+			transporta.setUF(TUf.valueOf(nfeTransporte.getUf()));
+			transp.setTransporta(transporta);
 
-		TVeiculo veiculo = new TVeiculo();
-		veiculo.setPlaca("");
-		veiculo.setUF(TUf.PR);
-		veiculo.setRNTC("");
-		transp.setVeicTransp(veiculo);
+//			RetTransp rettransp = new RetTransp();
+//			rettransp.setVServ("");
+//			rettransp.setVBCRet("");
+//			rettransp.setPICMSRet("");
+//			rettransp.setVICMSRet("");
+//			rettransp.setCFOP("");
+//			rettransp.setCMunFG("");
+//			transp.setRetTransp(rettransp);
 
-		transp.getReboque().addAll(montaReboques());
-		transp.setVagao("");
-		transp.setBalsa("");
-		;
+			TVeiculo veiculo = new TVeiculo();
+			veiculo.setPlaca(nfeTransporte.getPlaca());
+			veiculo.setUF(TUf.valueOf(nfeTransporte.getUfplaca()));
+			veiculo.setRNTC(nfeTransporte.getRntc());
+			transp.setVeicTransp(veiculo);
 
-		transp.getVol().addAll(montaVolumes());
+			if (nfeTransporte.getReboques() != null && nfeTransporte.getReboques().isEmpty()) {
+				transp.getReboque().addAll(montaReboques(nfeTransporte.getReboques()));
+			}
+			transp.setVagao(nfeTransporte.getVagao());
+			transp.setBalsa(nfeTransporte.getBalsa());
 
+			if (nfeTransporte.getVolumes() != null && nfeTransporte.getVolumes().isEmpty()) {
+				transp.getVol().addAll(montaVolumes(nfeTransporte.getVolumes()));
+			}
+		}
 		return transp;
 	}
 
-	private Collection<? extends Vol> montaVolumes() {
+	private Collection<? extends Vol> montaVolumes(List<NFeVolume> listVolumes) {
 		List<Vol> listaVol = new ArrayList<>();
 
-		Vol vol = new Vol();
-		vol.setQVol("");
-		vol.setEsp("");
-		vol.setMarca("");
-		vol.setNVol("");
-		vol.setPesoL("");
-		vol.setPesoB("");
+		listVolumes.forEach(volume -> {
+			Vol vol = new Vol();
+			vol.setQVol(BigDecimalHelper.toString(volume.getQvol(), 0));
+			vol.setEsp(volume.getEsp());
+			vol.setMarca(volume.getMarca());
+			vol.setNVol(volume.getNvol());
+			vol.setPesoL(BigDecimalHelper.toString(volume.getPesol(), 3));
+			vol.setPesoB(BigDecimalHelper.toString(volume.getPesob(), 3));
 
-		vol.getLacres().addAll(montaVolLacres());
+			listaVol.add(vol);
+		});
 
-		listaVol.add(vol);
+//		vol.getLacres().addAll(montaVolLacres());
 
 		return listaVol;
 	}
@@ -510,23 +533,25 @@ public class ServicoEnvioNFeImpl implements IServicoEnvioNFe {
 		return listaLacres;
 	}
 
-	private Collection<? extends TVeiculo> montaReboques() {
+	private Collection<? extends TVeiculo> montaReboques(List<NFeReboque> listReboques) {
 		List<TVeiculo> listaReboque = new ArrayList<>();
 
-		TVeiculo veiculo = new TVeiculo();
-		veiculo.setPlaca("");
-		veiculo.setUF(TUf.PR);
-		veiculo.setRNTC("");
-		listaReboque.add(veiculo);
+		listReboques.forEach(reb -> {
+			TVeiculo veiculo = new TVeiculo();
+			veiculo.setPlaca(reb.getPlaca());
+			veiculo.setUF(TUf.valueOf(reb.getUfplaca()));
+			veiculo.setRNTC(reb.getRntc());
+			listaReboque.add(veiculo);
+		});
 
 		return listaReboque;
 	}
 
-	private Total montaTotal() {
+	private Total montaTotal(NFe uwNFe) {
 		TNFe.InfNFe.Total total = new TNFe.InfNFe.Total();
-		total.setICMSTot(montarICMSTot());
-		total.setISSQNtot(montarISSQNTot());
-		total.setRetTrib(montarRetTrib());
+		total.setICMSTot(montarICMSTot(uwNFe));
+//		total.setISSQNtot(montarISSQNTot());
+//		total.setRetTrib(montarRetTrib());
 
 		return total;
 
@@ -565,49 +590,48 @@ public class ServicoEnvioNFeImpl implements IServicoEnvioNFe {
 		return issqnTot;
 	}
 
-	private ICMSTot montarICMSTot() {
+	private ICMSTot montarICMSTot(NFe uwNFe) {
+		NFeTotais nfeTotais = uwNFe.getNfeTotais();
 		TNFe.InfNFe.Total.ICMSTot icmsTot = new TNFe.InfNFe.Total.ICMSTot();
 
-		icmsTot.setVBC("0.00");
-		icmsTot.setVICMS("0.00");
-		icmsTot.setVICMSDeson("0.00");
-		icmsTot.setVFCPUFDest("");
-		icmsTot.setVICMSUFDest("");
-		icmsTot.setVICMSUFRemet("");
-		icmsTot.setVFCP("0.00");
-		icmsTot.setVBCST("0.00");
-		icmsTot.setVST("0.00");
-		icmsTot.setVFCPST("0.00");
-		icmsTot.setVFCPSTRet("0.00");
-		icmsTot.setVProd("0.00");
-		icmsTot.setVFrete("0.00");
-		icmsTot.setVSeg("0.00");
-		icmsTot.setVDesc("0.00");
-		icmsTot.setVII("0.00");
-		icmsTot.setVIPI("0.00");
-		icmsTot.setVIPIDevol("0.00");
-		icmsTot.setVPIS("0.00");
-		icmsTot.setVCOFINS("0.00");
-		icmsTot.setVOutro("0.00");
-		icmsTot.setVNF("0.00");
-		icmsTot.setVTotTrib("");
+		icmsTot.setVBC(BigDecimalHelper.toString(nfeTotais.getVbc(), 2));
+		icmsTot.setVICMS(BigDecimalHelper.toString(nfeTotais.getVicms(), 2));
+		icmsTot.setVICMSDeson(BigDecimalHelper.toString(nfeTotais.getVicmsdeson(), 2));
+		icmsTot.setVFCPUFDest(BigDecimalHelper.toString(nfeTotais.getVfcpufdest(), 2));
+		icmsTot.setVICMSUFDest(BigDecimalHelper.toString(nfeTotais.getVicmsufdest(), 2));
+		icmsTot.setVICMSUFRemet(BigDecimalHelper.toString(nfeTotais.getVicmsufremet(), 2));
+		icmsTot.setVFCP(BigDecimalHelper.toString(nfeTotais.getVfcp(), 2));
+		icmsTot.setVBCST(BigDecimalHelper.toString(nfeTotais.getVbcst(), 2));
+		icmsTot.setVST(BigDecimalHelper.toString(nfeTotais.getVst(), 2));
+		icmsTot.setVFCPST(BigDecimalHelper.toString(nfeTotais.getVfcpst(), 2));
+		icmsTot.setVFCPSTRet(BigDecimalHelper.toString(nfeTotais.getVfcpstret(), 2));
+		icmsTot.setVProd(BigDecimalHelper.toString(nfeTotais.getVprod(), 2));
+		icmsTot.setVFrete(BigDecimalHelper.toString(nfeTotais.getVfrete(), 2));
+		icmsTot.setVSeg(BigDecimalHelper.toString(nfeTotais.getVseg(), 2));
+		icmsTot.setVDesc(BigDecimalHelper.toString(nfeTotais.getVdesc(), 2));
+		icmsTot.setVII(BigDecimalHelper.toString(nfeTotais.getVii(), 2));
+		icmsTot.setVIPI(BigDecimalHelper.toString(nfeTotais.getVipi(), 2));
+		icmsTot.setVIPIDevol(BigDecimalHelper.toString(nfeTotais.getVipidevol(), 2));
+		icmsTot.setVPIS(BigDecimalHelper.toString(nfeTotais.getVpis(), 2));
+		icmsTot.setVCOFINS(BigDecimalHelper.toString(nfeTotais.getVcofins(), 2));
+		icmsTot.setVOutro(BigDecimalHelper.toString(nfeTotais.getVoutro(), 2));
+		icmsTot.setVNF(BigDecimalHelper.toString(nfeTotais.getVnf(), 2));
+		icmsTot.setVTotTrib(BigDecimalHelper.toString(nfeTotais.getVtottrib(), 2));
 
 		return icmsTot;
 	}
 
-	private Collection<? extends Det> montaDetalhamentoProdutosServicos(ContainerIntegracaoNFe containerIntegracaoNFe) {
-		List<ContainerIntegracaoNFeItem> nfeItens = containerIntegracaoNFe.getNfeItens();
-		int numeroItem = 1;
+	private Collection<? extends Det> montaDetalhamentoProdutosServicos(NFe uwNFe) {
 		List<TNFe.InfNFe.Det> listDetalhamento = new ArrayList<>();
 
-		for (ContainerIntegracaoNFeItem nfeItem : nfeItens) {
+		for (NFeDetItem nfeItem : uwNFe.getItens()) {
 			TNFe.InfNFe.Det det = new TNFe.InfNFe.Det();
-			det.setNItem("1");
+			det.setNItem(Integer.toString(nfeItem.getNItem()));
 			listDetalhamento.add(det);
-			det.setProd(montaProduto(nfeItem));
-			det.setImposto(montaImposto());
-			det.setImpostoDevol(montaImpostoDevol());
-			det.setInfAdProd("");
+			det.setProd(montaProduto(nfeItem.getNfeProdItem()));
+			det.setImposto(montaImposto(nfeItem.getNfeImpostosItem()));
+//			det.setImpostoDevol(montaImpostoDevol());
+			det.setInfAdProd(nfeItem.getNfeInfoAdicItem().getInfadprod());
 		}
 		return listDetalhamento;
 	}
@@ -624,17 +648,23 @@ public class ServicoEnvioNFeImpl implements IServicoEnvioNFe {
 		return impostoDev;
 	}
 
-	private Imposto montaImposto() {
+	private Imposto montaImposto(NFeImpostosItem nFeImpostosItem) {
 		TNFe.InfNFe.Det.Imposto imposto = new TNFe.InfNFe.Det.Imposto();
-		criaImpostoIcms(imposto);
+		if (nFeImpostosItem.getNfeIcmsItem() != null)
+			criaImpostoIcms(imposto, nFeImpostosItem.getNfeIcmsItem());
 		criaImpostoIcmsUFDestino(imposto);
-		criaImpostoIPI(imposto);
-		criaImpostoII(imposto);
-		criaImpostoPis(imposto);
-		criaImpostoPisST(imposto);
-		criaImpostoCofins(imposto);
-		criaImpostoCofinsST(imposto);
-		criaImpostoISSQN(imposto);
+		if (nFeImpostosItem.getNfeIpiItem() != null)
+			criaImpostoIPI(imposto, nFeImpostosItem.getNfeIpiItem());
+//		criaImpostoII(imposto);
+		if (nFeImpostosItem.getNfePisItem() != null) {
+			criaImpostoPis(imposto, nFeImpostosItem.getNfePisItem());
+//		criaImpostoPisST(imposto);
+		}
+		if (nFeImpostosItem.getNfeCofinsItem() != null) {
+			criaImpostoCofins(imposto, nFeImpostosItem.getNfeCofinsItem());
+//		criaImpostoCofinsST(imposto);
+		}
+//		criaImpostoISSQN(imposto);
 
 		return imposto;
 	}
@@ -674,35 +704,34 @@ public class ServicoEnvioNFeImpl implements IServicoEnvioNFe {
 		imposto.getContent().add(new ObjectFactory().createTNFeInfNFeDetImpostoCOFINSST(cofinsST));
 	}
 
-	private void criaImpostoCofins(Imposto imposto) {
+	private void criaImpostoCofins(Imposto imposto, NFeCofinsItem nFeCofinsItem) {
 		TNFe.InfNFe.Det.Imposto.COFINS cofins = new TNFe.InfNFe.Det.Imposto.COFINS();
 
-		COFINSAliq conAliq = new COFINSAliq();
-		conAliq.setCST("");
-		conAliq.setVBC("");
-		conAliq.setPCOFINS("");
-		conAliq.setVCOFINS("");
-		cofins.setCOFINSAliq(conAliq);
+		if (StringUtils.containsAny(nFeCofinsItem.getCst(), "01", "02")) {
+			COFINSAliq cofinsAliq = new COFINSAliq();
+			cofinsAliq.setCST(nFeCofinsItem.getCst());
+			cofinsAliq.setVBC(BigDecimalHelper.toString(nFeCofinsItem.getVbc(), 2));
+			cofinsAliq.setPCOFINS(BigDecimalHelper.toString(nFeCofinsItem.getPcofins(), 4));
+			cofinsAliq.setVCOFINS(BigDecimalHelper.toString(nFeCofinsItem.getVcofins(), 2));
+			cofins.setCOFINSAliq(cofinsAliq);
 
-		COFINSQtde qtde = new COFINSQtde();
-		qtde.setCST("");
-		qtde.setQBCProd("");
-		qtde.setVAliqProd("");
-		qtde.setVCOFINS("");
-		cofins.setCOFINSQtde(qtde);
-
-		COFINSNT nt = new COFINSNT();
-		nt.setCST("");
-		cofins.setCOFINSNT(nt);
-
-		COFINSOutr outros = new COFINSOutr();
-		outros.setCST("");
-		outros.setVBC("");
-		outros.setPCOFINS("");
-		outros.setQBCProd("");
-		outros.setVAliqProd("");
-		outros.setVCOFINS("");
-		cofins.setCOFINSOutr(outros);
+		} else if (StringUtils.containsAny(nFeCofinsItem.getCst(), "03")) {
+			COFINSQtde cofinsQtde = new COFINSQtde();
+			cofinsQtde.setCST(nFeCofinsItem.getCst());
+			cofinsQtde.setQBCProd(BigDecimalHelper.toString(nFeCofinsItem.getQbcprod(), 4));
+			cofinsQtde.setVAliqProd(BigDecimalHelper.toString(nFeCofinsItem.getValiqprod(), 2));
+			cofinsQtde.setVCOFINS(BigDecimalHelper.toString(nFeCofinsItem.getVcofins(), 2));
+			cofins.setCOFINSQtde(cofinsQtde);
+		} else if (StringUtils.containsAny(nFeCofinsItem.getCst(), "04", "05", "06", "07", "08", "09")) {
+			COFINSNT cofinsNT = new COFINSNT();
+			cofinsNT.setCST(nFeCofinsItem.getCst());
+			cofins.setCOFINSNT(cofinsNT);
+		} else {
+			COFINSOutr cofinsOutr = new COFINSOutr();
+			cofinsOutr.setVBC(BigDecimalHelper.toString(nFeCofinsItem.getVbc(), 2));
+			cofinsOutr.setPCOFINS(BigDecimalHelper.toString(nFeCofinsItem.getPcofins(), 4));
+			cofins.setCOFINSOutr(cofinsOutr);
+		}
 
 		imposto.getContent().add(new ObjectFactory().createTNFeInfNFeDetImpostoCOFINS(cofins));
 	}
@@ -719,32 +748,34 @@ public class ServicoEnvioNFeImpl implements IServicoEnvioNFe {
 		imposto.getContent().add(new ObjectFactory().createTNFeInfNFeDetImpostoPISST(pisST));
 	}
 
-	private void criaImpostoPis(Imposto imposto) {
+	private void criaImpostoPis(Imposto imposto, NFePisItem nFePisItem) {
 		TNFe.InfNFe.Det.Imposto.PIS pis = new TNFe.InfNFe.Det.Imposto.PIS();
 
-		PISAliq pisAliq = new PISAliq();
-		pisAliq.setCST("");
-		pisAliq.setVBC("");
-		pisAliq.setPPIS("");
-		pisAliq.setVPIS("");
-		pis.setPISAliq(pisAliq);
+		if (StringUtils.containsAny(nFePisItem.getCst(), "01", "02")) {
+			PISAliq pisAliq = new PISAliq();
+			pisAliq.setCST(nFePisItem.getCst());
+			pisAliq.setVBC(BigDecimalHelper.toString(nFePisItem.getVbc(), 2));
+			pisAliq.setPPIS(BigDecimalHelper.toString(nFePisItem.getPpis(), 4));
+			pisAliq.setVPIS(BigDecimalHelper.toString(nFePisItem.getVpis(), 2));
+			pis.setPISAliq(pisAliq);
 
-		PISQtde pisQtde = new PISQtde();
-		pisQtde.setCST("");
-		pisQtde.setQBCProd("");
-		pisQtde.setVAliqProd("");
-		pisQtde.setVPIS("");
-		pis.setPISQtde(pisQtde);
-
-		PISNT pisNT = new PISNT();
-		pisNT.setCST("");
-		pis.setPISNT(pisNT);
-
-		PISOutr pisOutr = new PISOutr();
-		pisOutr.setVBC("");
-		pisOutr.setPPIS("");
-		pis.setPISOutr(pisOutr);
-
+		} else if (StringUtils.containsAny(nFePisItem.getCst(), "03")) {
+			PISQtde pisQtde = new PISQtde();
+			pisQtde.setCST(nFePisItem.getCst());
+			pisQtde.setQBCProd(BigDecimalHelper.toString(nFePisItem.getQbcprod(), 4));
+			pisQtde.setVAliqProd(BigDecimalHelper.toString(nFePisItem.getValiqprod(), 2));
+			pisQtde.setVPIS(BigDecimalHelper.toString(nFePisItem.getVpis(), 2));
+			pis.setPISQtde(pisQtde);
+		} else if (StringUtils.containsAny(nFePisItem.getCst(), "04", "05", "06", "07", "08", "09")) {
+			PISNT pisNT = new PISNT();
+			pisNT.setCST(nFePisItem.getCst());
+			pis.setPISNT(pisNT);
+		} else {
+			PISOutr pisOutr = new PISOutr();
+			pisOutr.setVBC(BigDecimalHelper.toString(nFePisItem.getVbc(), 2));
+			pisOutr.setPPIS(BigDecimalHelper.toString(nFePisItem.getPpis(), 4));
+			pis.setPISOutr(pisOutr);
+		}
 		imposto.getContent().add(new ObjectFactory().createTNFeInfNFeDetImpostoPIS(pis));
 	}
 
@@ -759,25 +790,29 @@ public class ServicoEnvioNFeImpl implements IServicoEnvioNFe {
 		imposto.getContent().add(new ObjectFactory().createTNFeInfNFeDetImpostoII(ii));
 	}
 
-	private void criaImpostoIPI(Imposto imposto) {
+	private void criaImpostoIPI(Imposto imposto, NFeIpiItem nFeIpiItem) {
 		TIpi ipi = new TIpi();
-		ipi.setCNPJProd("");
-		ipi.setCSelo("");
-		ipi.setQSelo("");
-		ipi.setCEnq("");
+		ipi.setCNPJProd(nFeIpiItem.getCnpjprod());
+		ipi.setCSelo(nFeIpiItem.getCselo());
+		ipi.setQSelo(Integer.toString(nFeIpiItem.getQselo()));
+		ipi.setCEnq(Integer.toString(nFeIpiItem.getCenq()));
 
-		IPITrib ipiTrib = new IPITrib();
-		ipiTrib.setCST("");
-		ipiTrib.setVBC("");
-		ipiTrib.setPIPI("");
-		ipiTrib.setQUnid("");
-		ipiTrib.setVUnid("");
-		ipiTrib.setVIPI("");
-		ipi.setIPITrib(ipiTrib);
+		if (StringUtils.containsAny(nFeIpiItem.getCst(), "00", "49", "50", "99")) {
+			IPITrib ipiTrib = new IPITrib();
+			ipiTrib.setCST(nFeIpiItem.getCst());
+			ipiTrib.setVBC(BigDecimalHelper.toString(nFeIpiItem.getVbc(), 2));
+			ipiTrib.setPIPI(BigDecimalHelper.toString(nFeIpiItem.getPipi(), 4));
+			ipiTrib.setQUnid(BigDecimalHelper.toString(nFeIpiItem.getQunid(), 4));
+			ipiTrib.setVUnid(BigDecimalHelper.toString(nFeIpiItem.getVunid(), 2));
+			ipiTrib.setVIPI(BigDecimalHelper.toString(nFeIpiItem.getVipi(), 2));
+			ipi.setIPITrib(ipiTrib);
+		}
 
-		IPINT ipiINT = new IPINT();
-		ipiINT.setCST("");
-		ipi.setIPINT(ipiINT);
+		if (StringUtils.containsAny(nFeIpiItem.getCst(), "01", "02", "03", "04", "51", "52", "53")) {
+			IPINT ipiINT = new IPINT();
+			ipiINT.setCST(nFeIpiItem.getCst());
+			ipi.setIPINT(ipiINT);
+		}
 
 		imposto.getContent().add(new ObjectFactory().createTNFeInfNFeDetImpostoIPI(ipi));
 	}
@@ -798,135 +833,149 @@ public class ServicoEnvioNFeImpl implements IServicoEnvioNFe {
 		imposto.getContent().add(new ObjectFactory().createTNFeInfNFeDetImpostoICMSUFDest(icmsUFDest));
 	}
 
-	private void criaImpostoIcms(Imposto imposto) {
+	private void criaImpostoIcms(Imposto imposto, NFeIcmsItem nFeIcmsItem) {
 		TNFe.InfNFe.Det.Imposto.ICMS icms = new TNFe.InfNFe.Det.Imposto.ICMS();
-		icms.setICMS00(criaImpostoIcms00());
-		icms.setICMS10(criaImpostoIcms10());
-		icms.setICMS20(criaImpostoIcms20());
-		icms.setICMS30(criaImpostoIcms30());
-		icms.setICMS40(criaImpostoIcms40());
-		icms.setICMS51(criaImpostoIcms51());
-		icms.setICMS60(criaImpostoIcms60());
-		icms.setICMS70(criaImpostoIcms70());
-		icms.setICMS90(criaImpostoIcms90());
-		icms.setICMSPart(criaImportoIcmsPart());
-		icms.setICMSST(criaImportoIcmsST());
-		icms.setICMSSN101(criaImportoIcmsSN101());
-		icms.setICMSSN102(criaImportoIcmsSN102());
-		icms.setICMSSN201(criaImportoIcmsSN201());
-		;
-		icms.setICMSSN202(criaImportoIcmsSN202());
-		icms.setICMSSN500(criaImportoIcmsSN500());
-		icms.setICMSSN900(criaImportoIcmsSN900());
+		if (nFeIcmsItem.getCst().equals("00"))
+			icms.setICMS00(criaImpostoIcms00(nFeIcmsItem));
+		if (nFeIcmsItem.getCst().equals("10"))
+			icms.setICMS10(criaImpostoIcms10(nFeIcmsItem));
+		if (nFeIcmsItem.getCst().equals("20"))
+			icms.setICMS20(criaImpostoIcms20(nFeIcmsItem));
+		if (nFeIcmsItem.getCst().equals("30"))
+			icms.setICMS30(criaImpostoIcms30(nFeIcmsItem));
+		if (nFeIcmsItem.getCst().equals("40"))
+			icms.setICMS40(criaImpostoIcms40(nFeIcmsItem));
+		if (nFeIcmsItem.getCst().equals("51"))
+			icms.setICMS51(criaImpostoIcms51(nFeIcmsItem));
+		if (nFeIcmsItem.getCst().equals("60"))
+			icms.setICMS60(criaImpostoIcms60(nFeIcmsItem));
+		if (nFeIcmsItem.getCst().equals("70"))
+			icms.setICMS70(criaImpostoIcms70(nFeIcmsItem));
+		if (nFeIcmsItem.getCst().equals("90"))
+			icms.setICMS90(criaImpostoIcms90(nFeIcmsItem));
+//		icms.setICMSPart(criaImportoIcmsPart());
+//		icms.setICMSST(criaImportoIcmsST());
+		if (nFeIcmsItem.getCst().equals("101"))
+			icms.setICMSSN101(criaImportoIcmsSN101(nFeIcmsItem));
+		if (nFeIcmsItem.getCst().equals("102"))
+			icms.setICMSSN102(criaImportoIcmsSN102(nFeIcmsItem));
+		if (nFeIcmsItem.getCst().equals("201"))
+			icms.setICMSSN201(criaImportoIcmsSN201(nFeIcmsItem));
+		if (nFeIcmsItem.getCst().equals("202"))
+			icms.setICMSSN202(criaImportoIcmsSN202(nFeIcmsItem));
+		if (nFeIcmsItem.getCst().equals("500"))
+			icms.setICMSSN500(criaImportoIcmsSN500(nFeIcmsItem));
+		if (nFeIcmsItem.getCst().equals("900"))
+			icms.setICMSSN900(criaImportoIcmsSN900(nFeIcmsItem));
 
 		imposto.getContent().add(new ObjectFactory().createTNFeInfNFeDetImpostoICMS(icms));
 	}
 
-	private ICMSSN900 criaImportoIcmsSN900() {
+	private ICMSSN900 criaImportoIcmsSN900(NFeIcmsItem nFeIcmsItem) {
 		TNFe.InfNFe.Det.Imposto.ICMS.ICMSSN900 icmsSN900 = new TNFe.InfNFe.Det.Imposto.ICMS.ICMSSN900();
 
-		icmsSN900.setOrig("");
-		icmsSN900.setCSOSN("");
+		icmsSN900.setOrig(Integer.toString(nFeIcmsItem.getOrig()));
+		icmsSN900.setCSOSN(Integer.toString(nFeIcmsItem.getCsosn()));
 
-		icmsSN900.setModBC("");
-		icmsSN900.setVBC("");
-		icmsSN900.setPRedBC("");
-		icmsSN900.setPICMS("");
-		icmsSN900.setVICMS("");
+		icmsSN900.setModBC(Integer.toString(nFeIcmsItem.getModbc()));
+		icmsSN900.setVBC(BigDecimalHelper.toString(nFeIcmsItem.getVbc(), 2));
+		icmsSN900.setPRedBC(BigDecimalHelper.toString(nFeIcmsItem.getPredbc(), 4));
+		icmsSN900.setPICMS(BigDecimalHelper.toString(nFeIcmsItem.getPicms(), 4));
+		icmsSN900.setVICMS(BigDecimalHelper.toString(nFeIcmsItem.getVicms(), 2));
 
-		icmsSN900.setModBCST("");
-		icmsSN900.setPMVAST("");
-		icmsSN900.setPRedBCST("");
-		icmsSN900.setVBCST("");
-		icmsSN900.setPICMSST("");
-		icmsSN900.setVICMSST("");
+		icmsSN900.setModBCST(Integer.toString(nFeIcmsItem.getModbcst()));
+		icmsSN900.setPMVAST(BigDecimalHelper.toString(nFeIcmsItem.getPmvast(), 4));
+		icmsSN900.setPRedBCST(BigDecimalHelper.toString(nFeIcmsItem.getPredbcst(), 4));
+		icmsSN900.setVBCST(BigDecimalHelper.toString(nFeIcmsItem.getVbcst(), 2));
+		icmsSN900.setPICMSST(BigDecimalHelper.toString(nFeIcmsItem.getPicmsst(), 4));
+		icmsSN900.setVICMSST(BigDecimalHelper.toString(nFeIcmsItem.getVicmsst(), 2));
 
-		icmsSN900.setVBCFCPST("");
-		icmsSN900.setPFCPST("");
-		icmsSN900.setVFCPST("");
+//		icmsSN900.setVBCFCPST("");
+//		icmsSN900.setPFCPST("");
+//		icmsSN900.setVFCPST("");
 
-		icmsSN900.setPCredSN("");
-		icmsSN900.setVCredICMSSN("");
+		icmsSN900.setPCredSN(BigDecimalHelper.toString(nFeIcmsItem.getPcredsn(), 4));
+		icmsSN900.setVCredICMSSN(BigDecimalHelper.toString(nFeIcmsItem.getVcredicmssn(), 2));
 
 		return icmsSN900;
 	}
 
-	private ICMSSN500 criaImportoIcmsSN500() {
+	private ICMSSN500 criaImportoIcmsSN500(NFeIcmsItem nFeIcmsItem) {
 		TNFe.InfNFe.Det.Imposto.ICMS.ICMSSN500 icmsSN500 = new TNFe.InfNFe.Det.Imposto.ICMS.ICMSSN500();
 
-		icmsSN500.setOrig("");
-		icmsSN500.setCSOSN("");
-		icmsSN500.setVBCSTRet("");
-		icmsSN500.setPST("");
-		icmsSN500.setVICMSSubstituto("");
-		icmsSN500.setVICMSSTRet("");
+		icmsSN500.setOrig(Integer.toString(nFeIcmsItem.getOrig()));
+		icmsSN500.setCSOSN(Integer.toString(nFeIcmsItem.getCsosn()));
+		icmsSN500.setVBCSTRet(BigDecimalHelper.toString(nFeIcmsItem.getVbcstret(), 2));
+		icmsSN500.setPST(BigDecimalHelper.toString(nFeIcmsItem.getPst(), 4));
+		icmsSN500.setVICMSSubstituto(BigDecimalHelper.toString(nFeIcmsItem.getVicmssubstituto(), 2));
+		icmsSN500.setVICMSSTRet(BigDecimalHelper.toString(nFeIcmsItem.getVicmsstret(), 2));
 
-		icmsSN500.setVBCFCPSTRet("");
-		icmsSN500.setPFCPSTRet("");
-		icmsSN500.setVFCPSTRet("");
+//		icmsSN500.setVBCFCPSTRet("");
+//		icmsSN500.setPFCPSTRet("");
+//		icmsSN500.setVFCPSTRet("");
 
-		icmsSN500.setPRedBCEfet("");
-		icmsSN500.setVBCEfet("");
-		icmsSN500.setPICMSEfet("");
-		icmsSN500.setVICMSEfet("");
+		icmsSN500.setPRedBCEfet(BigDecimalHelper.toString(nFeIcmsItem.getPredbcefet(), 4));
+		icmsSN500.setVBCEfet(BigDecimalHelper.toString(nFeIcmsItem.getVbcefet(), 2));
+		icmsSN500.setPICMSEfet(BigDecimalHelper.toString(nFeIcmsItem.getPicmsefet(), 4));
+		icmsSN500.setVICMSEfet(BigDecimalHelper.toString(nFeIcmsItem.getVicmsefet(), 2));
 
 		return icmsSN500;
 	}
 
-	private ICMSSN202 criaImportoIcmsSN202() {
+	private ICMSSN202 criaImportoIcmsSN202(NFeIcmsItem nFeIcmsItem) {
 		TNFe.InfNFe.Det.Imposto.ICMS.ICMSSN202 icmsSN202 = new TNFe.InfNFe.Det.Imposto.ICMS.ICMSSN202();
 
-		icmsSN202.setOrig("");
-		icmsSN202.setCSOSN("");
-		icmsSN202.setModBCST("");
-		icmsSN202.setPMVAST("");
-		icmsSN202.setPRedBCST("");
-		icmsSN202.setVBCST("");
-		icmsSN202.setVICMSST("");
+		icmsSN202.setOrig(Integer.toString(nFeIcmsItem.getOrig()));
+		icmsSN202.setCSOSN(Integer.toString(nFeIcmsItem.getCsosn()));
+		icmsSN202.setModBCST(Integer.toString(nFeIcmsItem.getModbcst()));
+		icmsSN202.setPMVAST(BigDecimalHelper.toString(nFeIcmsItem.getPmvast(), 4));
+		icmsSN202.setPRedBCST(BigDecimalHelper.toString(nFeIcmsItem.getPredbcst(), 4));
+		icmsSN202.setVBCST(BigDecimalHelper.toString(nFeIcmsItem.getVbcst(), 2));
+		icmsSN202.setVICMSST(BigDecimalHelper.toString(nFeIcmsItem.getVicmsst(), 2));
 
-		icmsSN202.setVBCFCPST("");
-		icmsSN202.setPFCPST("");
-		icmsSN202.setVFCPST("");
+//		icmsSN202.setVBCFCPST("");
+//		icmsSN202.setPFCPST("");
+//		icmsSN202.setVFCPST("");
 
 		return icmsSN202;
 	}
 
-	private ICMSSN201 criaImportoIcmsSN201() {
+	private ICMSSN201 criaImportoIcmsSN201(NFeIcmsItem nFeIcmsItem) {
 		TNFe.InfNFe.Det.Imposto.ICMS.ICMSSN201 icmsSN201 = new TNFe.InfNFe.Det.Imposto.ICMS.ICMSSN201();
 
-		icmsSN201.setOrig("");
-		icmsSN201.setCSOSN("");
-		icmsSN201.setModBCST("");
-		icmsSN201.setPMVAST("");
-		icmsSN201.setPRedBCST("");
-		icmsSN201.setVBCST("");
-		icmsSN201.setVICMSST("");
+		icmsSN201.setOrig(Integer.toString(nFeIcmsItem.getOrig()));
+		icmsSN201.setCSOSN(Integer.toString(nFeIcmsItem.getCsosn()));
+		icmsSN201.setModBCST(Integer.toString(nFeIcmsItem.getModbcst()));
+		icmsSN201.setPMVAST(BigDecimalHelper.toString(nFeIcmsItem.getPmvast(), 4));
+		icmsSN201.setPRedBCST(BigDecimalHelper.toString(nFeIcmsItem.getPredbcst(), 4));
+		icmsSN201.setVBCST(BigDecimalHelper.toString(nFeIcmsItem.getVbcst(), 2));
+		icmsSN201.setVICMSST(BigDecimalHelper.toString(nFeIcmsItem.getVicmsst(), 2));
 
-		icmsSN201.setVBCFCPST("");
-		icmsSN201.setPFCPST("");
-		icmsSN201.setVFCPST("");
-		icmsSN201.setPCredSN("");
-		icmsSN201.setVCredICMSSN("");
+//		icmsSN201.setVBCFCPST("");
+//		icmsSN201.setPFCPST("");
+//		icmsSN201.setVFCPST("");
+		icmsSN201.setPCredSN(BigDecimalHelper.toString(nFeIcmsItem.getPcredsn(), 4));
+		icmsSN201.setVCredICMSSN(BigDecimalHelper.toString(nFeIcmsItem.getVcredicmssn(), 2));
 
 		return icmsSN201;
 	}
 
-	private ICMSSN102 criaImportoIcmsSN102() {
+	private ICMSSN102 criaImportoIcmsSN102(NFeIcmsItem nFeIcmsItem) {
 		TNFe.InfNFe.Det.Imposto.ICMS.ICMSSN102 icmsSN102 = new TNFe.InfNFe.Det.Imposto.ICMS.ICMSSN102();
 
-		icmsSN102.setOrig("");
-		icmsSN102.setCSOSN("");
+		icmsSN102.setOrig(Integer.toString(nFeIcmsItem.getOrig()));
+		icmsSN102.setCSOSN(Integer.toString(nFeIcmsItem.getCsosn()));
 
 		return icmsSN102;
 	}
 
-	private ICMSSN101 criaImportoIcmsSN101() {
+	private ICMSSN101 criaImportoIcmsSN101(NFeIcmsItem nFeIcmsItem) {
 		TNFe.InfNFe.Det.Imposto.ICMS.ICMSSN101 icmsSN101 = new TNFe.InfNFe.Det.Imposto.ICMS.ICMSSN101();
 
-		icmsSN101.setOrig("");
-		icmsSN101.setCSOSN("");
-		icmsSN101.setPCredSN("");
-		icmsSN101.setVCredICMSSN("");
+		icmsSN101.setOrig(Integer.toString(nFeIcmsItem.getOrig()));
+		icmsSN101.setCSOSN(Integer.toString(nFeIcmsItem.getCsosn()));
+		icmsSN101.setPCredSN(BigDecimalHelper.toString(nFeIcmsItem.getPcredsn(), 4));
+		icmsSN101.setVCredICMSSN(BigDecimalHelper.toString(nFeIcmsItem.getVcredicmssn(), 2));
 
 		return icmsSN101;
 	}
@@ -978,229 +1027,229 @@ public class ServicoEnvioNFeImpl implements IServicoEnvioNFe {
 		return icmsPart;
 	}
 
-	private ICMS90 criaImpostoIcms90() {
+	private ICMS90 criaImpostoIcms90(NFeIcmsItem nFeIcmsItem) {
 		TNFe.InfNFe.Det.Imposto.ICMS.ICMS90 icms90 = new TNFe.InfNFe.Det.Imposto.ICMS.ICMS90();
-		icms90.setOrig("0");
-		icms90.setCST("");
+		icms90.setOrig(Integer.toString(nFeIcmsItem.getOrig()));
+		icms90.setCST(nFeIcmsItem.getCst());
 
-		icms90.setModBC("");
-		icms90.setVBC("");
-		icms90.setPRedBC("");
-		icms90.setPICMS("");
-		icms90.setVICMS("");
+		icms90.setModBC(Integer.toString(nFeIcmsItem.getModbc()));
+		icms90.setVBC(BigDecimalHelper.toString(nFeIcmsItem.getVbc(), 2));
+		icms90.setPRedBC(BigDecimalHelper.toString(nFeIcmsItem.getPredbc(), 4));
+		icms90.setPICMS(BigDecimalHelper.toString(nFeIcmsItem.getPicms(), 2));
+		icms90.setVICMS(BigDecimalHelper.toString(nFeIcmsItem.getVicms(), 2));
 
-		icms90.setVBCFCP("");
-		icms90.setPFCP("");
-		icms90.setVFCP("");
+//		icms90.setVBCFCP("");
+//		icms90.setPFCP("");
+//		icms90.setVFCP("");
 
-		icms90.setModBCST("");
-		icms90.setPMVAST("");
-		icms90.setPRedBCST("");
-		icms90.setVBCST("");
-		icms90.setPICMSST("");
-		icms90.setVICMSST("");
+		icms90.setModBCST(Integer.toString(nFeIcmsItem.getModbcst()));
+		icms90.setPMVAST(BigDecimalHelper.toString(nFeIcmsItem.getPmvast(), 4));
+		icms90.setPRedBCST(BigDecimalHelper.toString(nFeIcmsItem.getPredbcst(), 4));
+		icms90.setVBCST(BigDecimalHelper.toString(nFeIcmsItem.getVbcst(), 2));
+		icms90.setPICMSST(BigDecimalHelper.toString(nFeIcmsItem.getPicmsst(), 2));
+		icms90.setVICMSST(BigDecimalHelper.toString(nFeIcmsItem.getVicmsst(), 2));
 
-		icms90.setVBCFCPST("");
-		icms90.setPFCPST("");
-		icms90.setVFCPST("");
+//		icms90.setVBCFCPST("");
+//		icms90.setPFCPST("");
+//		icms90.setVFCPST("");
 
-		icms90.setVICMSDeson("");
-		icms90.setMotDesICMS("");
+		icms90.setVICMSDeson(BigDecimalHelper.toString(nFeIcmsItem.getVicmsdeson(), 2));
+		icms90.setMotDesICMS(Integer.toString(nFeIcmsItem.getMotdesicms()));
 
 		return icms90;
 	}
 
-	private ICMS70 criaImpostoIcms70() {
+	private ICMS70 criaImpostoIcms70(NFeIcmsItem nFeIcmsItem) {
 		TNFe.InfNFe.Det.Imposto.ICMS.ICMS70 icms70 = new TNFe.InfNFe.Det.Imposto.ICMS.ICMS70();
-		icms70.setOrig("0");
-		icms70.setCST("");
+		icms70.setOrig(Integer.toString(nFeIcmsItem.getOrig()));
+		icms70.setCST(nFeIcmsItem.getCst());
 
-		icms70.setModBC("");
-		icms70.setPRedBC("");
-		icms70.setVBC("");
-		icms70.setPICMS("");
-		icms70.setVICMS("");
+		icms70.setModBC(Integer.toString(nFeIcmsItem.getModbc()));
+		icms70.setPRedBC(BigDecimalHelper.toString(nFeIcmsItem.getPredbc(), 4));
+		icms70.setVBC(BigDecimalHelper.toString(nFeIcmsItem.getVbc(), 2));
+		icms70.setPICMS(BigDecimalHelper.toString(nFeIcmsItem.getPicms(), 4));
+		icms70.setVICMS(BigDecimalHelper.toString(nFeIcmsItem.getVicms(), 2));
 
-		icms70.setVBCFCP("");
-		icms70.setPFCP("");
-		icms70.setVFCP("");
-		icms70.setModBCST("");
-		icms70.setPMVAST("");
-		icms70.setPRedBCST("");
-		icms70.setVBCST("");
-		icms70.setPICMSST("");
-		icms70.setVICMSST("");
+//		icms70.setVBCFCP("");
+//		icms70.setPFCP("");
+//		icms70.setVFCP("");
+
+		icms70.setModBCST(Integer.toString(nFeIcmsItem.getModbc()));
+		icms70.setPMVAST(BigDecimalHelper.toString(nFeIcmsItem.getPmvast(), 4));
+		icms70.setPRedBCST(BigDecimalHelper.toString(nFeIcmsItem.getPredbcst(), 4));
+		icms70.setVBCST(BigDecimalHelper.toString(nFeIcmsItem.getVbcst(), 2));
+		icms70.setPICMSST(BigDecimalHelper.toString(nFeIcmsItem.getPicmsst(), 4));
+		icms70.setVICMSST(BigDecimalHelper.toString(nFeIcmsItem.getVicmsst(), 2));
 
 		return icms70;
 	}
 
-	private ICMS60 criaImpostoIcms60() {
+	private ICMS60 criaImpostoIcms60(NFeIcmsItem nFeIcmsItem) {
 		TNFe.InfNFe.Det.Imposto.ICMS.ICMS60 icms60 = new TNFe.InfNFe.Det.Imposto.ICMS.ICMS60();
-		icms60.setOrig("0");
-		icms60.setCST("");
+		icms60.setOrig(Integer.toString(nFeIcmsItem.getOrig()));
+		icms60.setCST(nFeIcmsItem.getCst());
 
-		icms60.setVBCSTRet("");
-		icms60.setPST("");
-		icms60.setVICMSSubstituto("");
-		icms60.setVICMSSTRet("");
+		icms60.setVBCSTRet(BigDecimalHelper.toString(nFeIcmsItem.getVbcstret(), 2));
+		icms60.setPST(BigDecimalHelper.toString(nFeIcmsItem.getPst(), 4));
+		icms60.setVICMSSubstituto(BigDecimalHelper.toString(nFeIcmsItem.getVicmssubstituto(), 2));
+		icms60.setVICMSSTRet(BigDecimalHelper.toString(nFeIcmsItem.getVicmsstret(), 2));
 
-		icms60.setVBCFCPSTRet("");
-		icms60.setPFCPSTRet("");
-		icms60.setVFCPSTRet("");
+//		icms60.setVBCFCPSTRet("");
+//		icms60.setPFCPSTRet("");
+//		icms60.setVFCPSTRet("");
 
-		icms60.setPRedBCEfet("");
-		icms60.setVBCEfet("");
-		icms60.setPICMSEfet("");
-		icms60.setVICMSEfet("");
+		icms60.setPRedBCEfet(BigDecimalHelper.toString(nFeIcmsItem.getPredbcefet(), 4));
+		icms60.setVBCEfet(BigDecimalHelper.toString(nFeIcmsItem.getVbcefet(), 2));
+		icms60.setPICMSEfet(BigDecimalHelper.toString(nFeIcmsItem.getPicmsefet(), 4));
+		icms60.setVICMSEfet(BigDecimalHelper.toString(nFeIcmsItem.getVicmsefet(), 2));
 
 		return icms60;
 	}
 
-	private ICMS51 criaImpostoIcms51() {
+	private ICMS51 criaImpostoIcms51(NFeIcmsItem nFeIcmsItem) {
 		TNFe.InfNFe.Det.Imposto.ICMS.ICMS51 icms51 = new TNFe.InfNFe.Det.Imposto.ICMS.ICMS51();
-		icms51.setOrig("0");
-		icms51.setCST("");
-		icms51.setModBC("");
-		icms51.setPRedBC("");
-		icms51.setVBC("");
-		icms51.setPICMS("");
-		icms51.setVICMSOp("");
-		icms51.setPDif("");
-		icms51.setVICMSDif("");
-		icms51.setVICMS("");
+		icms51.setOrig(Integer.toString(nFeIcmsItem.getOrig()));
+		icms51.setCST(nFeIcmsItem.getCst());
+		icms51.setModBC(Integer.toString(nFeIcmsItem.getModbc()));
+		icms51.setPRedBC(BigDecimalHelper.toString(nFeIcmsItem.getPredbc(), 4));
+		icms51.setVBC(BigDecimalHelper.toString(nFeIcmsItem.getVbc(), 2));
+		icms51.setPICMS(BigDecimalHelper.toString(nFeIcmsItem.getPicms(), 4));
+		icms51.setVICMSOp(BigDecimalHelper.toString(nFeIcmsItem.getVicmsop(), 2));
+		icms51.setPDif(BigDecimalHelper.toString(nFeIcmsItem.getPdif(), 4));
+		icms51.setVICMSDif(BigDecimalHelper.toString(nFeIcmsItem.getVicmsdif(), 2));
+		icms51.setVICMS(BigDecimalHelper.toString(nFeIcmsItem.getVicms(), 2));
 
-		icms51.setVBCFCP("");
-		icms51.setPFCP("");
-		icms51.setVFCP("");
+//		icms51.setVBCFCP("");
+//		icms51.setPFCP("");
+//		icms51.setVFCP("");
 
 		return icms51;
 	}
 
-	private ICMS40 criaImpostoIcms40() {
+	private ICMS40 criaImpostoIcms40(NFeIcmsItem nFeIcmsItem) {
 		TNFe.InfNFe.Det.Imposto.ICMS.ICMS40 icms40 = new TNFe.InfNFe.Det.Imposto.ICMS.ICMS40();
-		icms40.setOrig("0");
-		icms40.setCST("");
+		icms40.setOrig(Integer.toString(nFeIcmsItem.getOrig()));
+		icms40.setCST(nFeIcmsItem.getCst());
 
-		icms40.setVICMSDeson("");
-		icms40.setMotDesICMS("");
+		icms40.setVICMSDeson(BigDecimalHelper.toString(nFeIcmsItem.getVicmsdeson(),2));
+		icms40.setMotDesICMS(Integer.toString(nFeIcmsItem.getMotdesicms()));
 
 		return icms40;
 	}
 
-	private ICMS30 criaImpostoIcms30() {
+	private ICMS30 criaImpostoIcms30(NFeIcmsItem nFeIcmsItem) {
 		TNFe.InfNFe.Det.Imposto.ICMS.ICMS30 icms30 = new TNFe.InfNFe.Det.Imposto.ICMS.ICMS30();
-		icms30.setOrig("0");
-		icms30.setCST("");
-		icms30.setModBCST("");
-		icms30.setPMVAST("");
-		icms30.setPRedBCST("");
-		icms30.setVBCST("");
-		icms30.setPICMSST("");
-		icms30.setVICMSST("");
-		;
+		icms30.setOrig(Integer.toString(nFeIcmsItem.getOrig()));
+		icms30.setCST(nFeIcmsItem.getCst());
+		icms30.setModBCST(Integer.toString(nFeIcmsItem.getModbcst()));
+		icms30.setPMVAST(BigDecimalHelper.toString(nFeIcmsItem.getPmvast(), 4));
+		icms30.setPRedBCST(BigDecimalHelper.toString(nFeIcmsItem.getPredbcst(), 4));
+		icms30.setVBCST(BigDecimalHelper.toString(nFeIcmsItem.getVbcst(), 2));
+		icms30.setPICMSST(BigDecimalHelper.toString(nFeIcmsItem.getPicmsst(), 4));
+		icms30.setVICMSST(BigDecimalHelper.toString(nFeIcmsItem.getVicmsst(), 2));
 
-		icms30.setVBCFCPST("");
-		icms30.setPFCPST("");
-		icms30.setVFCPST("");
+//		icms30.setVBCFCPST("");
+//		icms30.setPFCPST("");
+//		icms30.setVFCPST("");
 
-		icms30.setVICMSDeson("");
-		icms30.setMotDesICMS("");
+		icms30.setVICMSDeson(BigDecimalHelper.toString(nFeIcmsItem.getVicmsdeson(), 2));
+		icms30.setMotDesICMS(Integer.toString(nFeIcmsItem.getMotdesicms()));
 
 		return icms30;
 	}
 
-	private ICMS20 criaImpostoIcms20() {
+	private ICMS20 criaImpostoIcms20(NFeIcmsItem nFeIcmsItem) {
 
 		TNFe.InfNFe.Det.Imposto.ICMS.ICMS20 icms20 = new TNFe.InfNFe.Det.Imposto.ICMS.ICMS20();
-		icms20.setOrig("0");
-		icms20.setCST("");
-		icms20.setModBC("");
-		icms20.setVBC("");
-		icms20.setPICMS("");
-		icms20.setVICMS("");
+		icms20.setOrig(Integer.toString(nFeIcmsItem.getOrig()));
+		icms20.setCST(nFeIcmsItem.getCst());
+		icms20.setModBC(Integer.toString(nFeIcmsItem.getModbc()));
+		icms20.setVBC(BigDecimalHelper.toString(nFeIcmsItem.getVbc(), 2));
+		icms20.setPICMS(BigDecimalHelper.toString(nFeIcmsItem.getPicms(), 4));
+		icms20.setVICMS(BigDecimalHelper.toString(nFeIcmsItem.getVicms(), 2));
 
-		icms20.setVBCFCP("");
-		icms20.setPFCP("");
-		icms20.setVFCP("");
+//		icms20.setVBCFCP("");
+//		icms20.setPFCP("");
+//		icms20.setVFCP("");
 
-		icms20.setVICMSDeson("");
-		icms20.setMotDesICMS("");
+		icms20.setVICMSDeson(BigDecimalHelper.toString(nFeIcmsItem.getVicmsdeson(), 2));
+		icms20.setMotDesICMS(Integer.toString(nFeIcmsItem.getMotdesicms()));
 
 		return icms20;
 	}
 
-	private ICMS10 criaImpostoIcms10() {
+	private ICMS10 criaImpostoIcms10(NFeIcmsItem nFeIcmsItem) {
 		TNFe.InfNFe.Det.Imposto.ICMS.ICMS10 icms10 = new TNFe.InfNFe.Det.Imposto.ICMS.ICMS10();
-		icms10.setOrig("0");
-		icms10.setCST("");
-		icms10.setModBC("");
-		icms10.setVBC("");
-		icms10.setPICMS("");
-		icms10.setVICMS("");
+		icms10.setOrig(Integer.toString(nFeIcmsItem.getOrig()));
+		icms10.setCST(nFeIcmsItem.getCst());
+		icms10.setModBC(Integer.toString(nFeIcmsItem.getModbc()));
+		icms10.setVBC(BigDecimalHelper.toString(nFeIcmsItem.getVbc(), 2));
+		icms10.setPICMS(BigDecimalHelper.toString(nFeIcmsItem.getPicms(), 4));
+		icms10.setVICMS(BigDecimalHelper.toString(nFeIcmsItem.getVicms(), 2));
 
-		icms10.setVBCFCP("");
-		icms10.setPFCP("");
-		icms10.setVFCP("");
+//		icms10.setVBCFCP("");
+//		icms10.setPFCP("");
+//		icms10.setVFCP("");
 
-		icms10.setModBCST("");
-		icms10.setPMVAST("");
-		icms10.setPRedBCST("");
-		icms10.setVBCST("");
-		icms10.setPICMSST("");
-		icms10.setVICMSST("");
+		icms10.setModBCST(Integer.toString(nFeIcmsItem.getModbcst()));
+		icms10.setPMVAST(BigDecimalHelper.toString(nFeIcmsItem.getPmvast(), 4));
+		icms10.setPRedBCST(BigDecimalHelper.toString(nFeIcmsItem.getPredbcst(), 4));
+		icms10.setVBCST(BigDecimalHelper.toString(nFeIcmsItem.getVbcst(), 2));
+		icms10.setPICMSST(BigDecimalHelper.toString(nFeIcmsItem.getPicmsst(), 4));
+		icms10.setVICMSST(BigDecimalHelper.toString(nFeIcmsItem.getVicmsst(), 2));
 
-		icms10.setVBCFCPST("");
-		icms10.setPFCPST("");
-		icms10.setVFCPST("");
+//		icms10.setVBCFCPST("");
+//		icms10.setPFCPST("");
+//		icms10.setVFCPST("");
 
 		return icms10;
 	}
 
-	private ICMS00 criaImpostoIcms00() {
+	private ICMS00 criaImpostoIcms00(NFeIcmsItem nFeIcmsItem) {
 		TNFe.InfNFe.Det.Imposto.ICMS.ICMS00 icms00 = new TNFe.InfNFe.Det.Imposto.ICMS.ICMS00();
-		icms00.setOrig("0");
-		icms00.setModBC("0");
-		icms00.setCST("00");
-		icms00.setVBC("10.00");
-		icms00.setPICMS("10");
-		icms00.setVICMS("1.00");
+		icms00.setOrig(Integer.toString(nFeIcmsItem.getOrig()));
+		icms00.setModBC(Integer.toString(nFeIcmsItem.getModbc()));
+		icms00.setCST(nFeIcmsItem.getCst());
+		icms00.setVBC(BigDecimalHelper.toString(nFeIcmsItem.getVbc(), 2));
+		icms00.setPICMS(BigDecimalHelper.toString(nFeIcmsItem.getPicms(), 4));
+		icms00.setVICMS(BigDecimalHelper.toString(nFeIcmsItem.getVicms(), 2));
 
 		return icms00;
 	}
 
-	private Prod montaProduto(ContainerIntegracaoNFeItem nfeItem) {
-		Item item = nfeItem.getItem();
+	private Prod montaProduto(NFeProdItem uwNfeProdItem) {
 		TNFe.InfNFe.Det.Prod produto = new TNFe.InfNFe.Det.Prod();
-		produto.setCProd(Integer.toString(item.getCodigo()));
-		if (StringUtils.isNotBlank(item.getGtinEan()))
-			produto.setCEAN(item.getGtinEan());
+		produto.setCProd(uwNfeProdItem.getCprod());
+		if (StringUtils.isNotBlank(uwNfeProdItem.getCean()))
+			produto.setCEAN(uwNfeProdItem.getCean());
 		else
 			produto.setCEAN("SEM GTIN");
-		produto.setXProd(item.getNome());
-		produto.setNCM(item.getNcm().getCodigo());
-		produto.setCFOP(nfeItem.getCfop());
-		produto.setUCom(item.getUnidadeMedidaComercial().getSigla());
-		produto.setQCom(nfeItem.getQuantidade().toString());
-		produto.setVUnCom(nfeItem.getValorUnitario().toString());
-		produto.setVProd(nfeItem.getValorTotal().toString());
-		produto.setCEANTrib("SEM GTIN");
-		produto.setUTrib(item.getUnidadeMedidaTributavel().getSigla());
-		produto.setQTrib(nfeItem.getQuantidadeTributavel().toString());
-		produto.setVUnTrib(nfeItem.getValorUnitarioTributavel().toString());
-		produto.setVFrete(nfeItem.getValorTotalFrete().toString());
-		produto.setVSeg(nfeItem.getValorTotalSeguro().toString());
-		produto.setVDesc(nfeItem.getValorDesconto().toString());
-		produto.setVOutro(nfeItem.getValorOutrasDespesas().toString());
-		produto.setIndTot(nfeItem.isValorItemCompoeValorTotalNFe() ? "1" : "0");
-		;
+		produto.setXProd(uwNfeProdItem.getXprod());
+		produto.setNCM(uwNfeProdItem.getNcm());
+		produto.setCFOP(uwNfeProdItem.getCfop());
+		produto.setUCom(uwNfeProdItem.getUcom());
+		produto.setQCom(BigDecimalHelper.toString(uwNfeProdItem.getQcom(), 4));
+		produto.setVUnCom(BigDecimalHelper.toString(uwNfeProdItem.getVuncom(), 10));
+		produto.setVProd(BigDecimalHelper.toString(uwNfeProdItem.getVprod(), 2));
+		if (StringUtils.isNotBlank(uwNfeProdItem.getCeantrib()))
+			produto.setCEANTrib(uwNfeProdItem.getCeantrib());
+		else
+			produto.setCEANTrib("SEM GTIN");
+		produto.setUTrib(uwNfeProdItem.getUtrib());
+		produto.setQTrib(BigDecimalHelper.toString(uwNfeProdItem.getQtrib(), 4));
+		produto.setVUnTrib(BigDecimalHelper.toString(uwNfeProdItem.getVuntrib(), 10));
+		produto.setVFrete(BigDecimalHelper.toString(uwNfeProdItem.getVfrete(), 2));
+		produto.setVSeg(BigDecimalHelper.toString(uwNfeProdItem.getVseg(), 2));
+		produto.setVDesc(BigDecimalHelper.toString(uwNfeProdItem.getVdesc(), 2));
+		produto.setVOutro(BigDecimalHelper.toString(uwNfeProdItem.getVoutro(), 2));
+		produto.setIndTot(Integer.toString(uwNfeProdItem.getIndtot()));
 
 		return produto;
 	}
 
-	private Collection<? extends AutXML> montaAutorizacaoXML(
-			List<ContainerIntegracaoNFeAutorizacao> nfeAutorizacaoXML) {
+	private Collection<? extends AutXML> montaAutorizacaoXML(List<NFeAut> autorizacoes) {
 		List<AutXML> listAutXMLs = new ArrayList<>();
-		for (ContainerIntegracaoNFeAutorizacao autorizacao : nfeAutorizacaoXML) {
+		for (NFeAut autorizacao : autorizacoes) {
 			AutXML aut = new AutXML();
 			aut.setCNPJ(autorizacao.getCnpj());
 			aut.setCPF(autorizacao.getCpf());
@@ -1209,205 +1258,173 @@ public class ServicoEnvioNFeImpl implements IServicoEnvioNFe {
 		return listAutXMLs;
 	}
 
-	private TLocal montaLocalRetirada(ContainerIntegracaoNFeLocalRetirada containerIntegracaoNFeLocalRetirada) {
+	private TLocal montaLocalRetirada(NFeRetirada nFeRetirada) {
 		TLocal local = new TLocal();
-		if (StringUtils.isNotBlank(containerIntegracaoNFeLocalRetirada.getCnpj())) {
-			local.setCNPJ(containerIntegracaoNFeLocalRetirada.getCnpj());
-		}
-		if (StringUtils.isNotBlank(containerIntegracaoNFeLocalRetirada.getCpf())) {
-			local.setCNPJ(containerIntegracaoNFeLocalRetirada.getCpf());
-		}
-		local.setXNome(containerIntegracaoNFeLocalRetirada.getRazaoSocialNome());
-		local.setXLgr(containerIntegracaoNFeLocalRetirada.getLogradouro());
-		local.setNro(containerIntegracaoNFeLocalRetirada.getNumero());
-		local.setXCpl(containerIntegracaoNFeLocalRetirada.getComplemento());
-		local.setXBairro(containerIntegracaoNFeLocalRetirada.getBairro());
-		local.setCMun(Long.toString(containerIntegracaoNFeLocalRetirada.getMunicipio().getCodigoIBGE()));
-		local.setXMun(containerIntegracaoNFeLocalRetirada.getMunicipio().getNome());
-		local.setUF(TUf.valueOf(containerIntegracaoNFeLocalRetirada.getMunicipio().getUf().getSigla()));
-		local.setCEP(containerIntegracaoNFeLocalRetirada.getCep());
-		local.setCPais(containerIntegracaoNFeLocalRetirada.getMunicipio().getPais().getCodigoIBGE());
-		local.setXPais(containerIntegracaoNFeLocalRetirada.getMunicipio().getPais().getNome());
-		local.setFone(containerIntegracaoNFeLocalRetirada.getTelefone());
-		local.setEmail(containerIntegracaoNFeLocalRetirada.getEmail());
-		local.setIE(containerIntegracaoNFeLocalRetirada.getInscricaoEstadual());
+		local.setCNPJ(nFeRetirada.getCnpj());
+		local.setCPF(nFeRetirada.getCpf());
+		local.setXNome(nFeRetirada.getXnome());
+		local.setXLgr(nFeRetirada.getXlgr());
+		local.setNro(nFeRetirada.getNro());
+		local.setXCpl(nFeRetirada.getXcpl());
+		local.setXBairro(nFeRetirada.getXbairro());
+		local.setCMun(Integer.toString(nFeRetirada.getCmun()));
+		local.setXMun(nFeRetirada.getXmun());
+		local.setUF(TUf.valueOf(nFeRetirada.getUf()));
+		local.setCEP(nFeRetirada.getCep());
+		local.setCPais(nFeRetirada.getCpais());
+		local.setXPais(nFeRetirada.getXpais());
+		local.setFone(nFeRetirada.getFone());
+		local.setEmail(nFeRetirada.getEmail());
+		local.setIE(nFeRetirada.getIe());
 
 		return local;
 	}
 
-	private Dest montaDestinatario(ContainerIntegracaoNFe containerIntegracaoNFe) {
-		ParceiroLocalEndereco parceiroLocalEndereco = containerIntegracaoNFe.getNfeDestinatario()
-				.getParceiroLocalEndereco();
-		ParceiroLocal parceiroLocal = parceiroLocalService.getById(parceiroLocalEndereco.getParceiroLocal().getId()).get();
-		ParceiroLocalJuridica parceiroLocalJuridica = parceiroLocal.getDadosPessoaJuridica().get(0);
-		Parceiro parceiro = parceiroLocal.getParceiro();
-		ParceiroLocalTelefone parceiroLocalTelefone = parceiroLocal.getTelefones().get(0);
-		ParceiroLocalEmail parceiroLocalEmail = parceiroLocal.getEmails().get(0);
+	private Dest montaDestinatario(NFe uwNFe) {
+		NFeDest uwNfeDest = uwNFe.getNfeDest();
 
 		TNFe.InfNFe.Dest dest = new TNFe.InfNFe.Dest();
-		if (parceiro.getTipoPessoa().equals(TipoPessoa.PESSOA_FISICA))
-			dest.setCNPJ(parceiroLocal.getCpfCnpj());
-		if (parceiro.getTipoPessoa().equals(TipoPessoa.PESSOA_JURIDICA))
-			dest.setCPF(parceiroLocal.getCpfCnpj());
-		dest.setXNome(parceiro.getNomeRazaoSocial());
-		dest.setIndIEDest(containerIntegracaoNFe.getNfeDestinatario().getIndicadorIEDestinatario().getCodigoReceita());
-		if (containerIntegracaoNFe.getNfeDestinatario()
-				.getIndicadorIEDestinatario() == IndicadorIEDestinatario.CONTRIBUINTEICMS) {
-			dest.setIE(parceiroLocalJuridica.getInscricaoEstadual());
-		}
-		if (parceiroLocalEmail != null) {
-			dest.setEmail(parceiroLocalEmail.getEmail());
-		}
+		dest.setCNPJ(uwNfeDest.getCnpj());
+		dest.setCPF(uwNfeDest.getCpf());
+		dest.setXNome(uwNfeDest.getXnome());
+		dest.setIndIEDest(uwNfeDest.getIndieest());
+		dest.setIE(uwNfeDest.getIe());
+		dest.setEmail(uwNfeDest.getEmail());
 
 		TEndereco enderecoDestinatario = new TEndereco();
-		enderecoDestinatario.setXLgr(parceiroLocalEndereco.getEndereco());
-		enderecoDestinatario.setNro(parceiroLocalEndereco.getNumero());
-		enderecoDestinatario.setXCpl(parceiroLocalEndereco.getComplemento());
-		enderecoDestinatario.setXBairro(parceiroLocalEndereco.getBairro());
-		enderecoDestinatario.setCMun(Long.toString(parceiroLocalEndereco.getCidade().getCodigoIBGE()));
-		enderecoDestinatario.setXMun(parceiroLocalEndereco.getCidade().getNome());
-		enderecoDestinatario.setUF(TUf.valueOf(parceiroLocalEndereco.getCidade().getUf().getSigla()));
-		enderecoDestinatario.setCEP(parceiroLocalEndereco.getCep());
-		enderecoDestinatario.setCPais(parceiroLocalEndereco.getCidade().getPais().getCodigoIBGE());
-		enderecoDestinatario.setXPais(parceiroLocalEndereco.getCidade().getPais().getNome());
-		enderecoDestinatario.setFone(parceiroLocalTelefone.getNumero());
+		enderecoDestinatario.setXLgr(uwNfeDest.getXlgr());
+		enderecoDestinatario.setNro(uwNfeDest.getNro());
+		enderecoDestinatario.setXCpl(uwNfeDest.getXcpl());
+		enderecoDestinatario.setXBairro(uwNfeDest.getXbairro());
+		enderecoDestinatario.setCMun(Integer.toString(uwNfeDest.getCmun()));
+		enderecoDestinatario.setXMun(uwNfeDest.getXmun());
+		enderecoDestinatario.setUF(TUf.valueOf(uwNfeDest.getUf()));
+		enderecoDestinatario.setCEP(uwNfeDest.getCep());
+		enderecoDestinatario.setCPais(uwNfeDest.getCpais());
+		enderecoDestinatario.setXPais(uwNfeDest.getXpais());
+		enderecoDestinatario.setFone(uwNfeDest.getFone());
 
 		dest.setEnderDest(enderecoDestinatario);
 		return dest;
 	}
 
-	private Emit montaEmitente(ConfigEmpresaNFe configEmpresaNFe) {
-		ParceiroLocal parceiroLocalEmitente = parceiroLocalService.getById(configEmpresaNFe.getEmpresaFilial().getParceiroLocal().getId()).get();
-		
-		ParceiroLocalJuridica parceiroLocalJuridica = parceiroLocalEmitente.getDadosPessoaJuridica().get(0);
-
+	private Emit montaEmitente(ConfigEmpresaNFe configEmpresaNFe, NFe uwNFe) {
 		TNFe.InfNFe.Emit emit = new TNFe.InfNFe.Emit();
-		emit.setCNPJ(parceiroLocalEmitente.getCpfCnpj());
-		emit.setXNome(parceiroLocalEmitente.getParceiro().getNomeRazaoSocial());
-		if (StringUtils
-				.isNotBlank(parceiroLocalEmitente.getParceiro().getNomeFantasia()))
-			emit.setXFant(parceiroLocalEmitente.getParceiro().getNomeFantasia());
-		emit.setIE(parceiroLocalJuridica.getInscricaoEstadual());
-		emit.setCRT("3");// revisar
+		NFeEmit uwNfeEmit = uwNFe.getNfeEmit();
+		emit.setCNPJ(uwNfeEmit.getCnpj());
+		emit.setXNome(uwNfeEmit.getXnome());
+		emit.setXFant(uwNfeEmit.getXfant());
+		emit.setIE(uwNfeEmit.getIe());
+		emit.setCRT(Integer.toString(uwNfeEmit.getCrt()));
 
 		TEnderEmi enderecoEmitente = new TEnderEmi();
-		ParceiroLocalEndereco parceiroLocalEndereco = parceiroLocalEmitente
-				.getEnderecos().get(0);
-		ParceiroLocalTelefone parceiroLocalTelefone = parceiroLocalEmitente
-				.getTelefones().get(0);
-		enderecoEmitente.setXLgr(parceiroLocalEndereco.getEndereco());
-		enderecoEmitente.setNro(parceiroLocalEndereco.getNumero());
-		enderecoEmitente.setXCpl(parceiroLocalEndereco.getComplemento());
-		enderecoEmitente.setXBairro(parceiroLocalEndereco.getBairro());
-		enderecoEmitente.setCMun(Long.toString(parceiroLocalEndereco.getCidade().getCodigoIBGE()));
-		enderecoEmitente.setXMun(parceiroLocalEndereco.getCidade().getNome());
-		enderecoEmitente.setUF(TUfEmi.valueOf(parceiroLocalEndereco.getCidade().getUf().getSigla()));
-		enderecoEmitente.setCEP(parceiroLocalEndereco.getCep());
-		enderecoEmitente.setCPais("1058");
-		enderecoEmitente.setXPais("Brasil");
-		enderecoEmitente.setFone(parceiroLocalTelefone.getNumero());
+		enderecoEmitente.setXLgr(uwNfeEmit.getXlgr());
+		enderecoEmitente.setNro(uwNfeEmit.getNro());
+		enderecoEmitente.setXCpl(uwNfeEmit.getXcpl());
+		enderecoEmitente.setXBairro(uwNfeEmit.getXbairro());
+		enderecoEmitente.setCMun(Integer.toString(uwNfeEmit.getCmun()));
+		enderecoEmitente.setXMun(uwNfeEmit.getXmun());
+		enderecoEmitente.setUF(TUfEmi.valueOf(uwNfeEmit.getUf()));
+		enderecoEmitente.setCEP(uwNfeEmit.getCep());
+		enderecoEmitente.setCPais(uwNfeEmit.getCpais());
+		enderecoEmitente.setXPais(uwNfeEmit.getXpais());
+		enderecoEmitente.setFone(uwNfeEmit.getFone());
 
 		emit.setEnderEmit(enderecoEmitente);
 
 		return emit;
 	}
 
-	private Ide montaIde(ConfiguracoesNfe configuracoesNfe, ChaveUtil chaveUtil,
-			ContainerIntegracaoNFe containerIntegracaoNFe, ConfigEmpresaNFe configEmpresaNFe) {
-		// Tag: B01
+	private Ide montaIde(ConfiguracoesNfe configuracoesNfe, NFe uwNFe, ConfigEmpresaNFe configEmpresaNFe) {
 		TNFe.InfNFe.Ide ide = new TNFe.InfNFe.Ide();
-		ide.setCUF(configuracoesNfe.getEstado().getCodigoUF());
-		ide.setCNF(containerIntegracaoNFe.getNfeIdentificacao().getCnf());
-		ide.setNatOp(containerIntegracaoNFe.getNfeIdentificacao().getNaturezaOperacao());
-		ide.setMod(containerIntegracaoNFe.getNfeIdentificacao().getTipoDocumento().getCodigoReceita());
-		ide.setSerie(String.valueOf(containerIntegracaoNFe.getNfeIdentificacao().getSerie()));
-		ide.setNNF(String.valueOf(containerIntegracaoNFe.getNfeIdentificacao().getNumeroNFe()));
-		ide.setDhEmi(XmlNfeUtil.dataNfe(containerIntegracaoNFe.getNfeIdentificacao().getDataEmissao()));
-		if (containerIntegracaoNFe.getNfeIdentificacao().getDataHoraSaidaEntrada() != null)
-			ide.setDhSaiEnt(XmlNfeUtil.dataNfe(containerIntegracaoNFe.getNfeIdentificacao().getDataHoraSaidaEntrada()));
-		ide.setTpNF(containerIntegracaoNFe.getNfeIdentificacao().getIndicadorOperacao().getCodigoReceita());
-		ide.setIdDest(containerIntegracaoNFe.getNfeIdentificacao().getLocalDestinoOperacao().getCodigoReceita());
-		if (containerIntegracaoNFe.getNfeIdentificacao().getMunicipioOcorrenciaFatoGeradorICMS() != null)
-			ide.setCMunFG(Long.toString(containerIntegracaoNFe.getNfeIdentificacao()
-					.getMunicipioOcorrenciaFatoGeradorICMS().getCodigoIBGE()));
-		ide.setTpImp(containerIntegracaoNFe.getNfeIdentificacao().getTipoImpressaoDanfe().getCodigoReceita());
+		ide.setCUF(Integer.toString(uwNFe.getNfeIde().getCuf()));
+		ide.setCNF(Integer.toString(uwNFe.getNfeIde().getCnf()));
+		ide.setNatOp(uwNFe.getNfeIde().getNatop());
+		ide.setMod(Integer.toString(uwNFe.getNfeIde().getMod()));
+		ide.setSerie(Integer.toString(uwNFe.getNfeIde().getSerie()));
+		ide.setNNF(Integer.toString(uwNFe.getNfeIde().getNnf()));
+		ide.setDhEmi(XmlNfeUtil.dataNfe(uwNFe.getNfeIde().getDhemi()));
+		ide.setDhSaiEnt(XmlNfeUtil.dataNfe(uwNFe.getNfeIde().getDhsaient()));
+		ide.setTpNF(Integer.toString(uwNFe.getNfeIde().getTpnf()));
+		ide.setIdDest(Integer.toString(uwNFe.getNfeIde().getIddest()));
+		if (uwNFe.getNfeIde().getCmunfg() != 0)
+			ide.setCMunFG(Long.toString(uwNFe.getNfeIde().getCmunfg()));
+		ide.setTpImp(Integer.toString(uwNFe.getNfeIde().getTpimp()));
 		ide.setTpEmis(configEmpresaNFe.getTipoEmissao().getValue());
-		ide.setCDV(chaveUtil.getDigitoVerificador());
+		ide.setCDV(Integer.toString(uwNFe.getNfeIde().getCdv()));
 		ide.setTpAmb(configuracoesNfe.getAmbiente().getCodigo());
-		ide.setFinNFe(containerIntegracaoNFe.getNfeIdentificacao().getFinalidadeNfe().getCodigoReceita());
-		ide.setIndFinal(containerIntegracaoNFe.getNfeIdentificacao().getTipoConsumidor().getCodigoReceita());
-		ide.setIndPres(containerIntegracaoNFe.getNfeIdentificacao().getTipoPresencaComprador().getCodigoReceita());
-		if (containerIntegracaoNFe.getNfeIdentificacao().getTipoIntermediador() != null)
-			ide.setIndIntermed(containerIntegracaoNFe.getNfeIdentificacao().getTipoIntermediador().getCodigoReceita());
-		ide.setProcEmi(containerIntegracaoNFe.getNfeIdentificacao().getProcessoEmissao().getCodigoReceita());
-		ide.setVerProc("1.0.0");
+		ide.setFinNFe(Integer.toString(uwNFe.getNfeIde().getFinnfe()));
+		ide.setIndFinal(Integer.toString(uwNFe.getNfeIde().getIndfinal()));
+		ide.setIndPres(Integer.toString(uwNFe.getNfeIde().getIndpres()));
+		ide.setIndIntermed(Integer.toString(uwNFe.getNfeIde().getIndintermed()));
+		ide.setProcEmi(Integer.toString(uwNFe.getNfeIde().getProcemi()));
+		ide.setVerProc(Integer.toString(uwNFe.getNfeIde().getVerproc()));
 
-		ide.setDhCont("");
-		ide.setXJust("");
+		if (uwNFe.getNfeIde().getDhcont() != null) {
+			ide.setDhCont(XmlNfeUtil.dataNfe(uwNFe.getNfeIde().getDhcont()));
+			ide.setXJust(uwNFe.getNfeIde().getXjust());
+		}
 
-		ide.getNFref().addAll(montaNFReferenciadas());
+		ide.getNFref().addAll(montaNFReferenciadas(uwNFe.getNfeIde().getNfesRefs()));
 
 		return ide;
 	}
 
-	private Collection<? extends NFref> montaNFReferenciadas() {
+	private Collection<? extends NFref> montaNFReferenciadas(List<NFeRef> listNFeRef) {
 		List<NFref> notas = new ArrayList<>();
-		NFref nota = new NFref();
-		nota.setRefNFe("");
+		if (listNFeRef != null && !listNFeRef.isEmpty()) {
+			listNFeRef.forEach(nfeRef -> {
+				NFref nota = new NFref();
+				nota.setRefNFe(nfeRef.getRefNFe());
 
-		RefNF refNF = new RefNF();
-		refNF.setCUF("");
-		refNF.setAAMM("");
-		refNF.setCNPJ("");
-		refNF.setMod("");
-		refNF.setSerie("");
-		refNF.setNNF("");
-		nota.setRefNF(refNF);
+				if (nfeRef.getMod().equals("01") || nfeRef.getMod().equals("02")) {
+					RefNF refNF = new RefNF();
+					refNF.setCUF(Integer.toString(nfeRef.getCuf()));
+					refNF.setAAMM(Integer.toString(nfeRef.getAamm()));
+					refNF.setCNPJ(nfeRef.getCnpj());
+					refNF.setMod(nfeRef.getMod());
+					refNF.setSerie(Integer.toString(nfeRef.getSerie()));
+					refNF.setNNF(Integer.toString(nfeRef.getNnf()));
 
-		RefNFP refNFP = new RefNFP();
-		refNFP.setCUF("");
-		refNFP.setAAMM("");
-		refNFP.setCNPJ("");
-		refNFP.setCPF("");
-		refNFP.setIE("");
-		refNFP.setMod("");
-		refNFP.setSerie("");
-		refNFP.setNNF("");
-		nota.setRefNFP(refNFP);
+					nota.setRefNF(refNF);
+				}
 
-		nota.setRefCTe("");
+				if (nfeRef.getMod().equals("04")) {
+					RefNFP refNFP = new RefNFP();
+					refNFP.setCUF(Integer.toString(nfeRef.getCuf()));
+					refNFP.setAAMM(Integer.toString(nfeRef.getAamm()));
+					refNFP.setCNPJ(nfeRef.getCnpj());
+					refNFP.setCPF(nfeRef.getCpf());
+					refNFP.setIE(nfeRef.getIe());
+					refNFP.setMod(nfeRef.getMod());
+					refNFP.setSerie(Integer.toString(nfeRef.getSerie()));
+					refNFP.setNNF(Integer.toString(nfeRef.getNnf()));
+					nota.setRefNFP(refNFP);
+				}
 
-		RefECF refECF = new RefECF();
-		refECF.setMod("");
-		refECF.setNECF("");
-		refECF.setNCOO("");
-		nota.setRefECF(refECF);
+				nota.setRefCTe(nfeRef.getRefcte());
 
-		notas.add(nota);
+				if (nfeRef.getMod().equals("2B") || nfeRef.getMod().equals("2C") || nfeRef.getMod().equals("2D")) {
+					RefECF refECF = new RefECF();
+					refECF.setMod(nfeRef.getMod());
+					refECF.setNECF(nfeRef.getNecf());
+					refECF.setNCOO(nfeRef.getNcoo());
+					nota.setRefECF(refECF);
+				}
 
+				notas.add(nota);
+			});
+		}
 		return notas;
 
 	}
 
-	private ChaveUtil montaChaveNFe(EstadosEnum estado, ConfigEmpresaNFe configEmpresaNFe,
-			ContainerIntegracaoNFeIdentificacao containerNFeIdentificacao) {
-		containerNFeIdentificacao.setCnf(String.format("%08d", new Random().nextInt(99999999)));
-		if (containerNFeIdentificacao.getDataEmissao() == null) {
-			containerNFeIdentificacao.setDataEmissao(LocalDateTime.now());
-		}
-
-		return new ChaveUtil(estado, configEmpresaNFe.getEmpresaFilial().getParceiroLocal().getCpfCnpj(),
-				containerNFeIdentificacao.getTipoDocumento().getCodigoReceita(), containerNFeIdentificacao.getSerie(),
-				containerNFeIdentificacao.getNumeroNFe(), configEmpresaNFe.getTipoEmissao().getValue(),
-				containerNFeIdentificacao.getCnf(), containerNFeIdentificacao.getDataEmissao());
-	}
-
 	private ConfiguracoesNfe criarConfiguracoesNfe(ConfigEmpresaNFe configEmpresaNFe) throws BusinessException {
-		
+
 		try {
 			Resource resource = resourceLoader.getResource("classpath:schemas");
 			String path = resource.getFile().getAbsolutePath();
-			
+
 			Certificado certificado = carregarCertificado(configEmpresaNFe);
 			System.out.println(certificado.getCnpjCpf());
 			System.out.println(certificado.getVencimento());

@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class DocumentosReferenciadosRequest {
+public class DocumentoReferenciadoRequest {
 
 	private String tipoDocumentoReferenciado;
 	private String chaveAcesso;
@@ -13,6 +13,7 @@ public class DocumentosReferenciadosRequest {
 	private String anoMes;
 	private String cnpjEmitente;
 	private String cpfEmitente;
+	private String iEEmitente;
 	private String modeloDocumentoFiscal;
 	private String serie;
 	private int numero;

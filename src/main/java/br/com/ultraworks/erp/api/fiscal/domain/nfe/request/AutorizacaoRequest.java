@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class AutorizacoesRequest {
+public class AutorizacaoRequest {
 
 	private String tipoPessoa;
 	private String cnpj;

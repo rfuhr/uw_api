@@ -30,7 +30,13 @@ public class TributacaoIcmsNFeRequest {
 	private BigDecimal valorBCIcmsRetido;
 	private BigDecimal valorIcmsProprioSubst;
 	private BigDecimal valorIcmsRetido;
+	private BigDecimal valorBCIcmsStRetido;
 	private BigDecimal valorIcmsStRet;
+	
+	private BigDecimal reducaoBaseCalculoEfetiva;
+	private BigDecimal valorBCEfetivo;
+	private BigDecimal aliquotaIcmsEfetiva;
+	private BigDecimal valorIcmsEfetiva;
 	
 	private BigDecimal aliquotaCredito;
 	private BigDecimal valorCredIcmsSN;
