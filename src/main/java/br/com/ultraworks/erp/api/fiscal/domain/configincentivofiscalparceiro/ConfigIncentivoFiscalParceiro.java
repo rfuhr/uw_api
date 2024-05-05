@@ -32,7 +32,7 @@ import lombok.NoArgsConstructor;
 @Data
 @EqualsAndHashCode(callSuper=false)
 @UniqueValidationGroup({
-    @UniqueValidation(fields = {"parceiroLocalId"}, label = "Já existe Configuração de Incentivo Fiscal para este Parceiro")
+    @UniqueValidation(fields = {"id"}, label = "Já existe Configuração de Incentivo Fiscal para este Parceiro")
 })
 public class ConfigIncentivoFiscalParceiro extends UWEntityBase {
 	

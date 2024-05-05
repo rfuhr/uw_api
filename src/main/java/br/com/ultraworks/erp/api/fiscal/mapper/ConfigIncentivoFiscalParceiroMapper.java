@@ -32,8 +32,10 @@ public class ConfigIncentivoFiscalParceiroMapper extends GenericMapper<ConfigInc
 		entity.setId(dto.getId());
 		entity.setDataInicioVigencia(dto.getDataInicioVigencia());
 		entity.setDataFinalVigencia(dto.getDataFinalVigencia());
-		entity.setConfigIncentivoFiscal(configIncentivoFiscalRepository.findById(dto.getConfigIncentivoFiscalId())
-				.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Configuração de Incentivo Fiscal com id " + dto.getConfigIncentivoFiscalId())));
+		if (dto.getConfigIncentivoFiscalId() != null) {
+			entity.setConfigIncentivoFiscal(configIncentivoFiscalRepository.findById(dto.getConfigIncentivoFiscalId())
+					.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Configuração de Incentivo Fiscal com id " + dto.getConfigIncentivoFiscalId())));			
+		}
 		entity.setParceiroLocal(parceiroLocalRepository.findById(dto.getParceiroLocalId())
 				.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Parceiro Local com id " + dto.getParceiroLocalId())));
 		if (dto.getUfId() != null) {
@@ -51,6 +53,8 @@ public class ConfigIncentivoFiscalParceiroMapper extends GenericMapper<ConfigInc
 		dto.setId(entity.getId());
 		dto.setConfigIncentivoFiscalId(entity.getConfigIncentivoFiscal().getId());
 		dto.setParceiroLocalId(entity.getParceiroLocal().getId());
+		dto.setParceiroCnpjCpf(entity.getParceiroLocal().getCpfCnpj());
+		dto.setParceiroNomeRazaoSocial(entity.getParceiroLocal().getParceiro().getNomeRazaoSocial());
 		dto.setDataInicioVigencia(entity.getDataInicioVigencia());
 		dto.setDataFinalVigencia(entity.getDataFinalVigencia());
 		if (entity.getUf() != null) {
