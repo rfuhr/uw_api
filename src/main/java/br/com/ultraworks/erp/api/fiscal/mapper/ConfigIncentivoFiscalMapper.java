@@ -1,5 +1,7 @@
 package br.com.ultraworks.erp.api.fiscal.mapper;
 
+import java.util.ArrayList;
+
 import org.springframework.stereotype.Component;
 
 import br.com.ultraworks.erp.api.fiscal.domain.configincentivofiscal.ConfigIncentivoFiscal;
@@ -13,10 +15,13 @@ import br.com.ultraworks.erp.core.mapper.GenericMapper;
 public class ConfigIncentivoFiscalMapper extends GenericMapper<ConfigIncentivoFiscal, ConfigIncentivoFiscalDTO> {
 
 	TipoIncentivoFiscalRepository tipoIncentivoFiscalRepository;
+	ConfigIncentivoFiscalParceiroMapper configIncentivoFiscalParceiroMapper;
 	
-	public ConfigIncentivoFiscalMapper(ConfigIncentivoFiscalRepository ConfigIncentivoFiscalRepository, TipoIncentivoFiscalRepository tipoIncentivoFiscalRepository) {
+	public ConfigIncentivoFiscalMapper(ConfigIncentivoFiscalRepository ConfigIncentivoFiscalRepository, TipoIncentivoFiscalRepository tipoIncentivoFiscalRepository,
+			ConfigIncentivoFiscalParceiroMapper configIncentivoFiscalParceiroMapper) {
 		super(ConfigIncentivoFiscalRepository, ConfigIncentivoFiscal::new, ConfigIncentivoFiscalDTO::new);
 		this.tipoIncentivoFiscalRepository = tipoIncentivoFiscalRepository;
+		this.configIncentivoFiscalParceiroMapper = configIncentivoFiscalParceiroMapper;
     }
 
 	@Override
@@ -26,6 +31,10 @@ public class ConfigIncentivoFiscalMapper extends GenericMapper<ConfigIncentivoFi
 		entity.setDataFinalVigencia(dto.getDataFinalVigencia());
 		entity.setTipoIncentivoFiscal(tipoIncentivoFiscalRepository.findById(dto.getTipoIncentivoFiscalId())
 				.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Tipo de Incentivo Fiscal com id " + dto.getTipoIncentivoFiscalId())));
+		if (dto.getConfigIncentivoFiscalParceiros() != null && dto.getConfigIncentivoFiscalParceiros().size() > 0) {
+			entity.setConfigIncentivoFiscalParceiros(new ArrayList<>());
+			entity.getConfigIncentivoFiscalParceiros().addAll(configIncentivoFiscalParceiroMapper.toEntity(dto.getConfigIncentivoFiscalParceiros()));
+		}
 	}
 
 	@Override
@@ -37,6 +46,10 @@ public class ConfigIncentivoFiscalMapper extends GenericMapper<ConfigIncentivoFi
 			dto.setTipoIncentivoFiscalId(entity.getTipoIncentivoFiscal().getId());
 			dto.setTipoIncentivoFiscalNome(entity.getTipoIncentivoFiscal().getNome());
 			dto.setTipoIncentivoFiscalCodigo(entity.getTipoIncentivoFiscal().getCodigo());
+		}
+		dto.setConfigIncentivoFiscalParceiros(new ArrayList<>());
+		if (entity.getConfigIncentivoFiscalParceiros() != null) {
+			dto.getConfigIncentivoFiscalParceiros().addAll(configIncentivoFiscalParceiroMapper.toDto(entity.getConfigIncentivoFiscalParceiros()));
 		}
 	}	
 }

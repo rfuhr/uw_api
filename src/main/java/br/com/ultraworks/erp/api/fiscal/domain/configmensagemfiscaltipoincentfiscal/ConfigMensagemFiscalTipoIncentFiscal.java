@@ -1,9 +1,9 @@
-package br.com.ultraworks.erp.api.fiscal.domain.configmensagemfiscalsituactrib;
+package br.com.ultraworks.erp.api.fiscal.domain.configmensagemfiscaltipoincentfiscal;
 
 import java.time.LocalDate;
 
 import br.com.ultraworks.erp.api.fiscal.domain.configmensagemfiscal.ConfigMensagemFiscal;
-import br.com.ultraworks.erp.api.fiscal.domain.situacaotributaria.SituacaoTributaria;
+import br.com.ultraworks.erp.api.fiscal.domain.tipoincentivofiscal.TipoIncentivoFiscal;
 import br.com.ultraworks.erp.core.annotation.UniqueValidation;
 import br.com.ultraworks.erp.core.annotation.UniqueValidationGroup;
 import br.com.ultraworks.erp.core.entity.UWEntityBase;
@@ -21,19 +21,19 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "config_mensagem_fiscal_situac_trib")
+@Table(name = "config_mensagem_fiscal_tipo_incent_fiscal")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode(callSuper=false)
 @UniqueValidationGroup({
-    @UniqueValidation(fields = {"id"}, label = "Já existe Configuração de Mensagem Fiscal para esta está Situação Tributária")
+    @UniqueValidation(fields = {"id"}, label = "Já existe Configuração de Mensagem Fiscal para este Tipo de Incentivo Fiscal")
 })
-public class ConfigMensagemFiscalSituacTrib extends UWEntityBase {
+public class ConfigMensagemFiscalTipoIncentFiscal extends UWEntityBase {
 	
 	@Id
-	@SequenceGenerator(name = "configMensagemFiscalSituacTribSeq", sequenceName = "seq_config_mensagem_fiscal_situac_trib", allocationSize = 1)
-	@GeneratedValue(generator = "configMensagemFiscalSituacTribSeq")
+	@SequenceGenerator(name = "configMensagemFiscalTipoIncentFiscalSeq", sequenceName = "seq_config_mensagem_fiscal_tipo_incent_fiscal", allocationSize = 1)
+	@GeneratedValue(generator = "configMensagemFiscalTipoIncentFiscalSeq")
 	private Long id;
 	
 	@OneToOne
@@ -41,8 +41,8 @@ public class ConfigMensagemFiscalSituacTrib extends UWEntityBase {
 	private ConfigMensagemFiscal configMensagemFiscal;
 	
 	@OneToOne
-	@JoinColumn(name = "situacao_tributaria_id")
-	private SituacaoTributaria situacaoTributaria;
+	@JoinColumn(name = "tipo_incentivo_fiscal_id")
+	private TipoIncentivoFiscal tipoIncentivoFiscal;
 	
 	@Column(name = "data_inicio_vigencia")
 	private LocalDate dataInicioVigencia;

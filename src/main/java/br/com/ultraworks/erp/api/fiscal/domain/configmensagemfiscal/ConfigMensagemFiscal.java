@@ -4,7 +4,11 @@ import java.time.LocalDate;
 import java.util.List;
 
 import br.com.ultraworks.erp.api.fiscal.domain.configmensagemfiscalconfigfiscal.ConfigMensagemFiscalConfigFiscal;
+import br.com.ultraworks.erp.api.fiscal.domain.configmensagemfiscalgrupotrib.ConfigMensagemFiscalGrupoTrib;
+import br.com.ultraworks.erp.api.fiscal.domain.configmensagemfiscalitem.ConfigMensagemFiscalItem;
+import br.com.ultraworks.erp.api.fiscal.domain.configmensagemfiscaloperinterna.ConfigMensagemFiscalOperInterna;
 import br.com.ultraworks.erp.api.fiscal.domain.configmensagemfiscalsituactrib.ConfigMensagemFiscalSituacTrib;
+import br.com.ultraworks.erp.api.fiscal.domain.configmensagemfiscaltipoincentfiscal.ConfigMensagemFiscalTipoIncentFiscal;
 import br.com.ultraworks.erp.api.fiscal.domain.mensagemfiscal.MensagemFiscal;
 import br.com.ultraworks.erp.core.annotation.UniqueValidation;
 import br.com.ultraworks.erp.core.annotation.UniqueValidationGroup;
@@ -54,5 +58,17 @@ public class ConfigMensagemFiscal extends UWEntityBase {
 	
 	@Transient
 	private List<ConfigMensagemFiscalSituacTrib> configMensagemFiscalSituacTribs;
+	
+	@Transient
+	private List<ConfigMensagemFiscalItem> configMensagemFiscalItems;
+	
+	@Transient
+	private List<ConfigMensagemFiscalGrupoTrib> configMensagemFiscalGrupoTribs;
+	
+	@Transient
+	private List<ConfigMensagemFiscalOperInterna> configMensagemFiscalOperInternas;
+	
+	@Transient
+	private List<ConfigMensagemFiscalTipoIncentFiscal> configMensagemFiscalTipoIncentFiscals;
 
 }

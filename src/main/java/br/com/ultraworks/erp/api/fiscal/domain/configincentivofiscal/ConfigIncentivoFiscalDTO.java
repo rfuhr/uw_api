@@ -3,7 +3,7 @@ package br.com.ultraworks.erp.api.fiscal.domain.configincentivofiscal;
 import java.time.LocalDate;
 import java.util.List;
 
-import br.com.ultraworks.erp.api.fiscal.domain.configincentivofiscalparceiro.ConfigIncentivoFiscalParceiro;
+import br.com.ultraworks.erp.api.fiscal.domain.configincentivofiscalparceiro.ConfigIncentivoFiscalParceiroDTO;
 import jakarta.validation.Valid;
 import lombok.Data;
 
@@ -19,5 +19,5 @@ public class ConfigIncentivoFiscalDTO {
 	private LocalDate dataFinalVigencia;
 	
 	@Valid
-	private List<ConfigIncentivoFiscalParceiro> configIncentivoFiscalParceiros;
+	private List<ConfigIncentivoFiscalParceiroDTO> configIncentivoFiscalParceiros;
 }

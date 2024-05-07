@@ -2,6 +2,7 @@ package br.com.ultraworks.erp.api.fiscal.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import br.com.ultraworks.erp.api.fiscal.domain.configincentivofiscal.ConfigIncen
 import br.com.ultraworks.erp.api.fiscal.domain.configincentivofiscalparceiro.ConfigIncentivoFiscalParceiro;
 import br.com.ultraworks.erp.api.fiscal.mapper.ConfigIncentivoFiscalMapper;
 import br.com.ultraworks.erp.api.fiscal.repository.ConfigIncentivoFiscalRepository;
+import br.com.ultraworks.erp.api.fiscal.repository.query.VerificaDuplicidadeConfigIncentivoFiscalQuery;
 import br.com.ultraworks.erp.core.generics.GenericService;
 import br.com.ultraworks.erp.core.util.ListUtils;
 import lombok.NoArgsConstructor;
@@ -19,17 +21,31 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ConfigIncentivoFiscalService extends GenericService<ConfigIncentivoFiscal, Long, ConfigIncentivoFiscalDTO> {
 
-	private ConfigIncentivoFiscalParceiroService configIncentivoFiscalParceiroService;
+	ConfigIncentivoFiscalParceiroService configIncentivoFiscalParceiroService;
+	VerificaDuplicidadeConfigIncentivoFiscalQuery verificaDuplicidadeConfigIncentivoFiscalQuery;
 	
 	@Autowired
 	public ConfigIncentivoFiscalService(ConfigIncentivoFiscalRepository repository, ConfigIncentivoFiscalMapper mapper,
-			ConfigIncentivoFiscalParceiroService configIncentivoFiscalParceiroService) {
+			ConfigIncentivoFiscalParceiroService configIncentivoFiscalParceiroService,
+			VerificaDuplicidadeConfigIncentivoFiscalQuery verificaDuplicidadeConfigIncentivoFiscalQuery) {
 		super(repository, mapper);
 		this.configIncentivoFiscalParceiroService = configIncentivoFiscalParceiroService;
+		this.verificaDuplicidadeConfigIncentivoFiscalQuery = verificaDuplicidadeConfigIncentivoFiscalQuery;
+	}
+	
+	@Override
+	public Optional<ConfigIncentivoFiscal> getById(Long id) {
+		Optional<ConfigIncentivoFiscal> registro = super.getById(id);
+		if (registro.isPresent()) {
+			registro.get().setConfigIncentivoFiscalParceiros(configIncentivoFiscalParceiroService.getAllByConfigIncentivoFiscal(id));
+		}
+		return registro;
 	}
 	
 	@Override
 	public ConfigIncentivoFiscal save(ConfigIncentivoFiscal entity) {
+		
+		verificaDuplicidadeConfigIncentivoFiscal(entity);
 		
 		List<ConfigIncentivoFiscalParceiro> dadosSalvosParceiros = new ArrayList<>();
 		if (entity.getId() != null) {
@@ -54,6 +70,21 @@ public class ConfigIncentivoFiscalService extends GenericService<ConfigIncentivo
 		}
 		
 		return entity;
+	}
+	
+	@Override
+	public void delete(Long id) {
+		Optional<ConfigIncentivoFiscal> configIncentivoFiscal = this.getById(id);
+		if (configIncentivoFiscal.isPresent()) {
+			configIncentivoFiscal.get().getConfigIncentivoFiscalParceiros().forEach(parceiros -> {
+				configIncentivoFiscalParceiroService.delete(parceiros.getId());
+			});
+			repository.deleteById(id);
+		}
+	}
+
+	private void verificaDuplicidadeConfigIncentivoFiscal(ConfigIncentivoFiscal entity) {
+		this.verificaDuplicidadeConfigIncentivoFiscalQuery.executeSQL(entity);
 	}
 
 }
