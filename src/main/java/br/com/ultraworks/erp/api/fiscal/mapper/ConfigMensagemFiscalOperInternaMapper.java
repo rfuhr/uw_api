@@ -28,8 +28,10 @@ public class ConfigMensagemFiscalOperInternaMapper extends GenericMapper<ConfigM
 		entity.setId(dto.getId());
 		entity.setDataInicioVigencia(dto.getDataInicioVigencia());
 		entity.setDataFinalVigencia(dto.getDataFinalVigencia());
-		entity.setConfigMensagemFiscal(configMensagemFiscalRepository.findById(dto.getConfigMensagemFiscalId())
-				.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Configuração da Mensagem Fiscal com id " + dto.getConfigMensagemFiscalId())));
+		if (dto.getConfigMensagemFiscalId() != null) {
+			entity.setConfigMensagemFiscal(configMensagemFiscalRepository.findById(dto.getConfigMensagemFiscalId())
+					.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Configuração da Mensagem Fiscal com id " + dto.getConfigMensagemFiscalId())));			
+		}
 		entity.setOperacaoInterna(operacaoInternaRepository.findById(dto.getOperacaoInternaId())
 				.orElseThrow(() -> new RegisterNotFoundException("Não encontrada a Operação Interna com id " + dto.getOperacaoInternaId())));
 	}

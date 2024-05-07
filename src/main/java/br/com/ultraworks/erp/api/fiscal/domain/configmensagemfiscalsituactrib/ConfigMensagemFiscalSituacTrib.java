@@ -27,7 +27,7 @@ import lombok.NoArgsConstructor;
 @Data
 @EqualsAndHashCode(callSuper=false)
 @UniqueValidationGroup({
-    @UniqueValidation(fields = {"situacao_tributaria_id"}, label = "Já existe Configuração de Mensagem Fiscal para esta está Situação Tributária")
+    @UniqueValidation(fields = {"id"}, label = "Já existe Configuração de Mensagem Fiscal para esta está Situação Tributária")
 })
 public class ConfigMensagemFiscalSituacTrib extends UWEntityBase {
 	

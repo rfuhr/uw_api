@@ -28,8 +28,10 @@ public class ConfigMensagemFiscalGrupoTribMapper extends GenericMapper<ConfigMen
 		entity.setId(dto.getId());
 		entity.setDataInicioVigencia(dto.getDataInicioVigencia());
 		entity.setDataFinalVigencia(dto.getDataFinalVigencia());
-		entity.setConfigMensagemFiscal(configMensagemFiscalRepository.findById(dto.getConfigMensagemFiscalId())
-				.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Configuração da Mensagem Fiscal com id " + dto.getConfigMensagemFiscalId())));
+		if (dto.getConfigMensagemFiscalId() != null) {
+			entity.setConfigMensagemFiscal(configMensagemFiscalRepository.findById(dto.getConfigMensagemFiscalId())
+					.orElseThrow(() -> new RegisterNotFoundException("Não encontrado Configuração da Mensagem Fiscal com id " + dto.getConfigMensagemFiscalId())));			
+		}
 		entity.setGrupoTributacao(grupoTributacaoRepository.findById(dto.getGrupoTributacaoId())
 				.orElseThrow(() -> new RegisterNotFoundException("Não encontrado o Grupo de Tributação com id " + dto.getGrupoTributacaoId())));
 	}

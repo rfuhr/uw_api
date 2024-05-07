@@ -3,12 +3,12 @@ package br.com.ultraworks.erp.api.fiscal.domain.configmensagemfiscal;
 import java.time.LocalDate;
 import java.util.List;
 
-import br.com.ultraworks.erp.api.fiscal.domain.configmensagemfiscalconfigfiscal.ConfigMensagemFiscalConfigFiscal;
-import br.com.ultraworks.erp.api.fiscal.domain.configmensagemfiscalgrupotrib.ConfigMensagemFiscalGrupoTrib;
-import br.com.ultraworks.erp.api.fiscal.domain.configmensagemfiscalitem.ConfigMensagemFiscalItem;
-import br.com.ultraworks.erp.api.fiscal.domain.configmensagemfiscaloperinterna.ConfigMensagemFiscalOperInterna;
-import br.com.ultraworks.erp.api.fiscal.domain.configmensagemfiscalsituactrib.ConfigMensagemFiscalSituacTrib;
-import br.com.ultraworks.erp.api.fiscal.domain.configmensagemfiscaltipoincentfiscal.ConfigMensagemFiscalTipoIncentFiscal;
+import br.com.ultraworks.erp.api.fiscal.domain.configmensagemfiscalconfigfiscal.ConfigMensagemFiscalConfigFiscalDTO;
+import br.com.ultraworks.erp.api.fiscal.domain.configmensagemfiscalgrupotrib.ConfigMensagemFiscalGrupoTribDTO;
+import br.com.ultraworks.erp.api.fiscal.domain.configmensagemfiscalitem.ConfigMensagemFiscalItemDTO;
+import br.com.ultraworks.erp.api.fiscal.domain.configmensagemfiscaloperinterna.ConfigMensagemFiscalOperInternaDTO;
+import br.com.ultraworks.erp.api.fiscal.domain.configmensagemfiscalsituactrib.ConfigMensagemFiscalSituacTribDTO;
+import br.com.ultraworks.erp.api.fiscal.domain.configmensagemfiscaltipoincentfiscal.ConfigMensagemFiscalTipoIncentFiscalDTO;
 import jakarta.validation.Valid;
 import lombok.Data;
 
@@ -24,21 +24,21 @@ public class ConfigMensagemFiscalDTO {
 	private LocalDate dataFinalVigencia;
 	
 	@Valid
-	private List<ConfigMensagemFiscalConfigFiscal> configMensagemFiscalConfigFiscals;
+	private List<ConfigMensagemFiscalConfigFiscalDTO> configMensagemFiscalConfigFiscals;
 	
 	@Valid
-	private List<ConfigMensagemFiscalSituacTrib> configMensagemFiscalSituacTribs;
+	private List<ConfigMensagemFiscalSituacTribDTO> configMensagemFiscalSituacTribs;
 	
 	@Valid
-	private List<ConfigMensagemFiscalItem> configMensagemFiscalItems;
+	private List<ConfigMensagemFiscalItemDTO> configMensagemFiscalItems;
 	
 	@Valid
-	private List<ConfigMensagemFiscalGrupoTrib> configMensagemFiscalGrupoTribs;
+	private List<ConfigMensagemFiscalGrupoTribDTO> configMensagemFiscalGrupoTribs;
 	
 	@Valid
-	private List<ConfigMensagemFiscalOperInterna> configMensagemFiscalOperInternas;
+	private List<ConfigMensagemFiscalOperInternaDTO> configMensagemFiscalOperInternas;
 	
 	@Valid
-	private List<ConfigMensagemFiscalTipoIncentFiscal> configMensagemFiscalTipoIncentFiscals;
+	private List<ConfigMensagemFiscalTipoIncentFiscalDTO> configMensagemFiscalTipoIncentFiscals;
 	
 }

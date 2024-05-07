@@ -2,12 +2,15 @@ package br.com.ultraworks.erp.api.fiscal.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.ultraworks.erp.api.fiscal.domain.configmensagemfiscal.ConfigMensagemFiscal;
 import br.com.ultraworks.erp.api.fiscal.domain.configmensagemfiscal.ConfigMensagemFiscalDTO;
+import br.com.ultraworks.erp.api.fiscal.domain.configmensagemfiscal.MensagemFiscalNFeRequest;
+import br.com.ultraworks.erp.api.fiscal.domain.configmensagemfiscal.MensagemFiscalNFeResponse;
 import br.com.ultraworks.erp.api.fiscal.domain.configmensagemfiscalconfigfiscal.ConfigMensagemFiscalConfigFiscal;
 import br.com.ultraworks.erp.api.fiscal.domain.configmensagemfiscalgrupotrib.ConfigMensagemFiscalGrupoTrib;
 import br.com.ultraworks.erp.api.fiscal.domain.configmensagemfiscalitem.ConfigMensagemFiscalItem;
@@ -16,6 +19,7 @@ import br.com.ultraworks.erp.api.fiscal.domain.configmensagemfiscalsituactrib.Co
 import br.com.ultraworks.erp.api.fiscal.domain.configmensagemfiscaltipoincentfiscal.ConfigMensagemFiscalTipoIncentFiscal;
 import br.com.ultraworks.erp.api.fiscal.mapper.ConfigMensagemFiscalMapper;
 import br.com.ultraworks.erp.api.fiscal.repository.ConfigMensagemFiscalRepository;
+import br.com.ultraworks.erp.api.fiscal.repository.query.VerificaDuplicidadeConfigMensagemFiscalQuery;
 import br.com.ultraworks.erp.core.generics.GenericService;
 import br.com.ultraworks.erp.core.util.ListUtils;
 import lombok.NoArgsConstructor;
@@ -24,12 +28,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ConfigMensagemFiscalService extends GenericService<ConfigMensagemFiscal, Long, ConfigMensagemFiscalDTO> {
 
-	private ConfigMensagemFiscalConfigFiscalService configMensagemFiscalConfigFiscalService;
-	private ConfigMensagemFiscalSituacTribService configMensagemFiscalSituacTribService;
-	private ConfigMensagemFiscalItemService configMensagemFiscalItemService;
-	private ConfigMensagemFiscalGrupoTribService configMensagemFiscalGrupoTribService;
-	private ConfigMensagemFiscalOperInternaService configMensagemFiscalOperInternaService;
-	private ConfigMensagemFiscalTipoIncentFiscalService configMensagemFiscalTipoIncentFiscalService;
+	ConfigMensagemFiscalConfigFiscalService configMensagemFiscalConfigFiscalService;
+	ConfigMensagemFiscalSituacTribService configMensagemFiscalSituacTribService;
+	ConfigMensagemFiscalItemService configMensagemFiscalItemService;
+	ConfigMensagemFiscalGrupoTribService configMensagemFiscalGrupoTribService;
+	ConfigMensagemFiscalOperInternaService configMensagemFiscalOperInternaService;
+	ConfigMensagemFiscalTipoIncentFiscalService configMensagemFiscalTipoIncentFiscalService;
+	VerificaDuplicidadeConfigMensagemFiscalQuery verificaDuplicidadeConfigMensagemFiscalQuery;
 	
 	@Autowired
 	public ConfigMensagemFiscalService(ConfigMensagemFiscalRepository repository, ConfigMensagemFiscalMapper mapper,
@@ -38,7 +43,8 @@ public class ConfigMensagemFiscalService extends GenericService<ConfigMensagemFi
 			ConfigMensagemFiscalItemService configMensagemFiscalItemService,
 			ConfigMensagemFiscalGrupoTribService configMensagemFiscalGrupoTribService,
 			ConfigMensagemFiscalOperInternaService configMensagemFiscalOperInternaService,
-			ConfigMensagemFiscalTipoIncentFiscalService configMensagemFiscalTipoIncentFiscalService) {
+			ConfigMensagemFiscalTipoIncentFiscalService configMensagemFiscalTipoIncentFiscalService,
+			VerificaDuplicidadeConfigMensagemFiscalQuery verificaDuplicidadeConfigMensagemFiscalQuery) {
 		super(repository, mapper);
 		this.configMensagemFiscalConfigFiscalService = configMensagemFiscalConfigFiscalService;
 		this.configMensagemFiscalSituacTribService = configMensagemFiscalSituacTribService;
@@ -46,10 +52,27 @@ public class ConfigMensagemFiscalService extends GenericService<ConfigMensagemFi
 		this.configMensagemFiscalGrupoTribService = configMensagemFiscalGrupoTribService;
 		this.configMensagemFiscalOperInternaService = configMensagemFiscalOperInternaService;
 		this.configMensagemFiscalTipoIncentFiscalService = configMensagemFiscalTipoIncentFiscalService;
+		this.verificaDuplicidadeConfigMensagemFiscalQuery = verificaDuplicidadeConfigMensagemFiscalQuery;
+	}
+	
+	@Override
+	public Optional<ConfigMensagemFiscal> getById(Long id) {
+		Optional<ConfigMensagemFiscal> registro = super.getById(id);
+		if (registro.isPresent()) {
+			registro.get().setConfigMensagemFiscalConfigFiscals(configMensagemFiscalConfigFiscalService.getAllByConfigMensagemFiscal(id));
+			registro.get().setConfigMensagemFiscalSituacTribs(configMensagemFiscalSituacTribService.getAllByConfigMensagemFiscal(id));
+			registro.get().setConfigMensagemFiscalItems(configMensagemFiscalItemService.getAllByConfigMensagemFiscal(id));
+			registro.get().setConfigMensagemFiscalGrupoTribs(configMensagemFiscalGrupoTribService.getAllByConfigMensagemFiscal(id));
+			registro.get().setConfigMensagemFiscalOperInternas(configMensagemFiscalOperInternaService.getAllByConfigMensagemFiscal(id));
+			registro.get().setConfigMensagemFiscalTipoIncentFiscals(configMensagemFiscalTipoIncentFiscalService.getAllByConfigMensagemFiscal(id));
+		}
+		return registro;
 	}
 	
 	@Override
 	public ConfigMensagemFiscal save(ConfigMensagemFiscal entity) {
+		
+		verificaDuplicidadeConfigMensagemFiscal(entity);
 		
 		List<ConfigMensagemFiscalConfigFiscal> dadosSalvosConfigFiscais = new ArrayList<>();
 		if (entity.getId() != null) {
@@ -174,6 +197,41 @@ public class ConfigMensagemFiscalService extends GenericService<ConfigMensagemFi
 		}
 		
 		return entity;
+	}
+
+	private void verificaDuplicidadeConfigMensagemFiscal(ConfigMensagemFiscal entity) {
+		verificaDuplicidadeConfigMensagemFiscalQuery.executeSQL(entity);
+	}
+	
+	@Override
+	public void delete(Long id) {
+		Optional<ConfigMensagemFiscal> configMensagemFiscal = this.getById(id);
+		if (configMensagemFiscal.isPresent()) {
+			configMensagemFiscal.get().getConfigMensagemFiscalConfigFiscals().forEach(registro -> {
+				configMensagemFiscalConfigFiscalService.delete(registro.getId());
+			});
+			configMensagemFiscal.get().getConfigMensagemFiscalSituacTribs().forEach(registro -> {
+				configMensagemFiscalSituacTribService.delete(registro.getId());
+			});
+			configMensagemFiscal.get().getConfigMensagemFiscalItems().forEach(registro -> {
+				configMensagemFiscalItemService.delete(registro.getId());
+			});
+			configMensagemFiscal.get().getConfigMensagemFiscalGrupoTribs().forEach(registro -> {
+				configMensagemFiscalGrupoTribService.delete(registro.getId());
+			});
+			configMensagemFiscal.get().getConfigMensagemFiscalOperInternas().forEach(registro -> {
+				configMensagemFiscalOperInternaService.delete(registro.getId());
+			});
+			configMensagemFiscal.get().getConfigMensagemFiscalTipoIncentFiscals().forEach(registro -> {
+				configMensagemFiscalTipoIncentFiscalService.delete(registro.getId());
+			});
+			repository.deleteById(id);
+		}
+	}
+	
+	public MensagemFiscalNFeResponse buscaMensagensFiscaisParaNFe(MensagemFiscalNFeRequest request) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

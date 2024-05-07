@@ -27,7 +27,7 @@ import lombok.NoArgsConstructor;
 @Data
 @EqualsAndHashCode(callSuper=false)
 @UniqueValidationGroup({
-    @UniqueValidation(fields = {"tipo_incentivo_fiscal_id"}, label = "Já existe Configuração de Mensagem Fiscal para este Tipo de Incentivo Fiscal")
+    @UniqueValidation(fields = {"id"}, label = "Já existe Configuração de Mensagem Fiscal para este Tipo de Incentivo Fiscal")
 })
 public class ConfigMensagemFiscalTipoIncentFiscal extends UWEntityBase {
 	
