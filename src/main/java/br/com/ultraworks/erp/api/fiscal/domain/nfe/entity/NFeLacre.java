@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 public class NFeLacre extends UWEntityBase {
 
 	@Id
-	@SequenceGenerator(name = "nfeLacreSeq", sequenceName = "lacres_transp_nfe_seq", allocationSize = 1)
+	@SequenceGenerator(name = "nfeLacreSeq", sequenceName = "seq_lacres_transp_nfe", allocationSize = 1)
 	@GeneratedValue(generator = "nfeLacreSeq")
 	private Long id;
 

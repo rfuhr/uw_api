@@ -31,7 +31,7 @@ import lombok.NoArgsConstructor;
 public class NFeVolume extends UWEntityBase {
 
 	@Id
-	@SequenceGenerator(name = "nfeVolumeSeq", sequenceName = "vol_transp_nfe_seq", allocationSize = 1)
+	@SequenceGenerator(name = "nfeVolumeSeq", sequenceName = "seq_vol_transp_nfe", allocationSize = 1)
 	@GeneratedValue(generator = "nfeVolumeSeq")
 	private Long id;
 

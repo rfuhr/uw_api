@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 public class NFeEntrega extends UWEntityBase {
 
 	@Id
-	@SequenceGenerator(name = "nfeEntregaSeq", sequenceName = "local_entrega_nfe_seq", allocationSize = 1)
+	@SequenceGenerator(name = "nfeEntregaSeq", sequenceName = "seq_local_entrega_nfe", allocationSize = 1)
 	@GeneratedValue(generator = "nfeEntregaSeq")
 	private Long id;
 

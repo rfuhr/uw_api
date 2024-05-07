@@ -9,7 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -26,11 +26,11 @@ import lombok.NoArgsConstructor;
 public class NFeTotais extends UWEntityBase {
 
 	@Id
-	@SequenceGenerator(name = "nfeTotaisSeq", sequenceName = "totais_nfe_seq", allocationSize = 1)
+	@SequenceGenerator(name = "nfeTotaisSeq", sequenceName = "seq_totais_nfe", allocationSize = 1)
 	@GeneratedValue(generator = "nfeTotaisSeq")
 	private Long id;
 
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name = "nfe_id")
 	@JsonBackReference
 	private NFe nfe;

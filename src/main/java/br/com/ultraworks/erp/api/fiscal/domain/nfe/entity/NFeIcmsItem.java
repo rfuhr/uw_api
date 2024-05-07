@@ -28,7 +28,7 @@ import lombok.NoArgsConstructor;
 public class NFeIcmsItem extends UWEntityBase {
 
 	@Id
-	@SequenceGenerator(name = "nfeIcmsItemSeq", sequenceName = "icms_item_nfe_seq", allocationSize = 1)
+	@SequenceGenerator(name = "nfeIcmsItemSeq", sequenceName = "seq_icms_item_nfe", allocationSize = 1)
 	@GeneratedValue(generator = "nfeIcmsItemSeq")
 	private Long id;
 

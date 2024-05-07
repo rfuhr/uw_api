@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 public class NFeEmit extends UWEntityBase {
 
 	@Id
-	@SequenceGenerator(name = "nfeEmitSeq", sequenceName = "emit_nfe_seq", allocationSize = 1)
+	@SequenceGenerator(name = "nfeEmitSeq", sequenceName = "seq_emit_nfe", allocationSize = 1)
 	@GeneratedValue(generator = "nfeEmitSeq")
 	private Long id;
 

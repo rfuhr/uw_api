@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 public class NFeProcReferenciado extends UWEntityBase {
 
 	@Id
-	@SequenceGenerator(name = "nfeProcReferenciadoSeq", sequenceName = "proc_ref_info_adic_nfe_seq", allocationSize = 1)
+	@SequenceGenerator(name = "nfeProcReferenciadoSeq", sequenceName = "seq_proc_ref_info_adic_nfe", allocationSize = 1)
 	@GeneratedValue(generator = "nfeProcReferenciadoSeq")
 	private Long id;
 

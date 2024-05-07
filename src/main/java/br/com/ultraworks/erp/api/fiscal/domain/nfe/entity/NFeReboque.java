@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 public class NFeReboque extends UWEntityBase {
 
 	@Id
-	@SequenceGenerator(name = "nfeReboqueSeq", sequenceName = "reb_transp_nfe_seq", allocationSize = 1)
+	@SequenceGenerator(name = "nfeReboqueSeq", sequenceName = "seq_reb_transp_nfe", allocationSize = 1)
 	@GeneratedValue(generator = "nfeReboqueSeq")
 	private Long id;
 

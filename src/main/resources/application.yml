@@ -74,7 +74,11 @@ encryption:
   secret: verySecret
   salt: jozo
   
-logging:
-  level:
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE  
+#logging:
+#  level:
+#    org:
+#      hibernate: DEBUG
+#    org.hibernate.type: TRACE
+#    org.hibernate.SQL: DEBUG
+#    org.hibernate.engine: DEBUG
+      

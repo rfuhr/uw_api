@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 public class NFeRetirada extends UWEntityBase {
 
 	@Id
-	@SequenceGenerator(name = "nfeRetiradaSeq", sequenceName = "local_retirada_nfe_seq", allocationSize = 1)
+	@SequenceGenerator(name = "nfeRetiradaSeq", sequenceName = "seq_local_retirada_nfe", allocationSize = 1)
 	@GeneratedValue(generator = "nfeRetiradaSeq")
 	private Long id;
 

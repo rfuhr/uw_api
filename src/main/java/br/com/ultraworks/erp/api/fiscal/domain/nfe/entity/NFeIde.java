@@ -29,7 +29,7 @@ import lombok.NoArgsConstructor;
 public class NFeIde extends UWEntityBase {
 
 	@Id
-	@SequenceGenerator(name = "nfeIdeSeq", sequenceName = "ide_nfe_seq", allocationSize = 1)
+	@SequenceGenerator(name = "nfeIdeSeq", sequenceName = "seq_ide_nfe", allocationSize = 1)
 	@GeneratedValue(generator = "nfeIdeSeq")
 	private Long id;
 
@@ -62,6 +62,6 @@ public class NFeIde extends UWEntityBase {
 	private LocalDateTime dhcont;
 	private String xjust;
 	
-	@OneToMany(mappedBy = "nfe", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "nfeIde", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<NFeRef> nfesRefs;
 }

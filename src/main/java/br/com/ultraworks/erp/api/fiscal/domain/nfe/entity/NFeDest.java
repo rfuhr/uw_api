@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 public class NFeDest extends UWEntityBase {
 
 	@Id
-	@SequenceGenerator(name = "nfeDestSeq", sequenceName = "dest_nfe_seq", allocationSize = 1)
+	@SequenceGenerator(name = "nfeDestSeq", sequenceName = "seq_dest_nfe", allocationSize = 1)
 	@GeneratedValue(generator = "nfeDestSeq")
 	private Long id;
 

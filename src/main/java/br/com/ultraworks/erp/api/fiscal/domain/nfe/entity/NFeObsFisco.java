@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 public class NFeObsFisco extends UWEntityBase {
 
 	@Id
-	@SequenceGenerator(name = "nfeObsFiscoSeq", sequenceName = "obs_fisco_info_adic_nfe_seq", allocationSize = 1)
+	@SequenceGenerator(name = "nfeObsFiscoSeq", sequenceName = "seq_obs_fisco_info_adic_nfe", allocationSize = 1)
 	@GeneratedValue(generator = "nfeObsFiscoSeq")
 	private Long id;
 

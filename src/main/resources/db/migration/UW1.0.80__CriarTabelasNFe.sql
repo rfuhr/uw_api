@@ -1,4 +1,4 @@
-create sequence nfe_seq;
+create sequence seq_nfe;
 
 create table nfe (
 	id					bigint not null constraint nfe_pkey primary key,
@@ -18,7 +18,7 @@ create table nfe (
 	constraint empresa_filial_nfe_id_foreign foreign key (empresa_filial_id) references empresa_filial (id)
 );
 
-create sequence ide_nfe_seq;
+create sequence seq_ide_nfe;
 
 create table ide_nfe (
 	id					bigint not null constraint ide_nfe_pkey primary key,
@@ -53,7 +53,7 @@ create table ide_nfe (
 	constraint nfe_id_ide_nfe_foreign foreign key (nfe_id) references nfe (id)
 );
 
-create sequence nfe_ref_seq;
+create sequence seq_nfe_ref;
 
 create table nfe_ref (
 	id					bigint not null constraint nfe_ref_pkey primary key,
@@ -77,7 +77,7 @@ create table nfe_ref (
 	constraint ide_nfe_id_nfe_ref_foreign foreign key (ide_nfe_id) references ide_nfe (id)
 );
 
-create sequence emit_nfe_seq;
+create sequence seq_emit_nfe;
 
 create table emit_nfe (
 	id					bigint not null constraint emit_nfe_pkey primary key,
@@ -109,7 +109,7 @@ create table emit_nfe (
 	constraint nfe_id_emit_nfe_foreign foreign key (nfe_id) references nfe (id)	
 );
 
-create sequence dest_nfe_seq;
+create sequence seq_dest_nfe;
 
 create table dest_nfe (
 	id					bigint not null constraint dest_nfe_pkey primary key,
@@ -141,7 +141,7 @@ create table dest_nfe (
 	constraint nfe_id_dest_nfe_foreign foreign key (nfe_id) references nfe (id)		
 );
 
-create sequence local_retirada_nfe_seq;
+create sequence seq_local_retirada_nfe;
 
 create table local_retirada_nfe (
 	id					bigint not null constraint local_retirada_nfe_pkey primary key,
@@ -169,7 +169,7 @@ create table local_retirada_nfe (
 	constraint nfe_id_local_retirada_nfe_foreign foreign key (nfe_id) references nfe (id)	
 );
 
-create sequence local_entrega_nfe_seq;
+create sequence seq_local_entrega_nfe;
 
 create table local_entrega_nfe (
 	id					bigint not null constraint local_entrega_nfe_pkey primary key,
@@ -197,7 +197,7 @@ create table local_entrega_nfe (
 	constraint nfe_id_local_entrega_nfe_foreign foreign key (nfe_id) references nfe (id)		
 );
 
-create sequence aut_xml_nfe_seq;
+create sequence seq_aut_xml_nfe;
 
 create table aut_xml_nfe (
 	id					bigint not null constraint aut_xml_nfe_pkey primary key,
@@ -211,7 +211,7 @@ create table aut_xml_nfe (
 	constraint nfe_id_aut_xml_nfe_foreign foreign key (nfe_id) references nfe (id)		
 );
 
-create sequence det_item_nfe_seq;
+create sequence seq_det_item_nfe;
 
 create table det_item_nfe (
 	id					bigint not null constraint det_item_nfe_pkey primary key,
@@ -224,7 +224,7 @@ create table det_item_nfe (
 	constraint nfe_id_det_item_nfe_foreign foreign key (nfe_id) references nfe (id)		
 );
 
-create sequence prod_item_nfe_seq;
+create sequence seq_prod_item_nfe;
 
 create table prod_item_nfe (
 	id					bigint not null constraint prod_item_nfe_pkey primary key,
@@ -260,7 +260,7 @@ create table prod_item_nfe (
 	constraint det_item_nfe_id_prod_item_nfe_foreign foreign key (det_item_nfe_id) references det_item_nfe (id)		
 );
 	
-create sequence di_item_nfe_seq;
+create sequence seq_di_item_nfe;
 
 create table di_item_nfe (
 	id					bigint not null constraint di_item_nfe_pkey primary key,
@@ -283,7 +283,7 @@ create table di_item_nfe (
 	constraint prod_item_nfe_id_prod_item_nfe_foreign foreign key (prod_item_nfe_id) references prod_item_nfe (id)			
 );
 
-create sequence adicao_di_item_nfe_seq;
+create sequence seq_adicao_di_item_nfe;
 
 create table adicao_di_item_nfe (
 	id					bigint not null constraint adicao_di_item_nfe_pkey primary key,
@@ -300,7 +300,7 @@ create table adicao_di_item_nfe (
 	constraint adicao_di_item_nfe_id_di_item_nfe_foreign foreign key (di_item_nfe_id) references di_item_nfe (id)	
 );
 
-create sequence export_item_nfe_seq;
+create sequence seq_export_item_nfe;
 
 create table export_item_nfe (
 	id					bigint not null constraint export_item_nfe_pkey primary key,
@@ -316,7 +316,7 @@ create table export_item_nfe (
 	constraint export_item_nfe_id_prod_item_nfe_foreign foreign key (prod_item_nfe_id) references prod_item_nfe (id)			
 );
 
-create sequence ped_compra_item_nfe_seq;
+create sequence seq_ped_compra_item_nfe;
 
 create table ped_compra_item_nfe (
 	id					bigint not null constraint ped_compra_item_nfe_pkey primary key,
@@ -330,10 +330,10 @@ create table ped_compra_item_nfe (
 	constraint ped_compra_item_nfe_id_prod_item_nfe_foreign foreign key (prod_item_nfe_id) references prod_item_nfe (id)			
 );
 
-create sequence grupo_div_item_nfe_seq;
+create sequence seq_grupo_div_item_nfe;
 
 create table grupo_div_item_nfe (
-	id					bigint not null constraint ped_compra_item_nfe_pkey primary key,
+	id					bigint not null constraint grupo_div_item_nfe_pkey primary key,
 	prod_item_nfe_id	bigint not null,
 	nfci				varchar(36),
 	user_create     	bigint 		 not null,
@@ -343,7 +343,7 @@ create table grupo_div_item_nfe (
 	constraint grupo_div_item_nfe_id_prod_item_nfe_foreign foreign key (prod_item_nfe_id) references prod_item_nfe (id)			
 );
 
-create sequence rastreab_item_nfe_seq;
+create sequence seq_rastreab_item_nfe;
 
 create table rastreab_item_nfe (
 	id					bigint not null constraint rastreab_item_nfe_pkey primary key,
@@ -360,7 +360,7 @@ create table rastreab_item_nfe (
 	constraint rastreab_item_nfe_id_prod_item_nfe_foreign foreign key (prod_item_nfe_id) references prod_item_nfe (id)			
 );
 
-create sequence impostos_item_nfe_seq;
+create sequence seq_impostos_item_nfe;
 
 create table impostos_item_nfe (
 	id					bigint not null constraint impostos_nfe_pkey primary key,
@@ -373,7 +373,7 @@ create table impostos_item_nfe (
 	constraint impostos_item_nfe_id_det_item_nfe_foreign foreign key (det_item_nfe_id) references det_item_nfe (id)			
 );
 
-create sequence icms_item_nfe_seq;
+create sequence seq_icms_item_nfe;
 
 create table icms_item_nfe (
 	id						bigint not null constraint icms_item_nfe_pkey primary key,
@@ -424,7 +424,7 @@ create table icms_item_nfe (
 	
 );
 
-create sequence icms_uf_dest_item_nfe_seq;
+create sequence seq_icms_uf_dest_item_nfe;
 
 create table icms_uf_dest_item_nfe (
 	id						bigint not null constraint icms_uf_dest_item_nfe_pkey primary key,
@@ -441,11 +441,11 @@ create table icms_uf_dest_item_nfe (
 	user_create     	bigint 		 not null,
 	date_create			timestamp with time zone 	 not null,
 	user_update     	bigint,
-	date_update			timestamp with time ,
+	date_update			timestamp with time zone 	 not null,
 	constraint icms_uf_dest_item_nfe_id_impostos_item_nfe_foreign foreign key (impostos_item_nfe_id) references impostos_item_nfe (id)				
 );
 
-create sequence ipi_item_nfe_seq;
+create sequence seq_ipi_item_nfe;
 
 create table ipi_item_nfe (
 	id						bigint not null constraint ipi_item_nfe_pkey primary key,
@@ -466,7 +466,7 @@ create table ipi_item_nfe (
 	constraint ipi_item_nfe_id_impostos_item_nfe_foreign foreign key (impostos_item_nfe_id) references impostos_item_nfe (id)				
 );
 
-create sequence ii_item_nfe_seq;
+create sequence seq_ii_item_nfe;
 
 create table ii_item_nfe (
 	id						bigint not null constraint ii_item_nfe_pkey primary key,
@@ -482,7 +482,7 @@ create table ii_item_nfe (
 	constraint ii_item_nfe_id_impostos_item_nfe_foreign foreign key (impostos_item_nfe_id) references impostos_item_nfe (id)				
 );
 
-create sequence pis_item_nfe_seq;
+create sequence seq_pis_item_nfe;
 
 create table pis_item_nfe (
 	id						bigint not null constraint pis_item_nfe_pkey primary key,
@@ -500,7 +500,7 @@ create table pis_item_nfe (
 	constraint pis_item_nfe_id_impostos_item_nfe_foreign foreign key (impostos_item_nfe_id) references impostos_item_nfe (id)				
 );
 
-create sequence cofins_item_nfe_seq;
+create sequence seq_cofins_item_nfe;
 
 create table cofins_item_nfe (
 	id						bigint not null constraint cofins_item_nfe_pkey primary key,
@@ -519,7 +519,7 @@ create table cofins_item_nfe (
 );
 	
 	
-create sequence trib_incid_item_nfe_seq;
+create sequence seq_trib_incid_item_nfe;
 
 create table trib_incid_item_nfe (
 	id					bigint not null constraint trib_incid_item_nfe_pkey primary key,
@@ -533,7 +533,7 @@ create table trib_incid_item_nfe (
 	constraint trib_incid_item_nfe_id_det_item_nfe_foreign foreign key (det_item_nfe_id) references det_item_nfe (id)				
 );
 
-create sequence info_adic_item_nfe_seq;
+create sequence seq_info_adic_item_nfe;
 
 create table info_adic_item_nfe (
 	id					bigint not null constraint info_adic_item_nfe_pkey primary key,
@@ -546,7 +546,7 @@ create table info_adic_item_nfe (
 	constraint info_adic_item_nfe_id_det_item_nfe_foreign foreign key (det_item_nfe_id) references det_item_nfe (id)
 );
 
-create sequence totais_nfe_seq;
+create sequence seq_totais_nfe;
 
 create table totais_nfe (
 	id					bigint not null constraint totais_nfe_pkey primary key,
@@ -581,7 +581,7 @@ create table totais_nfe (
 	constraint totais_nfe_id_nfe_foreign foreign key (nfe_id) references nfe (id)		
 );
 
-create sequence transp_nfe_seq;
+create sequence seq_transp_nfe;
 
 create table transp_nfe (
 	id					bigint not null constraint transp_nfe_pkey primary key,
@@ -612,7 +612,7 @@ create table transp_nfe (
 	constraint transp_nfe_id_nfe_foreign foreign key (nfe_id) references nfe (id)			
 );
 
-create sequence reb_transp_nfe_seq;
+create sequence seq_reb_transp_nfe;
 
 create table reb_transp_nfe (
 	id					bigint not null constraint reb_transp_nfe_pkey primary key,
@@ -627,7 +627,7 @@ create table reb_transp_nfe (
 	constraint reb_nfe_id_transp_nfe_foreign foreign key (transp_nfe_id) references transp_nfe (id)		
 );	
 
-create sequence vol_transp_nfe_seq;
+create sequence seq_vol_transp_nfe;
 
 create table vol_transp_nfe (
 	id					bigint not null constraint vol_transp_nfe_pkey primary key,
@@ -645,7 +645,7 @@ create table vol_transp_nfe (
 	constraint volume_nfe_id_transp_nfe_foreign foreign key (transp_nfe_id) references transp_nfe (id)			
 );
 
-create sequence lacres_transp_nfe_seq;
+create sequence seq_lacres_transp_nfe;
 
 create table lacres_transp_nfe (
 	id					bigint not null constraint lacres_transp_nfe_pkey primary key,
@@ -658,7 +658,7 @@ create table lacres_transp_nfe (
 	constraint lacre_nfe_id_vol_transp_nfe_foreign foreign key (vol_transp_nfe_id) references vol_transp_nfe (id)		
 );
 
-create sequence pagamentos_nfe_seq;
+create sequence seq_pagamentos_nfe;
 
 create table pagamentos_nfe (
 	id					bigint not null constraint pagamentos_nfe_pkey primary key,
@@ -671,7 +671,7 @@ create table pagamentos_nfe (
 	constraint pagamentos_nfe_id_nfe_foreign foreign key (nfe_id) references nfe (id)		
 );
 
-create sequence det_pag_nfe_seq;
+create sequence seq_det_pag_nfe;
 
 create table det_pag_nfe (
 	id					bigint not null constraint det_pag_nfe_pkey primary key,
@@ -690,7 +690,7 @@ create table det_pag_nfe (
 	constraint det_pag_nfe_id_pagamentos_nfe_foreign foreign key (pagamentos_nfe_id) references pagamentos_nfe (id)
 );
 
-create sequence info_adic_nfe_seq;
+create sequence seq_info_adic_nfe;
 
 create table info_adic_nfe (
 	id					bigint not null constraint info_adic_nfe_pkey primary key,
@@ -704,7 +704,7 @@ create table info_adic_nfe (
 	constraint info_adic_nfe_id_nfe_foreign foreign key (nfe_id) references nfe (id)
 );
 
-create sequence obs_cont_info_adic_nfe_seq;
+create sequence seq_obs_cont_info_adic_nfe;
 
 create table obs_cont_info_adic_nfe (
 	id					bigint not null constraint obs_cont_info_adic_nfe_pkey primary key,
@@ -718,7 +718,7 @@ create table obs_cont_info_adic_nfe (
 	constraint obs_cont_nfe_id_info_adic_nfe_foreign foreign key (info_adic_nfe_id) references info_adic_nfe (id)
 );
 
-create sequence obs_fisco_info_adic_nfe_seq;
+create sequence seq_obs_fisco_info_adic_nfe;
 
 create table obs_fisco_info_adic_nfe (
 	id					bigint not null constraint obs_fisco_info_adic_nfe_pkey primary key,
@@ -732,7 +732,7 @@ create table obs_fisco_info_adic_nfe (
 	constraint obs_fisco_nfe_id_info_adic_nfe_foreign foreign key (info_adic_nfe_id) references info_adic_nfe (id)
 );
 
-create sequence proc_ref_info_adic_nfe_seq;
+create sequence seq_proc_ref_info_adic_nfe;
 
 create table proc_ref_info_adic_nfe (
 	id					bigint not null constraint proc_ref_info_adic_nfe_pkey primary key,

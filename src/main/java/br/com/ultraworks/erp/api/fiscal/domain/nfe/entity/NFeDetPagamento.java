@@ -28,7 +28,7 @@ import lombok.NoArgsConstructor;
 public class NFeDetPagamento extends UWEntityBase {
 
 	@Id
-	@SequenceGenerator(name = "nfeDetalhePagSeq", sequenceName = "det_pag_nfe_seq", allocationSize = 1)
+	@SequenceGenerator(name = "nfeDetalhePagSeq", sequenceName = "seq_det_pag_nfe", allocationSize = 1)
 	@GeneratedValue(generator = "nfeDetalhePagSeq")
 	private Long id;
 

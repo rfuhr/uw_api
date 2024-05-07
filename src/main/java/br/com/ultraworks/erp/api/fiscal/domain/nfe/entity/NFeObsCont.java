@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 public class NFeObsCont extends UWEntityBase {
 
 	@Id
-	@SequenceGenerator(name = "nfeObsContSeq", sequenceName = "obs_cont_info_adic_nfe_seq", allocationSize = 1)
+	@SequenceGenerator(name = "nfeObsContSeq", sequenceName = "seq_obs_cont_info_adic_nfe", allocationSize = 1)
 	@GeneratedValue(generator = "nfeObsContSeq")
 	private Long id;
 

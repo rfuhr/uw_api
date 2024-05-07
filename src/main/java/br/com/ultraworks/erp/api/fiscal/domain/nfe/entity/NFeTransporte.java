@@ -11,8 +11,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -29,11 +29,11 @@ import lombok.NoArgsConstructor;
 public class NFeTransporte extends UWEntityBase {
 
 	@Id
-	@SequenceGenerator(name = "nfeTransporteSeq", sequenceName = "transp_nfe_seq", allocationSize = 1)
+	@SequenceGenerator(name = "nfeTransporteSeq", sequenceName = "seq_transp_nfe", allocationSize = 1)
 	@GeneratedValue(generator = "nfeTransporteSeq")
 	private Long id;
 
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name = "nfe_id")
 	@JsonBackReference
 	private NFe nfe;

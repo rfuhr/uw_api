@@ -7,7 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -24,11 +24,11 @@ import lombok.NoArgsConstructor;
 public class NFeInfoAdicItem extends UWEntityBase {
 
 	@Id
-	@SequenceGenerator(name = "nfeInfoAdicItemSeq", sequenceName = "info_adic_item_nfe_seq", allocationSize = 1)
+	@SequenceGenerator(name = "nfeInfoAdicItemSeq", sequenceName = "seq_info_adic_item_nfe", allocationSize = 1)
 	@GeneratedValue(generator = "nfeInfoAdicItemSeq")
 	private Long id;
 
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name = "det_item_nfe_id")
 	@JsonBackReference
 	private NFeDetItem nFeDetItem;

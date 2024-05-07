@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 public class NFeDetItem extends UWEntityBase {
 
 	@Id
-	@SequenceGenerator(name = "nfeDetItemSeq", sequenceName = "det_item_nfe_seq", allocationSize = 1)
+	@SequenceGenerator(name = "nfeDetItemSeq", sequenceName = "seq_det_item_nfe", allocationSize = 1)
 	@GeneratedValue(generator = "nfeDetItemSeq")
 	private Long id;
 
@@ -43,7 +43,7 @@ public class NFeDetItem extends UWEntityBase {
 	@OneToOne(mappedBy = "nFeDetItem", cascade = CascadeType.ALL, orphanRemoval = true)
 	private NFeImpostosItem nfeImpostosItem;
 	
-	@OneToOne(mappedBy = "nFeInfoAdicItem", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToOne(mappedBy = "nFeDetItem", cascade = CascadeType.ALL, orphanRemoval = true)
 	private NFeInfoAdicItem nfeInfoAdicItem;
 
 }
