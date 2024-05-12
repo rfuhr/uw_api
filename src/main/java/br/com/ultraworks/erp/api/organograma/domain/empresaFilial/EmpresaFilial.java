@@ -21,8 +21,8 @@ import lombok.EqualsAndHashCode;
 public class EmpresaFilial extends UWEntityBase {
 
 	@Id
-	@SequenceGenerator(name = "filialSeq", sequenceName = "seq_empresa_filial", allocationSize = 1)
-	@GeneratedValue(generator = "filialSeq")
+	@SequenceGenerator(name = "empresaFilialSeq", sequenceName = "seq_empresa_filial", allocationSize = 1)
+	@GeneratedValue(generator = "empresaFilialSeq")
 	private Long id;
 	
 	@OneToOne(fetch = FetchType.EAGER)
