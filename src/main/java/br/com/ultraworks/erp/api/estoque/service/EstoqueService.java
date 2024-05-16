@@ -1,8 +1,9 @@
 package br.com.ultraworks.erp.api.estoque.service;
 
+import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Date;
 import java.util.Optional;
+import java.sql.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,7 @@ public class EstoqueService {
 	ItemService itemService;
 	LocalEstoqueService localEstoqueService;
 	MovimentoEstoqueService movimentoEstoqueService;
+	SaldoEstoqueService saldoEstoqueService;
 	
 	@Autowired
 	public EstoqueService (OperacaoInternaEstoqueService operacaoInternaEstoqueService,
@@ -40,7 +42,8 @@ public class EstoqueService {
 			EmpresaFilialService empresaFilialService,
 			ItemService itemService,
 			LocalEstoqueService localEstoqueService,
-			MovimentoEstoqueService movimentoEstoqueService) {
+			MovimentoEstoqueService movimentoEstoqueService,
+			SaldoEstoqueService saldoEstoqueService) {
 		this.operacaoInternaEstoqueService = operacaoInternaEstoqueService;
 		this.operacaoInternaService = operacaoInternaService;
 		this.grupoContabilService = grupoContabilService;
@@ -48,6 +51,7 @@ public class EstoqueService {
 		this.itemService = itemService;
 		this.localEstoqueService = localEstoqueService;
 		this.movimentoEstoqueService = movimentoEstoqueService;
+		this.saldoEstoqueService = saldoEstoqueService;
 	}
 	
 	public void atualizar(AtualizaEstoqueRequest atualizaEstoqueRequest) {
@@ -66,8 +70,7 @@ public class EstoqueService {
 					.orElseThrow(() -> new RegisterNotFoundException(
 							"Não encontrado Item com id " + item.getItemId())));
 			if (atualizaEstoqueRequest.getData() == null) {
-				Date dataAtual = new Date();
-				movimentoEstoque.setData(dataAtual.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+				movimentoEstoque.setData(LocalDate.now());
 			} else {
 				movimentoEstoque.setData(atualizaEstoqueRequest.getData());
 			}
@@ -91,9 +94,11 @@ public class EstoqueService {
 			movimentoEstoque.setCustoMedio(item.getCustoMedio());
 			movimentoEstoque.setValor(item.getValor());
 			
-			movimentoEstoqueService.save(movimentoEstoque);
+			MovimentoEstoque movimento = movimentoEstoqueService.save(movimentoEstoque);
 			
-			//TODO chamar atualiza saldo
+			saldoEstoqueService.atualizaSaldoEstoque(Date.valueOf(movimento.getData()), Date.valueOf(LocalDate.now()), 
+					movimento.getItem().getId(), movimento.getEmpresaFilial().getId(), movimento.getLocalEstoque().getId(), 
+					movimento.getGrupoContabil().getId(), movimento.getCriadoPor());
 		}
 		
 	}

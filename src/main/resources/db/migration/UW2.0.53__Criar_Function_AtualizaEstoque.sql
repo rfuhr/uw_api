@@ -1,5 +1,5 @@
-CREATE OR REPLACE FUNCTION public.atualiza_saldo_estoque(pData_inicial date, pData_final date, pItem_id integer, pEmpresa_filial_id integer, 
-                                                         pLocal_estoque_id integer, pGrupo_contabil_id integer, user_id integer)
+CREATE OR REPLACE FUNCTION public.atualiza_saldo_estoque(pData_inicial character varying, pData_final character varying, pItem_id bigint, pEmpresa_filial_id bigint, 
+                                                         pLocal_estoque_id bigint, pGrupo_contabil_id bigint, user_id bigint)
  RETURNS void
  LANGUAGE plpgsql
 AS $function$
@@ -16,13 +16,13 @@ declare
 begin
 	for linhas in (select distinct m.empresa_filial_id, m.item_id , m.local_estoque_id, m.grupo_contabil_id, m.data
 						from movimento_estoque m
-						where m.data >= pData_inicial
+						where m.data >= TO_DATE(pData_inicial, 'YYYY-MM-DD')
                         and   (0 = pEmpresa_filial_id or m.empresa_filial_id = pEmpresa_filial_id)
                         and   (0 = pGrupo_contabil_id or m.grupo_contabil_id = pGrupo_contabil_id)
 						and   (0 = pItem_id or m.item_id = pItem_id)
 						and   (0 = pLocal_estoque_id or m.local_estoque_id = pLocal_estoque_id)
 						order by m.data) loop
-		FOR dia IN select generate_series(pData_inicial, pData_final, '1 day')::DATE loop
+		FOR dia IN select generate_series(TO_DATE(pData_inicial, 'YYYY-MM-DD'), TO_DATE(pData_final, 'YYYY-MM-DD'), '1 day')::DATE loop
 			-- Obter o saldo anterior
 			select coalesce(saldo_quantidade, 0) into saldo_anterior from saldo_estoque s
 				where data <= dia - 1
