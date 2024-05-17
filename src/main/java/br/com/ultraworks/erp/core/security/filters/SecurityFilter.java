@@ -17,6 +17,7 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import br.com.ultraworks.erp.core.multitenancy.util.TenantContext;
+import br.com.ultraworks.erp.core.security.domain.CustomUser;
 import br.com.ultraworks.erp.core.security.domain.token.Token;
 import br.com.ultraworks.erp.core.security.domain.user.User;
 import br.com.ultraworks.erp.core.security.helper.JwtHelper;
@@ -64,7 +65,14 @@ public class SecurityFilter extends OncePerRequestFilter {
 				Optional<User> user = userRepository.findById(new BigDecimal(userId));
 				Optional<Token> token = tokenRepository.findById(tokenId);
 				if (user.isPresent() && token.isPresent()) {
-					UsernamePasswordAuthenticationToken upat = new UsernamePasswordAuthenticationToken(user.get(), null,
+					Long empresaId = Long.parseLong(request.getHeader("X-Empresa-Id"));
+					Long empresaFilialId = Long.parseLong(request.getHeader("X-Empresa-Filial-Id"));
+					CustomUser customUser = new CustomUser(user.get().getUsername(), user.get().getPassword(), user.get().getAuthorities());
+					customUser.setId(user.get().getId().longValue());
+					customUser.setEmpresaId(empresaId);
+					customUser.setEmpresaFilialId(empresaFilialId);
+					
+					UsernamePasswordAuthenticationToken upat = new UsernamePasswordAuthenticationToken(customUser, null,
 							user.get().getAuthorities());
 					upat.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 					SecurityContextHolder.getContext().setAuthentication(upat);

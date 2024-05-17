@@ -27,6 +27,7 @@ import br.com.ultraworks.erp.api.seguranca.repository.query.BuscaPermissaoFuncio
 import br.com.ultraworks.erp.core.exception.BusinessException;
 import br.com.ultraworks.erp.core.exception.RegisterNotFoundException;
 import br.com.ultraworks.erp.core.generics.GenericService;
+import br.com.ultraworks.erp.core.security.domain.CustomUser;
 import br.com.ultraworks.erp.core.security.domain.user.User;
 import br.com.ultraworks.erp.core.security.repository.UserRepository;
 import lombok.NoArgsConstructor;
@@ -110,7 +111,7 @@ public class UsuarioService extends GenericService<Usuario, Long, UsuarioDTO> {
 
 	public Optional checkPermissao(long empresaId, long empresaFilialId, String tag, String operacao) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		CustomUser user = (CustomUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Usuario usuario = this.findByUserId(user.getId().longValue())
 				.orElseThrow(() -> new RegisterNotFoundException("Não encontrado usuário com user id" + user.getId()));
 		Optional<Boolean> retorno = Optional.of(Boolean.FALSE);
@@ -153,7 +154,7 @@ public class UsuarioService extends GenericService<Usuario, Long, UsuarioDTO> {
 
 	public Optional checkAutonomia(long empresaId, long empresaFilialId, String tag) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		CustomUser user = (CustomUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Usuario usuario = this.findByUserId(user.getId().longValue())
 				.orElseThrow(() -> new RegisterNotFoundException("Não encontrado usuário com user id" + user.getId()));
 		Optional<Boolean> retorno = Optional.of(Boolean.FALSE);

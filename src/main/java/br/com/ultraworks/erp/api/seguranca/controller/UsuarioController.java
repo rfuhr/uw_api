@@ -34,6 +34,7 @@ import br.com.ultraworks.erp.api.seguranca.service.UsuarioPermissaoService;
 import br.com.ultraworks.erp.api.seguranca.service.UsuarioService;
 import br.com.ultraworks.erp.core.exception.RegisterNotFoundException;
 import br.com.ultraworks.erp.core.generics.GenericController;
+import br.com.ultraworks.erp.core.security.domain.CustomUser;
 import br.com.ultraworks.erp.core.security.domain.user.User;
 import br.com.ultraworks.erp.core.util.ResponseUtil;
 import jakarta.transaction.Transactional;
@@ -133,7 +134,7 @@ public class UsuarioController extends GenericController<Usuario, Long, UsuarioD
 	}
 
 	@GetMapping("/info")
-	public ResponseEntity<InfoUserViewDTO> getInfoUser(@AuthenticationPrincipal User user) {
+	public ResponseEntity<InfoUserViewDTO> getInfoUser(@AuthenticationPrincipal CustomUser user) {
 		Usuario usuario = usuarioService.findByUserId(user.getId().longValue())
 				.orElseThrow(() -> new RegisterNotFoundException("Não encontrado usuário"));
 		Optional<InfoUserViewDTO> infoUser = Optional

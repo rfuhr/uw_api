@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.21.2.final using JasperReports Library version 6.21.2-8434a0bd7c3bbc37cbf916f2968d35e4b165821a  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RazaoEstoque" pageWidth="595" pageHeight="842" whenNoDataType="BlankPage" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="26a5fcf6-1b6a-4e88-a0e6-5fdcfb46d7cf">
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="src/main/java/br/com/ultraworks/erp/api/estoque/reports/conexao.jrdax"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="284"/>
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="705"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="src/main/resources/reports/conexao1.jrdax"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="576"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="412"/>
 	<parameter name="dataInicio" class="java.sql.Date">
 		<defaultValueExpression><![CDATA[new java.util.Date()]]></defaultValueExpression>
 	</parameter>
 	<parameter name="dataFinal" class="java.sql.Date">
 		<defaultValueExpression><![CDATA[new java.util.Date()]]></defaultValueExpression>
 	</parameter>
+	<parameter name="dataSaldo" class="java.sql.Date"/>
 	<parameter name="usuarioNome" class="java.lang.String">
 		<defaultValueExpression><![CDATA["Admin"]]></defaultValueExpression>
 	</parameter>
@@ -35,27 +38,87 @@
 	<parameter name="filtroItem" class="java.lang.String">
 		<defaultValueExpression><![CDATA["<Todos>"]]></defaultValueExpression>
 	</parameter>
+	<parameter name="validaEmpresaFilialId" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
+	</parameter>
+	<parameter name="validaLocalEstoque" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
+	</parameter>
+	<parameter name="validaGrupoContabil" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
+	</parameter>
+	<parameter name="validaItem" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
+	</parameter>
+	<parameter name="validaOperacaoInterna" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
+	</parameter>
+	<parameter name="validaDocumento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
+	</parameter>
+	<parameter name="empresaFilialId" class="java.lang.Long"/>
+	<parameter name="localEstoqueId" class="java.lang.Long"/>
+	<parameter name="grupoContabilId" class="java.lang.Long"/>
+	<parameter name="itemId" class="java.lang.Long"/>
+	<parameter name="operacaoInternaId" class="java.lang.Long"/>
+	<parameter name="documento" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[select s.empresa_filial_id as empresaFilialId, ef.nome as empresaFilialNome, s.local_estoque_id as localEstoqueId, le.codigo as localEstoqueCodigo, le.nome as localEstoqueNome, 
-       s.grupo_contabil_id as grupoContabilId, gc.codigo as grupoContabilCodigo, gc.nome as grupoContabilNome, s.item_id as itemId, i.codigo as itemCodigo, i.nome as itemNome, um.sigla as unidadeMedidaSigla, s.data,
-       tp.name as tipoMovto, s.entrada, s.documento, oper.nome as operacaoInternaNome, oper.sigla as operacaoInternaSigla, s.user_create as usuarioId,
-       s.quantidade, opfis.credito_debito as credDebQtde, s.valor, opfin.credito_debito as credDebValor, s.custo_medio as custoMedio
-from movimento_estoque s 
- inner join empresa_filial ef on s.empresa_filial_id = ef.id 
- inner join local_estoque le on s.local_estoque_id = le.id
- inner join grupo_contabil gc on s.grupo_contabil_id = gc.id
- inner join item i on s.item_id = i.id
- left join unidade_medida um on i.unidade_medida_estoque_id = um.id
- inner join tipo_movimento_estoque tp on s.tipo_movimento_estoque = tp.value
- inner join operacao_estoque opfis ON opfis.value = s.operacao_estoque_fisico
- inner join operacao_estoque opfin ON opfin.value = s.operacao_estoque_financeiro
- inner join operacao_interna oper on oper.id = s.operacao_interna_id
-where s.data between  $P{dataInicio}  and $P{dataFinal} 
-and (1 = 0 or s.empresa_filial_id = 1)
-and (1 = 0 or s.local_estoque_id = 1)
-and (1 = 0 or s.grupo_contabil_id = 6)
-and (1 = 0 or s.item_id = 2)
-order by s.empresa_filial_id, s.local_estoque_id, s.grupo_contabil_id, s.item_id, s.data, tp.value, s.documento]]>
+		<![CDATA[WITH movimentacoes_periodo AS (
+    SELECT me.empresa_filial_id, me.local_estoque_id, me.grupo_contabil_id, me.item_id, me.data, me.documento,
+        me.entrada, me.quantidade, me.valor, me.custo_medio, me.operacao_interna_id, tp.name as tipoMovto,
+        tp.value as tipoMovtoValue, me.user_create as usuarioId, opfis.credito_debito as credDebQtde, opfin.credito_debito as credDebValor,
+        ROW_NUMBER() OVER (PARTITION BY me.empresa_filial_id, me.local_estoque_id, me.grupo_contabil_id, me.item_id ORDER BY me.empresa_filial_id, me.local_estoque_id, me.grupo_contabil_id, me.item_id, me.data, tp.value, me.documento, me.id) AS rn
+    FROM movimento_estoque me
+        inner join operacao_estoque opfis ON opfis.value = me.operacao_estoque_fisico
+        inner join operacao_estoque opfin ON opfin.value = me.operacao_estoque_financeiro
+        inner join tipo_movimento_estoque tp on me.tipo_movimento_estoque = tp.value
+    WHERE me.data BETWEEN  $P{dataInicio}  AND  $P{dataFinal} and (1 = $P{validaEmpresaFilialId} or me.empresa_filial_id = $P{empresaFilialId} )
+        and (1 = $P{validaLocalEstoque} or me.local_estoque_id = $P{localEstoqueId}) and (1 = $P{validaGrupoContabil} or me.grupo_contabil_id = $P{grupoContabilId})
+        and (1 = $P{validaItem} or me.item_id = $P{itemId}) and (1 = $P{validaOperacaoInterna} or me.operacao_interna_id = $P{operacaoInternaId}) 
+        and (1 = $P{validaDocumento} or me.documento = $P{documento}) ), 
+saldo_inicial AS (
+    SELECT me.empresa_filial_id, me.local_estoque_id, me.grupo_contabil_id, me.item_id,
+        COALESCE(sd.saldo_quantidade, 0) AS saldo_quantidade_inicial,
+        COALESCE(sd.saldo_valor, 0) AS saldo_valor_inicial
+    FROM (SELECT DISTINCT empresa_filial_id, local_estoque_id, grupo_contabil_id, item_id 
+         FROM movimento_estoque WHERE data BETWEEN $P{dataInicio} AND $P{dataFinal}
+            and (1 = $P{validaEmpresaFilialId} or empresa_filial_id = $P{empresaFilialId} ) and (1 = $P{validaLocalEstoque} or local_estoque_id = $P{localEstoqueId})
+            and (1 = $P{validaGrupoContabil} or grupo_contabil_id = $P{grupoContabilId}) and (1 = $P{validaItem} or item_id = $P{itemId})
+            and (1 = $P{validaOperacaoInterna} or operacao_interna_id = $P{operacaoInternaId}) and (1 = $P{validaDocumento} or documento = $P{documento})
+        ) me
+    LEFT JOIN saldo_estoque sd ON sd.empresa_filial_id = me.empresa_filial_id and sd.local_estoque_id = me.local_estoque_id 
+         and sd.grupo_contabil_id = me.grupo_contabil_id and sd.item_id = me.item_id AND sd.data =  $P{dataSaldo} 
+),
+saldo_composto AS (
+    SELECT mp.empresa_filial_id, mp.local_estoque_id, mp.grupo_contabil_id, mp.item_id, mp.data, mp.documento,
+        mp.entrada, mp.operacao_interna_id, mp.custo_medio, mp.tipoMovto, mp.tipoMovtoValue, mp.credDebQtde, 
+        mp.credDebValor, mp.usuarioId, mp.quantidade, mp.valor, si.saldo_quantidade_inicial, si.saldo_valor_inicial,
+        SUM( CASE mp.credDebQtde WHEN 'C' THEN mp.quantidade WHEN 'D' THEN -mp.quantidade ELSE 0 END
+        ) OVER (PARTITION BY mp.empresa_filial_id, mp.local_estoque_id, mp.grupo_contabil_id, mp.item_id ORDER BY mp.empresa_filial_id, mp.local_estoque_id, mp.grupo_contabil_id, mp.item_id, mp.data, mp.tipoMovtoValue, mp.documento, mp.rn) AS saldo_quantidade_movimentacao,
+        SUM( CASE mp.credDebValor WHEN 'C' THEN mp.valor WHEN 'D' THEN -mp.valor ELSE 0 END
+        ) OVER (PARTITION BY mp.empresa_filial_id, mp.local_estoque_id, mp.grupo_contabil_id, mp.item_id ORDER BY mp.empresa_filial_id, mp.local_estoque_id, mp.grupo_contabil_id, mp.item_id, mp.data, mp.tipoMovtoValue, mp.documento, mp.rn) AS saldo_valor_movimentacao
+    FROM movimentacoes_periodo mp
+    JOIN saldo_inicial si ON si.empresa_filial_id = mp.empresa_filial_id and si.local_estoque_id = mp.local_estoque_id 
+         and si.grupo_contabil_id = mp.grupo_contabil_id and si.item_id = mp.item_id
+)
+SELECT sc.empresa_filial_id as empresaFilialId, ef.nome as empresaFilialNome, sc.local_estoque_id as localEstoqueId, 
+        le.nome as localEstoqueNome, sc.grupo_contabil_id as grupoContabilId, gc.nome as grupoContabilNome,
+        sc.item_id as itemId, i.nome as itemNome, um.sigla as unidadeMedidaSigla, oper.nome as operacaoInternaNome, 
+        oper.sigla as operacaoInternaSigla, sc.data, sc.documento, sc.entrada, sc.custo_medio as custoMedio,
+        sc.tipoMovto, sc.credDebQtde, sc.credDebValor, sc.quantidade, sc.valor, sc.saldo_quantidade_inicial as saldoQuantidadeInicial,
+        sc.saldo_quantidade_inicial + sc.saldo_quantidade_movimentacao AS saldoQuantidadeComposto,
+        sc.saldo_valor_inicial as saldoValorInicial, sc.saldo_valor_inicial + sc.saldo_valor_movimentacao AS saldoValorComposto, sc.usuarioId,
+        le.codigo as localEstoqueCodigo, gc.codigo as grupoContabilCodigo, i.codigo as itemCodigo,
+        (sc.saldo_valor_inicial + sc.saldo_valor_movimentacao)/(sc.saldo_quantidade_inicial + sc.saldo_quantidade_movimentacao) as custoMedioComposto
+FROM saldo_composto sc
+     inner join empresa_filial ef on sc.empresa_filial_id = ef.id 
+     inner join local_estoque le on sc.local_estoque_id = le.id
+     inner join grupo_contabil gc on sc.grupo_contabil_id = gc.id
+     inner join item i on sc.item_id = i.id
+     left join unidade_medida um on i.unidade_medida_estoque_id = um.id
+     inner join operacao_interna oper on oper.id = sc.operacao_interna_id
+ORDER BY sc.empresa_filial_id, sc.local_estoque_id, sc.grupo_contabil_id, sc.item_id, sc.data, sc.tipoMovtoValue,
+        sc.documento]]>
 	</queryString>
 	<field name="empresafilialid" class="java.lang.Long">
 		<property name="com.jaspersoft.studio.field.name" value="empresafilialid"/>
@@ -72,11 +135,6 @@ order by s.empresa_filial_id, s.local_estoque_id, s.grupo_contabil_id, s.item_id
 		<property name="com.jaspersoft.studio.field.label" value="localestoqueid"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="movimento_estoque"/>
 	</field>
-	<field name="localestoquecodigo" class="java.lang.Integer">
-		<property name="com.jaspersoft.studio.field.name" value="localestoquecodigo"/>
-		<property name="com.jaspersoft.studio.field.label" value="localestoquecodigo"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="local_estoque"/>
-	</field>
 	<field name="localestoquenome" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="localestoquenome"/>
 		<property name="com.jaspersoft.studio.field.label" value="localestoquenome"/>
@@ -86,11 +144,6 @@ order by s.empresa_filial_id, s.local_estoque_id, s.grupo_contabil_id, s.item_id
 		<property name="com.jaspersoft.studio.field.name" value="grupocontabilid"/>
 		<property name="com.jaspersoft.studio.field.label" value="grupocontabilid"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="movimento_estoque"/>
-	</field>
-	<field name="grupocontabilcodigo" class="java.lang.Integer">
-		<property name="com.jaspersoft.studio.field.name" value="grupocontabilcodigo"/>
-		<property name="com.jaspersoft.studio.field.label" value="grupocontabilcodigo"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="grupo_contabil"/>
 	</field>
 	<field name="grupocontabilnome" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="grupocontabilnome"/>
@@ -102,11 +155,6 @@ order by s.empresa_filial_id, s.local_estoque_id, s.grupo_contabil_id, s.item_id
 		<property name="com.jaspersoft.studio.field.label" value="itemid"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="movimento_estoque"/>
 	</field>
-	<field name="itemcodigo" class="java.lang.Long">
-		<property name="com.jaspersoft.studio.field.name" value="itemcodigo"/>
-		<property name="com.jaspersoft.studio.field.label" value="itemcodigo"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="item"/>
-	</field>
 	<field name="itemnome" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="itemnome"/>
 		<property name="com.jaspersoft.studio.field.label" value="itemnome"/>
@@ -116,26 +164,6 @@ order by s.empresa_filial_id, s.local_estoque_id, s.grupo_contabil_id, s.item_id
 		<property name="com.jaspersoft.studio.field.name" value="unidademedidasigla"/>
 		<property name="com.jaspersoft.studio.field.label" value="unidademedidasigla"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="unidade_medida"/>
-	</field>
-	<field name="data" class="java.sql.Date">
-		<property name="com.jaspersoft.studio.field.name" value="data"/>
-		<property name="com.jaspersoft.studio.field.label" value="data"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="movimento_estoque"/>
-	</field>
-	<field name="tipomovto" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="tipomovto"/>
-		<property name="com.jaspersoft.studio.field.label" value="tipomovto"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="tipo_movimento_estoque"/>
-	</field>
-	<field name="entrada" class="java.lang.Boolean">
-		<property name="com.jaspersoft.studio.field.name" value="entrada"/>
-		<property name="com.jaspersoft.studio.field.label" value="entrada"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="movimento_estoque"/>
-	</field>
-	<field name="documento" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="documento"/>
-		<property name="com.jaspersoft.studio.field.label" value="documento"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="movimento_estoque"/>
 	</field>
 	<field name="operacaointernanome" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="operacaointernanome"/>
@@ -147,36 +175,155 @@ order by s.empresa_filial_id, s.local_estoque_id, s.grupo_contabil_id, s.item_id
 		<property name="com.jaspersoft.studio.field.label" value="operacaointernasigla"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="operacao_interna"/>
 	</field>
-	<field name="usuarioid" class="java.lang.Long">
-		<property name="com.jaspersoft.studio.field.name" value="usuarioid"/>
-		<property name="com.jaspersoft.studio.field.label" value="usuarioid"/>
+	<field name="data" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="data"/>
+		<property name="com.jaspersoft.studio.field.label" value="data"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="movimento_estoque"/>
 	</field>
-	<field name="quantidade" class="java.math.BigDecimal">
-		<property name="com.jaspersoft.studio.field.name" value="quantidade"/>
-		<property name="com.jaspersoft.studio.field.label" value="quantidade"/>
+	<field name="documento" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="documento"/>
+		<property name="com.jaspersoft.studio.field.label" value="documento"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="movimento_estoque"/>
 	</field>
-	<field name="creddebqtde" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="creddebqtde"/>
-		<property name="com.jaspersoft.studio.field.label" value="creddebqtde"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="operacao_estoque"/>
-	</field>
-	<field name="valor" class="java.math.BigDecimal">
-		<property name="com.jaspersoft.studio.field.name" value="valor"/>
-		<property name="com.jaspersoft.studio.field.label" value="valor"/>
+	<field name="entrada" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="entrada"/>
+		<property name="com.jaspersoft.studio.field.label" value="entrada"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="movimento_estoque"/>
-	</field>
-	<field name="creddebvalor" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="creddebvalor"/>
-		<property name="com.jaspersoft.studio.field.label" value="creddebvalor"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="operacao_estoque"/>
 	</field>
 	<field name="customedio" class="java.math.BigDecimal">
 		<property name="com.jaspersoft.studio.field.name" value="customedio"/>
 		<property name="com.jaspersoft.studio.field.label" value="customedio"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="movimento_estoque"/>
 	</field>
+	<field name="tipomovto" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="tipomovto"/>
+		<property name="com.jaspersoft.studio.field.label" value="tipomovto"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="tipo_movimento_estoque"/>
+	</field>
+	<field name="creddebqtde" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="creddebqtde"/>
+		<property name="com.jaspersoft.studio.field.label" value="creddebqtde"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="operacao_estoque"/>
+	</field>
+	<field name="creddebvalor" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="creddebvalor"/>
+		<property name="com.jaspersoft.studio.field.label" value="creddebvalor"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="operacao_estoque"/>
+	</field>
+	<field name="quantidade" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="quantidade"/>
+		<property name="com.jaspersoft.studio.field.label" value="quantidade"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="movimento_estoque"/>
+	</field>
+	<field name="valor" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="valor"/>
+		<property name="com.jaspersoft.studio.field.label" value="valor"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="movimento_estoque"/>
+	</field>
+	<field name="saldoquantidadeinicial" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="saldoquantidadeinicial"/>
+		<property name="com.jaspersoft.studio.field.label" value="saldoquantidadeinicial"/>
+	</field>
+	<field name="saldoquantidadecomposto" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="saldoquantidadecomposto"/>
+		<property name="com.jaspersoft.studio.field.label" value="saldoquantidadecomposto"/>
+	</field>
+	<field name="saldovalorinicial" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="saldovalorinicial"/>
+		<property name="com.jaspersoft.studio.field.label" value="saldovalorinicial"/>
+	</field>
+	<field name="saldovalorcomposto" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="saldovalorcomposto"/>
+		<property name="com.jaspersoft.studio.field.label" value="saldovalorcomposto"/>
+	</field>
+	<field name="usuarioid" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="usuarioid"/>
+		<property name="com.jaspersoft.studio.field.label" value="usuarioid"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="movimento_estoque"/>
+	</field>
+	<field name="localestoquecodigo" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="localestoquecodigo"/>
+		<property name="com.jaspersoft.studio.field.label" value="localestoquecodigo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="local_estoque"/>
+	</field>
+	<field name="grupocontabilcodigo" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="grupocontabilcodigo"/>
+		<property name="com.jaspersoft.studio.field.label" value="grupocontabilcodigo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="grupo_contabil"/>
+	</field>
+	<field name="itemcodigo" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="itemcodigo"/>
+		<property name="com.jaspersoft.studio.field.label" value="itemcodigo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="item"/>
+	</field>
+	<field name="customediocomposto" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="customediocomposto"/>
+		<property name="com.jaspersoft.studio.field.label" value="customediocomposto"/>
+	</field>
+	<variable name="totalQuantidadeEntradasFilial" class="java.lang.Double" resetType="Group" resetGroup="EmpresaFilial" calculation="Sum">
+		<variableExpression><![CDATA[$F{creddebqtde}.equals("C") ? $F{quantidade} : 0]]></variableExpression>
+		<initialValueExpression><![CDATA[new Double(0)]]></initialValueExpression>
+	</variable>
+	<variable name="totalValorEntradasFilial" class="java.lang.Double" resetType="Group" resetGroup="EmpresaFilial" calculation="Sum">
+		<variableExpression><![CDATA[$F{creddebvalor}.equals("C") ? $F{valor} : 0]]></variableExpression>
+		<initialValueExpression><![CDATA[new Double(0)]]></initialValueExpression>
+	</variable>
+	<variable name="totalQuantidadeSaidasFilial" class="java.lang.Double" resetType="Group" resetGroup="EmpresaFilial" calculation="Sum">
+		<variableExpression><![CDATA[$F{creddebqtde}.equals("D") ? $F{quantidade} : 0]]></variableExpression>
+		<initialValueExpression><![CDATA[new Double(0)]]></initialValueExpression>
+	</variable>
+	<variable name="totalValorSaidasFilial" class="java.lang.Double" resetType="Group" resetGroup="EmpresaFilial" calculation="Sum">
+		<variableExpression><![CDATA[$F{creddebvalor}.equals("D") ? $F{valor} : 0]]></variableExpression>
+		<initialValueExpression><![CDATA[new Double(0)]]></initialValueExpression>
+	</variable>
+	<variable name="totalQuantidadeEntradasGrupoContabil" class="java.lang.Double" resetType="Group" resetGroup="GrupoContabil" calculation="Sum">
+		<variableExpression><![CDATA[$F{creddebqtde}.equals("C") ? $F{quantidade} : 0]]></variableExpression>
+		<initialValueExpression><![CDATA[new Double(0)]]></initialValueExpression>
+	</variable>
+	<variable name="totalValorEntradasGrupoContabil" class="java.lang.Double" resetType="Group" resetGroup="GrupoContabil" calculation="Sum">
+		<variableExpression><![CDATA[$F{creddebvalor}.equals("C") ? $F{valor} : 0]]></variableExpression>
+		<initialValueExpression><![CDATA[new Double(0)]]></initialValueExpression>
+	</variable>
+	<variable name="totalQuantidadeSaidasGrupoContabil" class="java.lang.Double" resetType="Group" resetGroup="GrupoContabil" calculation="Sum">
+		<variableExpression><![CDATA[$F{creddebqtde}.equals("D") ? $F{quantidade} : 0]]></variableExpression>
+		<initialValueExpression><![CDATA[new Double(0)]]></initialValueExpression>
+	</variable>
+	<variable name="totalValorSaidasGrupoContabil" class="java.lang.Double" resetType="Group" resetGroup="GrupoContabil" calculation="Sum">
+		<variableExpression><![CDATA[$F{creddebvalor}.equals("D") ? $F{valor} : 0]]></variableExpression>
+		<initialValueExpression><![CDATA[new Double(0)]]></initialValueExpression>
+	</variable>
+	<variable name="totalQuantidadeEntradasLocalEstoque" class="java.lang.Double" resetType="Group" resetGroup="LocalEstoque" calculation="Sum">
+		<variableExpression><![CDATA[$F{creddebqtde}.equals("C") ? $F{quantidade} : 0]]></variableExpression>
+		<initialValueExpression><![CDATA[new Double(0)]]></initialValueExpression>
+	</variable>
+	<variable name="totalValorEntradasLocalEstoque" class="java.lang.Double" resetType="Group" resetGroup="LocalEstoque" calculation="Sum">
+		<variableExpression><![CDATA[$F{creddebvalor}.equals("C") ? $F{valor} : 0]]></variableExpression>
+		<initialValueExpression><![CDATA[new Double(0)]]></initialValueExpression>
+	</variable>
+	<variable name="totalQuantidadeSaidasLocalEstoque" class="java.lang.Double" resetType="Group" resetGroup="LocalEstoque" calculation="Sum">
+		<variableExpression><![CDATA[$F{creddebqtde}.equals("D") ? $F{quantidade} : 0]]></variableExpression>
+		<initialValueExpression><![CDATA[new Double(0)]]></initialValueExpression>
+	</variable>
+	<variable name="totalValorSaidasLocalEstoque" class="java.lang.Double" resetType="Group" resetGroup="LocalEstoque" calculation="Sum">
+		<variableExpression><![CDATA[$F{creddebvalor}.equals("D") ? $F{valor} : 0]]></variableExpression>
+		<initialValueExpression><![CDATA[new Double(0)]]></initialValueExpression>
+	</variable>
+	<variable name="totalQuantidadeEntradasItem" class="java.lang.Double" resetType="Group" resetGroup="Item" calculation="Sum">
+		<variableExpression><![CDATA[$F{creddebqtde}.equals("C") ? $F{quantidade} : 0]]></variableExpression>
+		<initialValueExpression><![CDATA[new Double(0)]]></initialValueExpression>
+	</variable>
+	<variable name="totalValorEntradasItem" class="java.lang.Double" resetType="Group" resetGroup="Item" calculation="Sum">
+		<variableExpression><![CDATA[$F{creddebvalor}.equals("C") ? $F{valor} : 0]]></variableExpression>
+		<initialValueExpression><![CDATA[new Double(0)]]></initialValueExpression>
+	</variable>
+	<variable name="totalQuantidadeSaidasItem" class="java.lang.Double" resetType="Group" resetGroup="Item" calculation="Sum">
+		<variableExpression><![CDATA[$F{creddebqtde}.equals("D") ? $F{quantidade} : 0]]></variableExpression>
+		<initialValueExpression><![CDATA[new Double(0)]]></initialValueExpression>
+	</variable>
+	<variable name="totalValorSaidasItem" class="java.lang.Double" resetType="Group" resetGroup="Item" calculation="Sum">
+		<variableExpression><![CDATA[$F{creddebvalor}.equals("D") ? $F{valor} : 0]]></variableExpression>
+		<initialValueExpression><![CDATA[new Double(0)]]></initialValueExpression>
+	</variable>
 	<group name="EmpresaFilial">
 		<groupExpression><![CDATA[$F{empresafilialid}]]></groupExpression>
 		<groupHeader>
@@ -200,8 +347,58 @@ order by s.empresa_filial_id, s.local_estoque_id, s.grupo_contabil_id, s.item_id
 			</band>
 		</groupHeader>
 		<groupFooter>
-			<band height="13">
+			<band height="24">
 				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				<textField>
+					<reportElement x="24" y="0" width="264" height="12" uuid="5d463020-4e3b-4537-b163-61754dec3517"/>
+					<textElement textAlignment="Right" verticalAlignment="Top">
+						<font size="7.5" isBold="true" isItalic="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" Total de Entradas da Filial - " + $F{empresafilialnome}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.000;(#,##0.000-)">
+					<reportElement x="351" y="0" width="64" height="12" uuid="53bca229-650b-4e54-a25f-57a12b3965e9">
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Right" verticalAlignment="Top">
+						<font size="7.5" isBold="true" isItalic="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalQuantidadeEntradasFilial}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.000;(#,##0.000-)">
+					<reportElement x="488" y="0" width="64" height="12" uuid="932f5a71-4f40-4494-b2d2-b02596033d4f">
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Right" verticalAlignment="Top">
+						<font size="7.5" isBold="true" isItalic="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalValorEntradasFilial}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="24" y="12" width="264" height="12" uuid="de272319-5878-4a6b-b777-2e545f14300e"/>
+					<textElement textAlignment="Right" verticalAlignment="Top">
+						<font size="7.5" isBold="true" isItalic="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" Total de Saídas"]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.000;(#,##0.000-)">
+					<reportElement x="351" y="12" width="64" height="12" uuid="7bff0ae7-7103-4327-bc71-ca2830c63fd9">
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Right" verticalAlignment="Top">
+						<font size="7.5" isBold="true" isItalic="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalQuantidadeSaidasFilial}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.000;(#,##0.000-)">
+					<reportElement x="488" y="12" width="64" height="12" uuid="9e89b07e-cff2-4942-9a6e-6e83fdedea6a">
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Right" verticalAlignment="Top">
+						<font size="7.5" isBold="true" isItalic="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalValorSaidasFilial}]]></textFieldExpression>
+				</textField>
 			</band>
 		</groupFooter>
 	</group>
@@ -228,8 +425,58 @@ order by s.empresa_filial_id, s.local_estoque_id, s.grupo_contabil_id, s.item_id
 			</band>
 		</groupHeader>
 		<groupFooter>
-			<band height="13">
+			<band height="24">
 				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				<textField>
+					<reportElement x="24" y="0" width="264" height="12" uuid="80138f26-4cf7-4825-bf55-a319cb8efa68"/>
+					<textElement textAlignment="Right" verticalAlignment="Top">
+						<font size="7.5" isBold="true" isItalic="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" Total de Entradas do Local Estoque - " + $F{localestoquenome}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.000;(#,##0.000-)">
+					<reportElement x="351" y="0" width="64" height="12" uuid="540c83d1-8a6f-47eb-b5d6-d71bb49a8d13">
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Right" verticalAlignment="Top">
+						<font size="7.5" isBold="true" isItalic="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalQuantidadeEntradasLocalEstoque}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.000;(#,##0.000-)">
+					<reportElement x="488" y="0" width="64" height="12" uuid="4d2ccf1b-4dc8-49e4-a2f3-f0c51b8aefe8">
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Right" verticalAlignment="Top">
+						<font size="7.5" isBold="true" isItalic="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalValorEntradasLocalEstoque}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="24" y="12" width="264" height="12" uuid="a4acebe2-16fd-4615-9ce3-1a8545602f3b"/>
+					<textElement textAlignment="Right" verticalAlignment="Top">
+						<font size="7.5" isBold="true" isItalic="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" Total de Saídas"]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.000;(#,##0.000-)">
+					<reportElement x="351" y="12" width="64" height="12" uuid="1aa24d37-7d7c-42ea-8604-43bb5ddf26fd">
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Right" verticalAlignment="Top">
+						<font size="7.5" isBold="true" isItalic="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalQuantidadeSaidasLocalEstoque}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.000;(#,##0.000-)">
+					<reportElement x="488" y="12" width="64" height="12" uuid="09353cfd-3f8f-40cc-9332-f2e5bf8d5b59">
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Right" verticalAlignment="Top">
+						<font size="7.5" isBold="true" isItalic="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalValorSaidasGrupoContabil}]]></textFieldExpression>
+				</textField>
 			</band>
 		</groupFooter>
 	</group>
@@ -257,8 +504,58 @@ order by s.empresa_filial_id, s.local_estoque_id, s.grupo_contabil_id, s.item_id
 			</band>
 		</groupHeader>
 		<groupFooter>
-			<band height="13">
+			<band height="24">
 				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				<textField>
+					<reportElement x="24" y="0" width="264" height="12" uuid="f2c20570-e55f-4e7d-8c37-f5486c31730f"/>
+					<textElement textAlignment="Right" verticalAlignment="Top">
+						<font size="7.5" isBold="true" isItalic="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" Total de Entradas do Gr. Contábil - " + $F{grupocontabilnome}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.000;(#,##0.000-)">
+					<reportElement x="351" y="0" width="64" height="12" uuid="1a671c78-37b2-4f36-b555-2f19af844b85">
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Right" verticalAlignment="Top">
+						<font size="7.5" isBold="true" isItalic="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalQuantidadeEntradasGrupoContabil}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.000;(#,##0.000-)">
+					<reportElement x="488" y="0" width="64" height="12" uuid="148fca4f-e5c1-4f63-966b-0c1b5801075c">
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Right" verticalAlignment="Top">
+						<font size="7.5" isBold="true" isItalic="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalValorEntradasGrupoContabil}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="24" y="12" width="264" height="12" uuid="937cc709-63ff-4941-8f7f-d0f3204c86a8"/>
+					<textElement textAlignment="Right" verticalAlignment="Top">
+						<font size="7.5" isBold="true" isItalic="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" Total de Saídas"]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.000;(#,##0.000-)">
+					<reportElement x="351" y="12" width="64" height="12" uuid="6384c968-63a8-4fcc-ba43-c49fee8f9f34">
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Right" verticalAlignment="Top">
+						<font size="7.5" isBold="true" isItalic="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalQuantidadeSaidasGrupoContabil}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.000;(#,##0.000-)">
+					<reportElement x="488" y="12" width="64" height="12" uuid="1b46ccd9-343d-41a3-8423-d3f1875a6c1d">
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Right" verticalAlignment="Top">
+						<font size="7.5" isBold="true" isItalic="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalValorSaidasGrupoContabil}]]></textFieldExpression>
+				</textField>
 			</band>
 		</groupFooter>
 	</group>
@@ -292,29 +589,79 @@ order by s.empresa_filial_id, s.local_estoque_id, s.grupo_contabil_id, s.item_id
 					</textElement>
 					<text><![CDATA[Saldo Anterior:]]></text>
 				</staticText>
-				<textField>
+				<textField pattern="#,##0.000;(#,##0.000-)">
 					<reportElement x="351" y="0" width="64" height="12" uuid="e766f88d-0169-4034-b9bf-946a8e7c8273">
 						<property name="com.jaspersoft.studio.unit.y" value="px"/>
 					</reportElement>
 					<textElement textAlignment="Right" verticalAlignment="Top">
 						<font size="7.5" isBold="true" isItalic="false"/>
 					</textElement>
-					<textFieldExpression><![CDATA["0,000"]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{saldoquantidadeinicial}]]></textFieldExpression>
 				</textField>
-				<textField>
-					<reportElement x="487" y="0" width="64" height="12" uuid="d324e7f2-95c5-4288-a341-cb4c9dacb285">
+				<textField pattern="#,##0.00#;(#,##0.00#-)">
+					<reportElement x="480" y="0" width="72" height="12" uuid="d324e7f2-95c5-4288-a341-cb4c9dacb285">
 						<property name="com.jaspersoft.studio.unit.y" value="px"/>
 					</reportElement>
 					<textElement textAlignment="Right" verticalAlignment="Top">
 						<font size="7.5" isBold="true" isItalic="false"/>
 					</textElement>
-					<textFieldExpression><![CDATA["0,00"]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{saldovalorinicial}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupHeader>
 		<groupFooter>
-			<band height="13">
+			<band height="24">
 				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				<textField>
+					<reportElement x="24" y="0" width="264" height="12" uuid="9250c0c5-c67a-454b-b8e9-03acb66429f7"/>
+					<textElement textAlignment="Right" verticalAlignment="Top">
+						<font size="7.5" isBold="true" isItalic="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" Total de Entradas"]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.000;(#,##0.000-)">
+					<reportElement x="351" y="0" width="64" height="12" uuid="5c20aff4-cbaa-4ba0-861e-97cd199a9a60">
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Right" verticalAlignment="Top">
+						<font size="7.5" isBold="true" isItalic="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalQuantidadeEntradasItem}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.000;(#,##0.000-)">
+					<reportElement x="488" y="0" width="64" height="12" uuid="afbbb6a6-7e91-4207-8dac-eb4d0c02982e">
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Right" verticalAlignment="Top">
+						<font size="7.5" isBold="true" isItalic="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalValorEntradasItem}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="24" y="12" width="264" height="12" uuid="944b1385-dc30-41c8-a8b6-ce625207a836"/>
+					<textElement textAlignment="Right" verticalAlignment="Top">
+						<font size="7.5" isBold="true" isItalic="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" Total de Saídas"]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.000;(#,##0.000-)">
+					<reportElement x="351" y="12" width="64" height="12" uuid="3178f7e5-09e1-4387-b3f5-a2351e482a89">
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Right" verticalAlignment="Top">
+						<font size="7.5" isBold="true" isItalic="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalQuantidadeSaidasItem}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.000;(#,##0.000-)">
+					<reportElement x="488" y="12" width="64" height="12" uuid="ffefe7e8-9227-4850-b092-75cdef337b9f">
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Right" verticalAlignment="Top">
+						<font size="7.5" isBold="true" isItalic="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalValorSaidasItem}]]></textFieldExpression>
+				</textField>
 			</band>
 		</groupFooter>
 	</group>
@@ -673,7 +1020,7 @@ order by s.empresa_filial_id, s.local_estoque_id, s.grupo_contabil_id, s.item_id
 				<textElement textAlignment="Right" verticalAlignment="Top">
 					<font size="7.5" isItalic="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{quantidade}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{customediocomposto}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="256" y="0" width="24" height="12" uuid="5acf0c50-df4d-403e-b24f-87943b68a3ad"/>
@@ -689,25 +1036,39 @@ order by s.empresa_filial_id, s.local_estoque_id, s.grupo_contabil_id, s.item_id
 				</textElement>
 				<textFieldExpression><![CDATA[$F{creddebvalor}]]></textFieldExpression>
 			</textField>
+			<textField pattern="#,##0.000;(#,##0.000-)">
+				<reportElement x="351" y="0" width="64" height="12" uuid="036dd052-7587-4daf-a374-8749059af8fb">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font size="7.5" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{saldoquantidadecomposto}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement x="482" y="0" width="70" height="12" uuid="6848a6d8-ebc2-41da-8dfe-b86156e0ffa2"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font size="7.5" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{saldovalorcomposto}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="18" splitType="Stretch">
+		<band height="15" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="2" width="48" height="14" uuid="e40150f4-bca2-40d7-82be-e2af7b44ba13">
+				<reportElement x="0" y="0" width="36" height="14" uuid="e40150f4-bca2-40d7-82be-e2af7b44ba13">
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
 				<textElement>
-					<font size="9"/>
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Usuário: ]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="48" y="2" width="100" height="12" uuid="b3494d20-258c-4f8f-b5d5-0b1bc873b53a">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement x="40" y="0" width="152" height="12" uuid="b3494d20-258c-4f8f-b5d5-0b1bc873b53a"/>
 				<textElement>
-					<font size="9"/>
+					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{usuarioNome}]]></textFieldExpression>
 			</textField>
@@ -720,47 +1081,39 @@ order by s.empresa_filial_id, s.local_estoque_id, s.grupo_contabil_id, s.item_id
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="199" y="2" width="62" height="12" uuid="c6c3aab5-209e-4c05-ad15-b5a36f31668c">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement x="199" y="0" width="62" height="12" uuid="c6c3aab5-209e-4c05-ad15-b5a36f31668c"/>
 				<textElement>
-					<font size="9"/>
+					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Emitido em"]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy">
-				<reportElement x="254" y="2" width="74" height="12" uuid="49cdec0e-2506-4844-a09d-e10b8e102426">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement x="254" y="0" width="74" height="12" uuid="49cdec0e-2506-4844-a09d-e10b8e102426"/>
 				<textElement>
-					<font size="9"/>
+					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 			<textField pattern="HH:mm:ss">
-				<reportElement x="312" y="2" width="60" height="12" uuid="a1a5e318-a108-4572-ad61-477f26a52e4b">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement x="312" y="0" width="60" height="12" uuid="a1a5e318-a108-4572-ad61-477f26a52e4b"/>
 				<textElement>
-					<font size="9"/>
+					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="483" y="2" width="48" height="12" uuid="35f6330e-cf81-4cbc-a377-abb39fedc979">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement x="483" y="0" width="48" height="12" uuid="35f6330e-cf81-4cbc-a377-abb39fedc979"/>
 				<textElement textAlignment="Left">
-					<font size="9"/>
+					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Página " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report">
-				<reportElement x="524" y="2" width="24" height="12" uuid="1d2271e9-f3a2-481a-bb3c-9a108bcd1043">
+				<reportElement x="524" y="0" width="24" height="12" uuid="1d2271e9-f3a2-481a-bb3c-9a108bcd1043">
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Left">
-					<font size="9"/>
+					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[" / " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>

@@ -7,7 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import br.com.ultraworks.erp.core.entity.UWEntityBase;
-import br.com.ultraworks.erp.core.security.domain.user.User;
+import br.com.ultraworks.erp.core.security.domain.CustomUser;
 import br.com.ultraworks.erp.core.service.UniqueValidationService;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
@@ -28,7 +28,7 @@ public class BaseListener implements Serializable {
 	@PrePersist
 	public void prePersist(UWEntityBase entity) throws Exception {
 		this.unique.verificarUnicidade(entity, true);
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		CustomUser user = (CustomUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		entity.setCriadoPor(user.getId().longValue());
 //		FieldsTransform.transform(entity);
 	}
@@ -38,7 +38,7 @@ public class BaseListener implements Serializable {
 		if (!entity.isUpdated() ) {
 			entity.setUpdated(true);
 			this.unique.verificarUnicidade(entity, false);
-			User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			CustomUser user = (CustomUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			entity.setAlteradoPor(user.getId().longValue());
 //			FieldsTransform.transform(entity);
 		}
