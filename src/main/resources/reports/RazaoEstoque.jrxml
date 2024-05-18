@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.21.2.final using JasperReports Library version 6.21.2-8434a0bd7c3bbc37cbf916f2968d35e4b165821a  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RazaoEstoque" pageWidth="595" pageHeight="842" whenNoDataType="BlankPage" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="26a5fcf6-1b6a-4e88-a0e6-5fdcfb46d7cf">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RazaoEstoque" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="26a5fcf6-1b6a-4e88-a0e6-5fdcfb46d7cf">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="284"/>
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="705"/>
@@ -328,6 +328,7 @@ ORDER BY sc.empresa_filial_id, sc.local_estoque_id, sc.grupo_contabil_id, sc.ite
 		<groupExpression><![CDATA[$F{empresafilialid}]]></groupExpression>
 		<groupHeader>
 			<band height="13">
+				<printWhenExpression><![CDATA[$F{empresafilialid} == null ? false : true]]></printWhenExpression>
 				<staticText>
 					<reportElement x="0" y="0" width="36" height="12" uuid="34a6055c-9d6a-4312-b574-a2cd84e9fe74">
 						<property name="com.jaspersoft.studio.unit.y" value="px"/>
@@ -1102,14 +1103,14 @@ ORDER BY sc.empresa_filial_id, sc.local_estoque_id, sc.grupo_contabil_id, sc.ite
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="483" y="0" width="48" height="12" uuid="35f6330e-cf81-4cbc-a377-abb39fedc979"/>
-				<textElement textAlignment="Left">
+				<reportElement x="477" y="0" width="48" height="12" uuid="36e8f350-c91c-41c1-8cef-0cacdcb1b066"/>
+				<textElement textAlignment="Right">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Página " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report">
-				<reportElement x="524" y="0" width="24" height="12" uuid="1d2271e9-f3a2-481a-bb3c-9a108bcd1043">
+				<reportElement x="524" y="0" width="24" height="12" uuid="382a88bf-0871-4f07-a65b-97d3e390c3b4">
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Left">

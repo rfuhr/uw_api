@@ -8,6 +8,7 @@ import java.sql.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.ultraworks.erp.api.estoque.domain.item.Item;
 import br.com.ultraworks.erp.api.estoque.domain.movimentoestoque.AtualizaEstoqueItensRequest;
 import br.com.ultraworks.erp.api.estoque.domain.movimentoestoque.AtualizaEstoqueRequest;
 import br.com.ultraworks.erp.api.estoque.domain.movimentoestoque.MovimentoEstoque;
@@ -59,46 +60,49 @@ public class EstoqueService {
 		OperacaoInternaEstoque operacaoInternaEstoque = validarCamposObrigatorios(atualizaEstoqueRequest);
 		
 		for (AtualizaEstoqueItensRequest item : atualizaEstoqueRequest.getListaItens()) {
-			MovimentoEstoque movimentoEstoque = new MovimentoEstoque();
-			movimentoEstoque.setEmpresaFilial(empresaFilialService.getById(atualizaEstoqueRequest.getEmpresaFilialId())
+			Item itemEstoque = itemService.getById(item.getItemId())
 					.orElseThrow(() -> new RegisterNotFoundException(
-							"Não encontrada a Filial da Empresa com id " + atualizaEstoqueRequest.getEmpresaFilialId())));
-			movimentoEstoque.setOperacaoInterna(operacaoInternaService.getById(atualizaEstoqueRequest.getOperacaoInternaId())
-					.orElseThrow(() -> new RegisterNotFoundException(
-							"Não encontrada a Operação Interna com id " + atualizaEstoqueRequest.getOperacaoInternaId())));
-			movimentoEstoque.setItem(itemService.getById(item.getItemId())
-					.orElseThrow(() -> new RegisterNotFoundException(
-							"Não encontrado Item com id " + item.getItemId())));
-			if (atualizaEstoqueRequest.getData() == null) {
-				movimentoEstoque.setData(LocalDate.now());
-			} else {
-				movimentoEstoque.setData(atualizaEstoqueRequest.getData());
+							"Não encontrado Item com id " + item.getItemId()));
+			if (itemEstoque.isControlaEstoque()) {
+				MovimentoEstoque movimentoEstoque = new MovimentoEstoque();
+				movimentoEstoque.setItem(itemEstoque);
+				movimentoEstoque.setEmpresaFilial(empresaFilialService.getById(atualizaEstoqueRequest.getEmpresaFilialId())
+						.orElseThrow(() -> new RegisterNotFoundException(
+								"Não encontrada a Filial da Empresa com id " + atualizaEstoqueRequest.getEmpresaFilialId())));
+				movimentoEstoque.setOperacaoInterna(operacaoInternaService.getById(atualizaEstoqueRequest.getOperacaoInternaId())
+						.orElseThrow(() -> new RegisterNotFoundException(
+								"Não encontrada a Operação Interna com id " + atualizaEstoqueRequest.getOperacaoInternaId())));
+				if (atualizaEstoqueRequest.getData() == null) {
+					movimentoEstoque.setData(LocalDate.now());
+				} else {
+					movimentoEstoque.setData(atualizaEstoqueRequest.getData());
+				}
+				Long grupoContabilId = operacaoInternaEstoque.isInformaGrupoContabil() ? atualizaEstoqueRequest.getGrupoContabilId() : operacaoInternaEstoque.getGrupoContabil().getId();
+				movimentoEstoque.setGrupoContabil(grupoContabilService.getById(grupoContabilId)
+						.orElseThrow(() -> new RegisterNotFoundException(
+								"Não encontrado o Grupo Contábil com id " + grupoContabilId)));
+				Long localEstoqueId = operacaoInternaEstoque.isInformaLocalEstoque() ? atualizaEstoqueRequest.getLocalEstoqueId() : operacaoInternaEstoque.getLocalEstoque().getId();
+				movimentoEstoque.setLocalEstoque(localEstoqueService.getById(localEstoqueId)
+						.orElseThrow(() -> new RegisterNotFoundException(
+								"Não encontrado o Local do Estoque com id " + localEstoqueId)));
+				movimentoEstoque.setOperacaoEstoqueFinanceiro(operacaoInternaEstoque.getOperacaoEstoqueFinanceiro());
+				movimentoEstoque.setOperacaoEstoqueFisico(operacaoInternaEstoque.getOperacaoEstoqueFisico());
+				movimentoEstoque.setTipoMovimentoEstoque(TipoMovimentoEstoque.fromValue(atualizaEstoqueRequest.getTipoMovimentoEstoque()));
+				movimentoEstoque.setTipoDocumentoEstoque(TipoDocumentoEstoque.fromValue(atualizaEstoqueRequest.getTipoDocumentoEstoque()));
+				movimentoEstoque.setCalculaCustoMedioSaldo(operacaoInternaEstoque.isCalculaCustoMedio());
+				movimentoEstoque.setDocumento(atualizaEstoqueRequest.getDocumento());
+				movimentoEstoque.setEntrada(atualizaEstoqueRequest.isEntrada());
+				movimentoEstoque.setProtocoloDocumento(atualizaEstoqueRequest.getProtocoloDocumento());
+				movimentoEstoque.setQuantidade(item.getQuantidade());
+				movimentoEstoque.setCustoMedio(item.getCustoMedio());
+				movimentoEstoque.setValor(item.getValor());
+				
+				MovimentoEstoque movimento = movimentoEstoqueService.save(movimentoEstoque);
+				
+				saldoEstoqueService.atualizaSaldoEstoque(Date.valueOf(movimento.getData()), Date.valueOf(LocalDate.now()), 
+						movimento.getItem().getId(), movimento.getEmpresaFilial().getId(), movimento.getLocalEstoque().getId(), 
+						movimento.getGrupoContabil().getId(), movimento.getCriadoPor());
 			}
-			Long grupoContabilId = operacaoInternaEstoque.isInformaGrupoContabil() ? atualizaEstoqueRequest.getGrupoContabilId() : operacaoInternaEstoque.getGrupoContabil().getId();
-			movimentoEstoque.setGrupoContabil(grupoContabilService.getById(grupoContabilId)
-					.orElseThrow(() -> new RegisterNotFoundException(
-							"Não encontrado o Grupo Contábil com id " + grupoContabilId)));
-			Long localEstoqueId = operacaoInternaEstoque.isInformaLocalEstoque() ? atualizaEstoqueRequest.getLocalEstoqueId() : operacaoInternaEstoque.getLocalEstoque().getId();
-			movimentoEstoque.setLocalEstoque(localEstoqueService.getById(localEstoqueId)
-					.orElseThrow(() -> new RegisterNotFoundException(
-							"Não encontrado o Local do Estoque com id " + localEstoqueId)));
-			movimentoEstoque.setOperacaoEstoqueFinanceiro(operacaoInternaEstoque.getOperacaoEstoqueFinanceiro());
-			movimentoEstoque.setOperacaoEstoqueFisico(operacaoInternaEstoque.getOperacaoEstoqueFisico());
-			movimentoEstoque.setTipoMovimentoEstoque(TipoMovimentoEstoque.fromValue(atualizaEstoqueRequest.getTipoMovimentoEstoque()));
-			movimentoEstoque.setTipoDocumentoEstoque(TipoDocumentoEstoque.fromValue(atualizaEstoqueRequest.getTipoDocumentoEstoque()));
-			movimentoEstoque.setCalculaCustoMedioSaldo(operacaoInternaEstoque.isCalculaCustoMedio());
-			movimentoEstoque.setDocumento(atualizaEstoqueRequest.getDocumento());
-			movimentoEstoque.setEntrada(atualizaEstoqueRequest.isEntrada());
-			movimentoEstoque.setProtocoloDocumento(atualizaEstoqueRequest.getProtocoloDocumento());
-			movimentoEstoque.setQuantidade(item.getQuantidade());
-			movimentoEstoque.setCustoMedio(item.getCustoMedio());
-			movimentoEstoque.setValor(item.getValor());
-			
-			MovimentoEstoque movimento = movimentoEstoqueService.save(movimentoEstoque);
-			
-			saldoEstoqueService.atualizaSaldoEstoque(Date.valueOf(movimento.getData()), Date.valueOf(LocalDate.now()), 
-					movimento.getItem().getId(), movimento.getEmpresaFilial().getId(), movimento.getLocalEstoque().getId(), 
-					movimento.getGrupoContabil().getId(), movimento.getCriadoPor());
 		}
 		
 	}

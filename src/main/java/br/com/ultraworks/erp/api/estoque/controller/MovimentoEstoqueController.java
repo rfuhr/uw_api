@@ -38,7 +38,7 @@ public class MovimentoEstoqueController extends GenericController<MovimentoEstoq
 	}
 	
 	@PostMapping("/imprimir")
-    public ResponseEntity<byte[]> generateReport(@RequestBody MovimentoEstoqueRequest movimentoEstoqueRequest) {
+    public ResponseEntity<byte[]> imprimirRazaoEstoque(@RequestBody MovimentoEstoqueRequest movimentoEstoqueRequest) {
     	return relatoriosEstoqueService.imprimirRazaoEstoque(movimentoEstoqueRequest);
     }
 

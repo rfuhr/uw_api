@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import br.com.ultraworks.erp.api.estoque.domain.movimentoestoque.MovimentoEstoqueRequest;
+import br.com.ultraworks.erp.api.estoque.domain.saldoestoque.SaldoEstoqueRequest;
 import br.com.ultraworks.erp.api.organograma.domain.empresa.Empresa;
 import br.com.ultraworks.erp.api.organograma.service.EmpresaService;
 import br.com.ultraworks.erp.core.security.domain.CustomUser;
@@ -94,6 +95,62 @@ public class RelatoriosEstoqueService {
             byte[] report = reportsService.generateReport("RazaoEstoque", parameters);
             HttpHeaders headers = new HttpHeaders();
             headers.set(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=RazaoEstoque.pdf");
+            return new ResponseEntity<>(report, headers, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+	}
+	
+	public ResponseEntity<byte[]> imprimirPosicaoFisicoFinanceiro(@RequestBody SaldoEstoqueRequest saldoEstoqueRequest) {
+        try {
+        	Date dataInicio = Date.valueOf(saldoEstoqueRequest.getDataInicio());
+        	Date dataFinal = Date.valueOf(saldoEstoqueRequest.getDataFinal());
+    		int validaEmpresaFilial = saldoEstoqueRequest.getEmpresaFilialId() == null ? 1 : 0;
+    		int validaLocalEstoque = saldoEstoqueRequest.getLocalEstoqueId() == null ? 1 : 0;
+    		int validaGrupoContabil = saldoEstoqueRequest.getGrupoContabilId() == null ? 1 : 0;
+    		int validaItem = saldoEstoqueRequest.getItemId() == null ? 1 : 0;
+
+    		CustomUser user = (CustomUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    		Optional<Empresa> empresa = empresaService.getById(user.getEmpresaId());
+        	
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put("dataInicio", dataInicio);
+            parameters.put("dataFinal", dataFinal);
+            parameters.put("validaEmpresaFilialId", validaEmpresaFilial);
+            parameters.put("validaLocalEstoque", validaLocalEstoque);
+            parameters.put("validaGrupoContabil", validaGrupoContabil);
+            parameters.put("validaItem", validaItem);
+
+            parameters.put("usuarioNome", user.getUsername());
+            parameters.put("empresaNome", empresa.get().getNome());
+            if (validaEmpresaFilial == 1) {
+            	parameters.put("filtroFilial", "<Todas>");
+            } else {
+            	parameters.put("empresaFilialId", saldoEstoqueRequest.getEmpresaFilialId());
+            	parameters.put("filtroFilial", saldoEstoqueRequest.getEmpresaFilialId().toString());
+            }
+            if (validaLocalEstoque == 1) {
+            	parameters.put("filtroLocalEstoque", "<Todos>");
+            } else {
+            	parameters.put("localEstoqueId", saldoEstoqueRequest.getLocalEstoqueId());
+            	parameters.put("filtroLocalEstoque", saldoEstoqueRequest.getLocalEstoqueId().toString());
+            }
+            if (validaGrupoContabil == 1) {
+            	parameters.put("filtroGrupoContabil", "<Todos>");
+            } else {
+            	parameters.put("grupoContabilId", saldoEstoqueRequest.getGrupoContabilId());
+            	parameters.put("filtroGrupoContabil", saldoEstoqueRequest.getGrupoContabilId().toString());
+            }
+            if (validaItem == 1) {
+            	parameters.put("filtroItem", "<Todos>");
+            } else {
+            	parameters.put("itemId", saldoEstoqueRequest.getItemId());
+            	parameters.put("filtroItem", saldoEstoqueRequest.getItemId().toString());
+            }
+
+            byte[] report = reportsService.generateReport("PosicaoFisicoFinanceiro", parameters);
+            HttpHeaders headers = new HttpHeaders();
+            headers.set(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=PosicaoFisicoFinanceiro.pdf");
             return new ResponseEntity<>(report, headers, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
