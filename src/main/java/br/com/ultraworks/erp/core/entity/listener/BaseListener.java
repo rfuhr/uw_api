@@ -37,7 +37,7 @@ public class BaseListener implements Serializable {
 	@PreUpdate
 	public void preUpdate(UWEntityBase entity) throws Exception {
 		if (!entity.isUpdated() ) {
-			User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			CustomUser user = (CustomUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			if (entity.getCriadoEm() == null) {
 				entity.setCriadoEm(LocalDateTime.now());
 				entity.setCriadoPor(user.getId().longValue());

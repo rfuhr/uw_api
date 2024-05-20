@@ -35,7 +35,6 @@ import br.com.ultraworks.erp.api.seguranca.service.UsuarioService;
 import br.com.ultraworks.erp.core.exception.RegisterNotFoundException;
 import br.com.ultraworks.erp.core.generics.GenericController;
 import br.com.ultraworks.erp.core.security.domain.CustomUser;
-import br.com.ultraworks.erp.core.security.domain.user.User;
 import br.com.ultraworks.erp.core.util.ResponseUtil;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
