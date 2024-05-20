@@ -1,0 +1,1 @@
+alter table operacao_interna add column caracteristica_estoque boolean NOT NULL default false;

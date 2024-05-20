@@ -17,14 +17,17 @@ public class OperacaoInternaMapper extends GenericMapper<OperacaoInterna, Operac
 	private NaturezaOperacaoMapper naturezaOperacaoInternaMapper;
 	private NaturezaOperacaoService naturezaOperacaoService;
 	private OperacaoInternaFiscalMapper operacaoInternaFiscalMapper;
+	private OperacaoInternaEstoqueMapper operacaoInternaEstoqueMapper;
 
 	public OperacaoInternaMapper(OperacaoInternaRepository repository,
 			NaturezaOperacaoMapper naturezaOperacaoInternaMapper, NaturezaOperacaoService naturezaOperacaoService,
-			OperacaoInternaFiscalMapper operacaoInternaFiscalMapper) {
+			OperacaoInternaFiscalMapper operacaoInternaFiscalMapper,
+			OperacaoInternaEstoqueMapper operacaoInternaEstoqueMapper) {
 		super(repository, OperacaoInterna::new, OperacaoInternaDTO::new);
 		this.naturezaOperacaoInternaMapper = naturezaOperacaoInternaMapper;
 		this.naturezaOperacaoService = naturezaOperacaoService;
 		this.operacaoInternaFiscalMapper = operacaoInternaFiscalMapper;
+		this.operacaoInternaEstoqueMapper = operacaoInternaEstoqueMapper;
 	}
 
 	@Override
@@ -36,6 +39,7 @@ public class OperacaoInternaMapper extends GenericMapper<OperacaoInterna, Operac
 				.orElseThrow(() -> new RegisterNotFoundException(
 						"Não encontrado empresa filial com id " + dto.getNaturezaOperacaoId())));
 		entity.setCaracteristicaFiscal(dto.isCaracteristicaFiscal());
+		entity.setCaracteristicaEstoque(dto.isCaracteristicaEstoque());
 		if (dto.getOperacaoInternaFiscal() != null) {
 			entity.setOperacoesInternasFiscal(new ArrayList<>());
 			entity.getOperacoesInternasFiscal()
@@ -44,6 +48,9 @@ public class OperacaoInternaMapper extends GenericMapper<OperacaoInterna, Operac
 				if (dado.getOperacaoInterna() == null)
 					dado.setOperacaoInterna(entity);
 			});
+		}
+		if (dto.getOperacaoInternaEstoque() != null) {
+			entity.setOperacaoInternaEstoque(operacaoInternaEstoqueMapper.toEntity(dto.getOperacaoInternaEstoque()));
 		}
 	}
 
@@ -56,9 +63,12 @@ public class OperacaoInternaMapper extends GenericMapper<OperacaoInterna, Operac
 		dto.setNaturezaOperacao(naturezaOperacaoInternaMapper.toDto(entity.getNaturezaOperacao()));
 		dto.setNaturezaOperacaoId(entity.getNaturezaOperacao().getId());
 		dto.setCaracteristicaFiscal(entity.isCaracteristicaFiscal());
+		dto.setCaracteristicaEstoque(entity.isCaracteristicaEstoque());
 		if (entity.getOperacoesInternasFiscal() != null && entity.getOperacoesInternasFiscal().size() > 0) {
 			dto.setOperacaoInternaFiscal(operacaoInternaFiscalMapper.toDto(entity.getOperacoesInternasFiscal()).get(0));
 		}
-
+		if (entity.getOperacaoInternaEstoque() != null) {
+			dto.setOperacaoInternaEstoque(operacaoInternaEstoqueMapper.toDto(entity.getOperacaoInternaEstoque()));			
+		}
 	}
 }
