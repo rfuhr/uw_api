@@ -42,15 +42,5 @@ public class OperacaoFinanceira extends UWEntityBase {
 	@JoinColumn(name = "operacao_acessoria_financeira_id")
 	private OperacaoAcessoriaFinanceira operacaoAcessoriaFinanceira;
 	
-	@Column(name = "idn_gera_ficha")
-	private boolean geraFichaFinanceira;
-	
-	@Column(name = "idn_integra_bco")
-	private boolean integraBanco;
-	
-	@Column(name = "operacao_banco_id")
-	private long operacaoBancaria;
-	
-	@Column(name = "idn_gera_apurfin")
-	private boolean geraApuracaoFinanceira;
+
 }

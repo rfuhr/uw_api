@@ -36,7 +36,7 @@ public class HistoricoPadrao extends UWEntityBase {
 	private String sigla;
 	
 	@Convert(converter = TipoObrigatoriedadeConverter.class)
-	@Column(name = "informa_documento")
+	@Column(name = "tipo_obrigatoriedade")
 	private TipoObrigatoriedade informaDocumento;
 	
 }

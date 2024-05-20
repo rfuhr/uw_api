@@ -8,6 +8,7 @@ import br.com.ultraworks.erp.api.financeiro.domain.fatogerador.FatoGerador;
 import br.com.ultraworks.erp.api.financeiro.domain.grupofinanceiro.GrupoFinanceiro;
 import br.com.ultraworks.erp.api.financeiro.domain.tipotitulo.TipoTitulo;
 import br.com.ultraworks.erp.api.organograma.domain.departamento.Departamento;
+import br.com.ultraworks.erp.api.organograma.domain.empresaFilial.EmpresaFilial;
 import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocal.ParceiroLocal;
 import br.com.ultraworks.erp.api.tabela.domain.historicopadrao.HistoricoPadrao;
 import lombok.Builder;
@@ -17,6 +18,7 @@ import lombok.Data;
 @Builder
 public class ContainerTitulo {
 
+	private EmpresaFilial empresaFilial;
 	private Departamento departamento;
 	private GrupoFinanceiro grupoFinanceiro;
 	private ParceiroLocal parceiroLocal;

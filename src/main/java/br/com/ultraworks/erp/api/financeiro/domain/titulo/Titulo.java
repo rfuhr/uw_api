@@ -8,6 +8,7 @@ import br.com.ultraworks.erp.api.financeiro.domain.fatogerador.FatoGerador;
 import br.com.ultraworks.erp.api.financeiro.domain.grupofinanceiro.GrupoFinanceiro;
 import br.com.ultraworks.erp.api.financeiro.domain.tipotitulo.TipoTitulo;
 import br.com.ultraworks.erp.api.organograma.domain.departamento.Departamento;
+import br.com.ultraworks.erp.api.organograma.domain.empresaFilial.EmpresaFilial;
 import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocal.ParceiroLocal;
 import br.com.ultraworks.erp.api.tabela.domain.historicopadrao.HistoricoPadrao;
 import br.com.ultraworks.erp.core.entity.UWEntityBase;
@@ -39,6 +40,10 @@ public class Titulo extends UWEntityBase {
 	@GeneratedValue(generator = "tituloSeq")
 	private Long id;
 
+	@OneToOne
+	@JoinColumn(name = "empresa_filial_id")
+	private EmpresaFilial empresaFilial;
+	
 	@OneToOne
 	@JoinColumn(name = "departamento_id")
 	private Departamento departamento;
@@ -73,6 +78,7 @@ public class Titulo extends UWEntityBase {
 	private LocalDate dataDocumento;
 
 	private String observacao;
+	@Column(name = "valor_total")
 	private BigDecimal valorTotal;
 	private String historico;
 }

@@ -19,6 +19,7 @@ public class TipoOperacaoFinanceiraMapper extends GenericMapper<TipoOperacaoFina
 		entity.setId(dto.getId());
 		entity.setNome(dto.getNome());
 		entity.setSigla(dto.getSigla());
+		entity.setCriaTitulo(dto.isCriaTitulo());
 	}
 
 	@Override
@@ -26,5 +27,6 @@ public class TipoOperacaoFinanceiraMapper extends GenericMapper<TipoOperacaoFina
 		dto.setId(entity.getId());
 		dto.setNome(entity.getNome());
 		dto.setSigla(entity.getSigla());
+		dto.setCriaTitulo(entity.isCriaTitulo());
 	}
 }

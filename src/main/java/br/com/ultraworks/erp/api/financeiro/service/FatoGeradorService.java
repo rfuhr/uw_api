@@ -7,6 +7,7 @@ import br.com.ultraworks.erp.api.financeiro.domain.fatogerador.FatoGerador;
 import br.com.ultraworks.erp.api.financeiro.domain.fatogerador.FatoGeradorDTO;
 import br.com.ultraworks.erp.api.financeiro.mapper.FatoGeradorMapper;
 import br.com.ultraworks.erp.api.financeiro.repository.FatoGeradorRepository;
+import br.com.ultraworks.erp.api.financeiro.repository.TipoTituloRepository;
 import br.com.ultraworks.erp.core.generics.GenericService;
 import lombok.NoArgsConstructor;
 
@@ -19,4 +20,7 @@ public class FatoGeradorService extends GenericService<FatoGerador, Long, FatoGe
 		super(repository, mapper);
 	}
 
+	public int getProximoCodigo() {
+		return ((FatoGeradorRepository) repository).getProximoCodigo();
+	}
 }

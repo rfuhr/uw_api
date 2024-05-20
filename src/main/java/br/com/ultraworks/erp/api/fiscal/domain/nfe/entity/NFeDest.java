@@ -48,7 +48,7 @@ public class NFeDest extends UWEntityBase {
 	private String cpais;
 	private String xpais;
 	private String fone;
-	private String indieest;
+	private int indiedest;
 	private String ie;
 	private String isuf;
 	private String im;

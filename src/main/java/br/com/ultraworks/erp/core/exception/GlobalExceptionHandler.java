@@ -111,6 +111,14 @@ public class GlobalExceptionHandler {
 		return buildErrorResponse(endPointNotFoundException, HttpStatus.NOT_IMPLEMENTED, request);
 	}
 
+	@ExceptionHandler(BusinessException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ResponseEntity<Object> handleBusinessException(BusinessException businessException,
+			WebRequest request) {
+		log.error("Failed to validate element", businessException);
+		return buildErrorResponse(businessException, HttpStatus.BAD_REQUEST, request);
+	}
+	
 	@ExceptionHandler(Exception.class)
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	public ResponseEntity<Object> handleAllUncaughtException(Exception exception, WebRequest request) {

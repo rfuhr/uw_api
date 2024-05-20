@@ -102,7 +102,7 @@ public class CalcularIcmsHelper {
 		{
 			vBC_ICMS = imposto.calcularBaseICMS(imposto, calculoImpostoRequest);
 			//aplica MVA sobre ICMS próprio
-			if (ModalidadeBaseCalculo.MVA.getValue().equals(configuracaoFiscalIcms.getModalidadeBaseCalculoST().getValue())) {
+			if (ModalidadeBaseCalculo.MVA.getValue().equals(configuracaoFiscalIcms.getModalidadeBaseCalculo().getValue())) {
 				BigDecimal percentualAjustado = (new BigDecimal(100).add(valoresICMS.getPMVAST())).divide(new BigDecimal(100));
 				vBC_ICMS = vBC_ICMS.multiply(percentualAjustado);
 			}

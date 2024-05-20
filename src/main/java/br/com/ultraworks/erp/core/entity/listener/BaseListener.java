@@ -1,6 +1,7 @@
 package br.com.ultraworks.erp.core.entity.listener;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,9 +37,13 @@ public class BaseListener implements Serializable {
 	@PreUpdate
 	public void preUpdate(UWEntityBase entity) throws Exception {
 		if (!entity.isUpdated() ) {
+			User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			if (entity.getCriadoEm() == null) {
+				entity.setCriadoEm(LocalDateTime.now());
+				entity.setCriadoPor(user.getId().longValue());
+			}
 			entity.setUpdated(true);
 			this.unique.verificarUnicidade(entity, false);
-			User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			entity.setAlteradoPor(user.getId().longValue());
 //			FieldsTransform.transform(entity);
 		}

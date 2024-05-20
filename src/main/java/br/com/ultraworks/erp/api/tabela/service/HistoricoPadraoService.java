@@ -3,6 +3,7 @@ package br.com.ultraworks.erp.api.tabela.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.ultraworks.erp.api.financeiro.repository.TipoTituloRepository;
 import br.com.ultraworks.erp.api.tabela.domain.historicopadrao.HistoricoPadrao;
 import br.com.ultraworks.erp.api.tabela.domain.historicopadrao.HistoricoPadraoDTO;
 import br.com.ultraworks.erp.api.tabela.mapper.HistoricoPadraoMapper;
@@ -19,4 +20,7 @@ public class HistoricoPadraoService extends GenericService<HistoricoPadrao, Long
 		super(repository, mapper);
 	}
 
+	public int getProximoCodigo() {
+		return ((HistoricoPadraoRepository) repository).getProximoCodigo();
+	}
 }

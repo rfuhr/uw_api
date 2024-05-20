@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.swconsultoria.nfe.dom.enuns.EstadosEnum;
 import br.com.swconsultoria.nfe.util.ChaveUtil;
@@ -80,7 +81,7 @@ public class NfeService {
 			BuscaListagemNFeQuery buscaListagemNFeQuery, CacheNFeRepository cacheNFeRepository,
 			MergeNFeRequestToNFeEntityService mergeNFeRequestToNFeEntityService) {
 		this.resourceLoader = resourceLoader;
-		resourceLoader = context;
+		this.context = context;
 		this.empresaFilialService = empresaFilialService;
 		this.nfeRepository = nfeRepository;
 		this.configEmpresaService = configEmpresaService;
@@ -186,6 +187,7 @@ public class NfeService {
 		return newEntity;
 	}
 
+	@Transactional
 	public NovaNFeResponse iniciarNovaNFe(Long empresaFilialId) {
 		EmpresaFilial empresaFilial = empresaFilialService.getById(empresaFilialId)
 				.orElseThrow(() -> new RegisterNotFoundException("Não foi encontrada filial informada"));
@@ -287,11 +289,13 @@ public class NfeService {
 		return new String(cache, StandardCharsets.UTF_8);
 	}
 
+	@Transactional
 	public void salvarNFe(NFeRequest nFeRequest) {
 		NFe nfe = nfeRepository.findById(nFeRequest.getNfeId()).orElse(new NFe());		nfe = mergeNFeRequestToNFeEntityService.merge(nfe, nFeRequest);
 		nfe = this.save(nfe);
 	}
 
+	@Transactional
 	public byte[] enviarNFe(Long nfeId) {
 		NFe nfe = nfeRepository.findById(nfeId).orElseThrow(() -> new RegisterNotFoundException("Não encontrado nfe para o id informado"));
 		IServicoEnvioNFe servicoIntegracaoNFe = context.getBean(IServicoEnvioNFe.class);

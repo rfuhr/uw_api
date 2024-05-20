@@ -16,4 +16,5 @@ public class TipoOperacaoFinanceiraDTO {
 	@FriendlyName("Nome")
 	private String nome;
 	private String sigla;
+	private boolean criaTitulo;
 }

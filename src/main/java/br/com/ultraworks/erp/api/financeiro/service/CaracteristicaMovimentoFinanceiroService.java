@@ -7,6 +7,7 @@ import br.com.ultraworks.erp.api.financeiro.domain.caracteristicamovfin.Caracter
 import br.com.ultraworks.erp.api.financeiro.domain.caracteristicamovfin.CaracteristicaMovimentoFinanceiroDTO;
 import br.com.ultraworks.erp.api.financeiro.mapper.CaracteristicaMovimentoFinanceiroMapper;
 import br.com.ultraworks.erp.api.financeiro.repository.CaracteristicaMovimentoFinanceiroRepository;
+import br.com.ultraworks.erp.api.financeiro.repository.TipoTituloRepository;
 import br.com.ultraworks.erp.core.generics.GenericService;
 import lombok.NoArgsConstructor;
 
@@ -19,6 +20,10 @@ public class CaracteristicaMovimentoFinanceiroService
 	public CaracteristicaMovimentoFinanceiroService(CaracteristicaMovimentoFinanceiroRepository repository,
 			CaracteristicaMovimentoFinanceiroMapper mapper) {
 		super(repository, mapper);
+	}
+
+	public int getProximoCodigo() {
+		return ((CaracteristicaMovimentoFinanceiroRepository) repository).getProximoCodigo();
 	}
 
 }

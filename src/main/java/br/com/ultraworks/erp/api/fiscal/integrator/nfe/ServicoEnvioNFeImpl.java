@@ -22,6 +22,7 @@ import br.com.swconsultoria.nfe.dom.enuns.AmbienteEnum;
 import br.com.swconsultoria.nfe.dom.enuns.DocumentoEnum;
 import br.com.swconsultoria.nfe.dom.enuns.EstadosEnum;
 import br.com.swconsultoria.nfe.dom.enuns.StatusEnum;
+import br.com.swconsultoria.nfe.exception.NfeException;
 import br.com.swconsultoria.nfe.schema_4.enviNFe.ObjectFactory;
 import br.com.swconsultoria.nfe.schema_4.enviNFe.TEnderEmi;
 import br.com.swconsultoria.nfe.schema_4.enviNFe.TEndereco;
@@ -162,45 +163,49 @@ public class ServicoEnvioNFeImpl implements IServicoEnvioNFe {
 		ConfiguracoesNfe configuracoesNfe = criarConfiguracoesNfe(configEmpresaNFe);
 		TEnviNFe enviNFe = criaEnviNFe(configuracoesNfe, nfe, configEmpresaNFe);
 
-//		try {
-//			enviNFe = Nfe.montaNfe(configuracoesNfe, enviNFe, true);
-//		} catch (NfeException e) {
-//			throw new BusinessException(
-//					"Erro ao realizar assinatura e validação da NFe. " + "Motivo: " + e.getMessage());
-//		}
+		try {
+			enviNFe = Nfe.montaNfe(configuracoesNfe, enviNFe, true);
+		} catch (NfeException e) {
+			throw new BusinessException(
+					"Erro ao realizar assinatura e validação da NFe. " + "Motivo: " + e.getMessage());
+		}
 
 		TRetEnviNFe retorno = null;
-//		try {
-//			retorno = Nfe.enviarNfe(configuracoesNfe, enviNFe, DocumentoEnum.NFE);
-//		} catch (NfeException e) {
-//			throw new BusinessException("Erro ao enviar da NFe. " + "Motivo: " + e.getMessage());
-//		}
+		try {
+			retorno = Nfe.enviarNfe(configuracoesNfe, enviNFe, DocumentoEnum.NFE);
+		} catch (NfeException e) {
+			throw new BusinessException("Erro ao enviar da NFe. " + "Motivo: " + e.getMessage());
+		}
 
 		String xmlFinal = null;
 		RetornoNFeIntegracao retornoNFeIntegracao = new RetornoNFeIntegracao();
-		retornoNFeIntegracao.setRecibo(retorno.getInfRec().getNRec());
-		try {
-			if (RetornoUtil.isRetornoAssincrono(retorno)) {
-				br.com.swconsultoria.nfe.schema_4.retConsReciNFe.TRetConsReciNFe tRetConsReciNFe = verificaEnvioAssincrono(
-						configuracoesNfe, retorno);
-				if (!tRetConsReciNFe.getCStat().equals(StatusEnum.LOTE_EM_PROCESSAMENTO.getCodigo())) {
-					RetornoUtil.validaAssincrono(tRetConsReciNFe);
-					retornoNFeIntegracao.setStatus(tRetConsReciNFe.getProtNFe().get(0).getInfProt().getCStat());
-					retornoNFeIntegracao.setProtocolo(tRetConsReciNFe.getProtNFe().get(0).getInfProt().getNProt());
-//					xmlFinal = XmlNfeUtil.criaNfeProc(enviNFe, tRetConsReciNFe.getProtNFe().get(0));
-					retornoNFeIntegracao.setXml(xmlFinal);
+		if (retorno.getInfRec() != null) {
+			retornoNFeIntegracao.setRecibo(retorno.getInfRec().getNRec());
+			try {
+				if (RetornoUtil.isRetornoAssincrono(retorno)) {
+					br.com.swconsultoria.nfe.schema_4.retConsReciNFe.TRetConsReciNFe tRetConsReciNFe = verificaEnvioAssincrono(
+							configuracoesNfe, retorno);
+					if (!tRetConsReciNFe.getCStat().equals(StatusEnum.LOTE_EM_PROCESSAMENTO.getCodigo())) {
+						RetornoUtil.validaAssincrono(tRetConsReciNFe);
+						retornoNFeIntegracao.setStatus(tRetConsReciNFe.getProtNFe().get(0).getInfProt().getCStat());
+						retornoNFeIntegracao.setProtocolo(tRetConsReciNFe.getProtNFe().get(0).getInfProt().getNProt());
+						xmlFinal = XmlNfeUtil.criaNfeProc(enviNFe, tRetConsReciNFe.getProtNFe().get(0));
+						retornoNFeIntegracao.setXml(xmlFinal);
+					} else {
+						retornoNFeIntegracao.setStatus(tRetConsReciNFe.getCStat());
+					}
 				} else {
-					retornoNFeIntegracao.setStatus(tRetConsReciNFe.getCStat());
+					RetornoUtil.validaSincrono(retorno);
+					retornoNFeIntegracao.setStatus(retorno.getProtNFe().getInfProt().getCStat());
+					retornoNFeIntegracao.setProtocolo(retorno.getProtNFe().getInfProt().getNProt());
+					xmlFinal = XmlNfeUtil.criaNfeProc(enviNFe, retorno.getProtNFe());
+					retornoNFeIntegracao.setXml(xmlFinal);
 				}
-			} else {
-				RetornoUtil.validaSincrono(retorno);
-				retornoNFeIntegracao.setStatus(retorno.getProtNFe().getInfProt().getCStat());
-				retornoNFeIntegracao.setProtocolo(retorno.getProtNFe().getInfProt().getNProt());
-//				xmlFinal = XmlNfeUtil.criaNfeProc(enviNFe, retorno.getProtNFe());
-				retornoNFeIntegracao.setXml(xmlFinal);
+			} catch (Exception e) {
+				retornoNFeIntegracao.setErroValidarRetorno(e.getMessage());
 			}
-		} catch (Exception e) {
-			retornoNFeIntegracao.setErroValidarRetorno(e.getMessage());
+		} else {
+			retornoNFeIntegracao.setErroValidarRetorno(retorno.getXMotivo());
 		}
 
 		return retornoNFeIntegracao;
@@ -630,7 +635,8 @@ public class ServicoEnvioNFeImpl implements IServicoEnvioNFe {
 			det.setProd(montaProduto(nfeItem.getNfeProdItem()));
 			det.setImposto(montaImposto(nfeItem.getNfeImpostosItem()));
 //			det.setImpostoDevol(montaImpostoDevol());
-			det.setInfAdProd(nfeItem.getNfeInfoAdicItem().getInfadprod());
+			if (nfeItem.getNfeInfoAdicItem() != null)
+				det.setInfAdProd(nfeItem.getNfeInfoAdicItem().getInfadprod());
 		}
 		return listDetalhamento;
 	}
@@ -651,7 +657,7 @@ public class ServicoEnvioNFeImpl implements IServicoEnvioNFe {
 		TNFe.InfNFe.Det.Imposto imposto = new TNFe.InfNFe.Det.Imposto();
 		if (nFeImpostosItem.getNfeIcmsItem() != null)
 			criaImpostoIcms(imposto, nFeImpostosItem.getNfeIcmsItem());
-		criaImpostoIcmsUFDestino(imposto);
+//		criaImpostoIcmsUFDestino(imposto);
 		if (nFeImpostosItem.getNfeIpiItem() != null)
 			criaImpostoIPI(imposto, nFeImpostosItem.getNfeIpiItem());
 //		criaImpostoII(imposto);
@@ -1130,7 +1136,7 @@ public class ServicoEnvioNFeImpl implements IServicoEnvioNFe {
 		icms40.setOrig(Integer.toString(nFeIcmsItem.getOrig()));
 		icms40.setCST(nFeIcmsItem.getCst());
 
-		icms40.setVICMSDeson(BigDecimalHelper.toString(nFeIcmsItem.getVicmsdeson(),2));
+		icms40.setVICMSDeson(BigDecimalHelper.toString(nFeIcmsItem.getVicmsdeson(), 2));
 		icms40.setMotDesICMS(Integer.toString(nFeIcmsItem.getMotdesicms()));
 
 		return icms40;
@@ -1237,10 +1243,14 @@ public class ServicoEnvioNFeImpl implements IServicoEnvioNFe {
 		produto.setUTrib(uwNfeProdItem.getUtrib());
 		produto.setQTrib(BigDecimalHelper.toString(uwNfeProdItem.getQtrib(), 4));
 		produto.setVUnTrib(BigDecimalHelper.toString(uwNfeProdItem.getVuntrib(), 10));
-		produto.setVFrete(BigDecimalHelper.toString(uwNfeProdItem.getVfrete(), 2));
-		produto.setVSeg(BigDecimalHelper.toString(uwNfeProdItem.getVseg(), 2));
-		produto.setVDesc(BigDecimalHelper.toString(uwNfeProdItem.getVdesc(), 2));
-		produto.setVOutro(BigDecimalHelper.toString(uwNfeProdItem.getVoutro(), 2));
+		if (uwNfeProdItem.getVfrete() != null && uwNfeProdItem.getVfrete().doubleValue() > 0)
+			produto.setVFrete(BigDecimalHelper.toString(uwNfeProdItem.getVfrete(), 2));
+		if (uwNfeProdItem.getVseg() != null && uwNfeProdItem.getVseg().doubleValue() > 0)
+			produto.setVSeg(BigDecimalHelper.toString(uwNfeProdItem.getVseg(), 2));
+		if (uwNfeProdItem.getVdesc() != null && uwNfeProdItem.getVdesc().doubleValue() > 0)
+			produto.setVDesc(BigDecimalHelper.toString(uwNfeProdItem.getVdesc(), 2));
+		if (uwNfeProdItem.getVoutro() != null && uwNfeProdItem.getVoutro().doubleValue() > 0)
+			produto.setVOutro(BigDecimalHelper.toString(uwNfeProdItem.getVoutro(), 2));
 		produto.setIndTot(Integer.toString(uwNfeProdItem.getIndtot()));
 
 		return produto;
@@ -1286,7 +1296,7 @@ public class ServicoEnvioNFeImpl implements IServicoEnvioNFe {
 		dest.setCNPJ(uwNfeDest.getCnpj());
 		dest.setCPF(uwNfeDest.getCpf());
 		dest.setXNome(uwNfeDest.getXnome());
-		dest.setIndIEDest(uwNfeDest.getIndieest());
+		dest.setIndIEDest(String.valueOf(uwNfeDest.getIndiedest()));
 		dest.setIE(uwNfeDest.getIe());
 		dest.setEmail(uwNfeDest.getEmail());
 
@@ -1364,7 +1374,9 @@ public class ServicoEnvioNFeImpl implements IServicoEnvioNFe {
 			ide.setXJust(uwNFe.getNfeIde().getXjust());
 		}
 
-		ide.getNFref().addAll(montaNFReferenciadas(uwNFe.getNfeIde().getNfesRefs()));
+		if (uwNFe.getNfeIde().getNfesRefs() != null && !uwNFe.getNfeIde().getNfesRefs().isEmpty()) {
+			ide.getNFref().addAll(montaNFReferenciadas(uwNFe.getNfeIde().getNfesRefs()));
+		}
 
 		return ide;
 	}
@@ -1422,7 +1434,7 @@ public class ServicoEnvioNFeImpl implements IServicoEnvioNFe {
 
 		try {
 			Resource resource = resourceLoader.getResource("classpath:schemas");
-			String path = resource.getFile().getAbsolutePath();
+			String path = resource.getFile().getAbsolutePath().concat("\\nfe");
 
 			Certificado certificado = carregarCertificado(configEmpresaNFe);
 			System.out.println(certificado.getCnpjCpf());

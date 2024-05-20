@@ -7,6 +7,7 @@ import br.com.ultraworks.erp.api.financeiro.domain.carteirafinanceira.CarteiraFi
 import br.com.ultraworks.erp.api.financeiro.domain.carteirafinanceira.CarteiraFinanceiraDTO;
 import br.com.ultraworks.erp.api.financeiro.mapper.CarteiraFinanceiraMapper;
 import br.com.ultraworks.erp.api.financeiro.repository.CarteiraFinanceiraRepository;
+import br.com.ultraworks.erp.api.financeiro.repository.TipoTituloRepository;
 import br.com.ultraworks.erp.core.generics.GenericService;
 import lombok.NoArgsConstructor;
 
@@ -19,4 +20,7 @@ public class CarteiraFinanceiraService extends GenericService<CarteiraFinanceira
 		super(repository, mapper);
 	}
 
+	public int getProximoCodigo() {
+		return ((CarteiraFinanceiraRepository) repository).getProximoCodigo();
+	}
 }

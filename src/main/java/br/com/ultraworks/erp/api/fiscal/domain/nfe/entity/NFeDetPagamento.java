@@ -33,7 +33,7 @@ public class NFeDetPagamento extends UWEntityBase {
 	private Long id;
 
 	@ManyToOne
-	@JoinColumn(name = "pagamento_nfe_id")
+	@JoinColumn(name = "pagamentos_nfe_id")
 	@JsonBackReference
 	private NFePagamento nfePagamento;
 

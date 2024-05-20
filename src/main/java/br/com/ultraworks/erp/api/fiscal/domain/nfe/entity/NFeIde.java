@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import br.com.ultraworks.erp.core.entity.UWEntityBase;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -62,6 +63,6 @@ public class NFeIde extends UWEntityBase {
 	private LocalDateTime dhcont;
 	private String xjust;
 	
-	@OneToMany(mappedBy = "nfeIde", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "nfeIde", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<NFeRef> nfesRefs;
 }

@@ -27,8 +27,8 @@ import br.com.ultraworks.erp.api.financeiro.domain.titulo.Titulo;
 import br.com.ultraworks.erp.api.financeiro.integrator.dto.ContainerDefinicaoOperacao;
 import br.com.ultraworks.erp.api.financeiro.integrator.dto.ContainerIntegracaoFinanceira;
 import br.com.ultraworks.erp.api.financeiro.integrator.dto.ContainerMovimento;
-import br.com.ultraworks.erp.api.financeiro.integrator.dto.ContainerParcelaBaixa;
 import br.com.ultraworks.erp.api.financeiro.integrator.dto.ContainerParcela;
+import br.com.ultraworks.erp.api.financeiro.integrator.dto.ContainerParcelaBaixa;
 import br.com.ultraworks.erp.api.financeiro.integrator.dto.ContainerTitulo;
 import br.com.ultraworks.erp.api.financeiro.repository.MovimentoRepository;
 import br.com.ultraworks.erp.api.financeiro.repository.OperacaoFinanceiraRepository;
@@ -37,9 +37,9 @@ import br.com.ultraworks.erp.api.financeiro.repository.TipoOperacaoFinanceiraRep
 import br.com.ultraworks.erp.api.financeiro.repository.TituloRepository;
 import br.com.ultraworks.erp.api.financeiro.repository.query.BuscaSomaValorBaixaFinanceiraQuery;
 import br.com.ultraworks.erp.api.organograma.domain.departamento.Departamento;
+import br.com.ultraworks.erp.api.organograma.domain.empresaFilial.EmpresaFilial;
 import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocal.ParceiroLocal;
 import br.com.ultraworks.erp.api.tabela.domain.historicopadrao.HistoricoPadrao;
-import br.com.ultraworks.erp.api.tabela.domain.indicadorDC.IndicadorDC;
 import br.com.ultraworks.erp.core.exception.BusinessException;
 import br.com.ultraworks.erp.core.exception.RegisterNotFoundException;
 
@@ -77,39 +77,40 @@ public class ServicoIntegracaoFinanceira {
 
 	public void definirOperacao(long tipoOperacaoFinanceiraId, BigDecimal valorOperacao,
 			Departamento departamentoPelaOperacao) {
-//		TipoOperacaoFinanceira tipoOperacaoFinanceira = tipoOperacaoFinanceiraRepository
-//				.findById(tipoOperacaoFinanceiraId).orElseThrow(() -> new RegisterNotFoundException(
-//						"Não encontrado tipo operação financeira com id " + tipoOperacaoFinanceiraId));
-//
-//		if (this.tipoOperacaoIntegracaoFinanceira.isInclusaoLancamento()) {
-//			if (!tipoOperacaoFinanceira.isCriaParcela()) {
-//				new RegisterNotFoundException(
-//						"Operação Financeira para integração não é válida para inclusão de título ");
-//			}
-//		} else if (this.tipoOperacaoIntegracaoFinanceira.isBaixa()) {
+		TipoOperacaoFinanceira tipoOperacaoFinanceira = tipoOperacaoFinanceiraRepository
+				.findById(tipoOperacaoFinanceiraId).orElseThrow(() -> new RegisterNotFoundException(
+						"Não encontrado tipo operação financeira com id " + tipoOperacaoFinanceiraId));
+
+		if (this.tipoOperacaoIntegracaoFinanceira.isInclusaoLancamento()) {
+			if (!tipoOperacaoFinanceira.isCriaTitulo()) {
+				new RegisterNotFoundException(
+						"Operação Financeira para integração não é válida para inclusão de título ");
+			}
+		}
+//		else if (this.tipoOperacaoIntegracaoFinanceira.isBaixa()) {
 //			if (!tipoOperacaoFinanceira.isBaixaTitulo()) {
 //				new RegisterNotFoundException(
 //						"Operação Financeira para integração não é válida para baixa de movimento de título ");
 //			}
 //		}
 //
-//		if (valorOperacao.doubleValue() <= 0) {
-//			new RegisterNotFoundException(
-//					"Valor da operação de integração do movimento financeiro deve ser maior que R$ 0,00 ");
-//		}
-//
-//		container.setContainerDefinicaoOperacao(
-//				ContainerDefinicaoOperacao.builder().tipoOperacaoFinanceira(tipoOperacaoFinanceira)
-//						.valorOperacao(valorOperacao).departamentoPelaOperacao(departamentoPelaOperacao).build());
+		if (valorOperacao.doubleValue() <= 0) {
+			new RegisterNotFoundException(
+					"Valor da operação de integração do movimento financeiro deve ser maior que R$ 0,00 ");
+		}
+
+		container.setContainerDefinicaoOperacao(
+				ContainerDefinicaoOperacao.builder().tipoOperacaoFinanceira(tipoOperacaoFinanceira)
+						.valorOperacao(valorOperacao).departamentoPelaOperacao(departamentoPelaOperacao).build());
 	}
 
-	public void atribuiValoresTitulo(TipoTitulo tipoTitulo, Departamento departamento, GrupoFinanceiro grupoFinanceiro,
+	public void atribuiValoresTitulo(TipoTitulo tipoTitulo, EmpresaFilial empresaFilial, Departamento departamento, GrupoFinanceiro grupoFinanceiro,
 			ParceiroLocal parceiroLocal, FatoGerador fatoGerador,
 			CaracteristicaMovimentoFinanceiro caracteristicaMovimentoFinanceiro, HistoricoPadrao historicoPadrao,
 			String documento, String observacao, LocalDate dataDocumento, String historico, BigDecimal valorTotal,
 			Long bancoId, Long agenciaId, Long contaId) {
 
-		container.setContainerTitulo(ContainerTitulo.builder().departamento(departamento)
+		container.setContainerTitulo(ContainerTitulo.builder().empresaFilial(empresaFilial).departamento(departamento)
 				.grupoFinanceiro(grupoFinanceiro).parceiroLocal(parceiroLocal).fatoGerador(fatoGerador)
 				.caracteristicaMovimentoFinanceiro(caracteristicaMovimentoFinanceiro).historicoPadrao(historicoPadrao)
 				.tipoTitulo(tipoTitulo).documento(documento).observacaoTitulo(observacao).valorTotalTitulo(valorTotal)
@@ -130,46 +131,47 @@ public class ServicoIntegracaoFinanceira {
 		OperacaoFinanceira operacaoFinanceira = validaOperacaoFinanceira(
 				container.getContainerDefinicaoOperacao().getTipoOperacaoFinanceira().getId(), 1,
 				operacaoAcessoriaFinanceira.getId());
-		
+
 		container.getListContainerMovimentos()
 				.add(ContainerMovimento.builder().numeroParcela(numeroParcela).sequenciaParcela(1)
 						.sequenciaMovimento(subSequenciaMovimento).subSequenciaMovimento(subSequenciaMovimento)
+						.grupoFinanceiro(grupoFinanceiro)
 						.operacaoFinanceira(operacaoFinanceira).carteiraFinanceira(carteira)
 						.valorMovimento(valorMovimento).dataMovimento(dataMovimento).saldoParcela(saldoParcela)
 						.build());
 	}
 
-	public void atribuiMovimentosParaBaixa(OperacaoAcessoriaFinanceira operacaoAcessoriaFinanceira, Long movimentoParaBaixaId,
-			Long bancoId, Long agenciaId, Long contaId, BigDecimal valorBaixa, 
+	public void atribuiMovimentosParaBaixa(OperacaoAcessoriaFinanceira operacaoAcessoriaFinanceira,
+			Long movimentoParaBaixaId, Long bancoId, Long agenciaId, Long contaId, BigDecimal valorBaixa,
 			CarteiraFinanceira carteiraFinanceiraSubstituicao, LocalDate dataMovimento, String observacao) {
 
 		OperacaoFinanceira operacaoFinanceira = validaOperacaoFinanceira(
 				container.getContainerDefinicaoOperacao().getTipoOperacaoFinanceira().getId(), 51,
 				operacaoAcessoriaFinanceira.getId());
-		
+
 		container.getListContainerBaixaParcela()
 				.add(ContainerParcelaBaixa.builder().operacaoFinanceira(operacaoFinanceira)
 						.idMovimentoParaBaixa(movimentoParaBaixaId).bancoId(bancoId).agenciaId(agenciaId)
 						.contaId(contaId).valorBaixa(valorBaixa)
 						.carteiraFinanceiraSubstituicao(carteiraFinanceiraSubstituicao).dataMovimento(dataMovimento)
 						.observacao(observacao)
-						.criaSubSequenciaMovimento(
-								operacaoFinanceira.getOperacaoAcessoriaFinanceira().isCriaSubSequenciaMovimento())
+//						.criaSubSequenciaMovimento(
+//								operacaoFinanceira.getOperacaoAcessoriaFinanceira().isCriaSubSequenciaMovimento())
 						.build());
 	}
 
 	public void executarIntegracao() {
 
-//		if (container.getContainerDefinicaoOperacao().getTipoOperacaoFinanceira().isCriaTitulo()) {
-//			executarIntegracaoNovoTitulo();
-//		}
+		if (container.getContainerDefinicaoOperacao().getTipoOperacaoFinanceira().isCriaTitulo()) {
+			executarIntegracaoNovoTitulo();
+		}
 //		if ((container.getContainerDefinicaoOperacao().getTipoOperacaoFinanceira().isBaixaTitulo()) &&
 //				!this.tipoOperacaoIntegracaoFinanceira.isEstorno()) {
 //			executarIntegracaoBaixaParcela();
 //		}
 	}
 
-	public void executarIntegracaoNovoTitulo() {
+	private void executarIntegracaoNovoTitulo() {
 		validaInclusaoTitulo();
 		Titulo titulo = persistirTitulo();
 		persistirParcelasEMovimentos(titulo);
@@ -205,20 +207,20 @@ public class ServicoIntegracaoFinanceira {
 					throw new BusinessException(
 							"Data de vencimento de parcela é menor que a data de movimento do título");
 				}
-				if (parametroFinanceiro.getIndicadorDC() == IndicadorDC.CRÉDITO) {
-					somaMovimentos.add(containerMovimento.getValorMovimento());
-				} else {
-					somaMovimentos.subtract(containerMovimento.getValorMovimento());
-				}
+//				if (parametroFinanceiro.getIndicadorDC() == IndicadorDC.CRÉDITO) {
+				somaMovimentos = somaMovimentos.add(containerMovimento.getValorMovimento());
+//				} else {
+//					somaMovimentos.subtract(containerMovimento.getValorMovimento());
+//				}
 			}
 		}
 
-		if (container.getContainerTitulo().getValorTotalTitulo() != somaParcelas) {
+		if (container.getContainerTitulo().getValorTotalTitulo().compareTo(somaParcelas) != 0) {
 			throw new BusinessException(
 					"Verifique o valor do título e das parcelas, corrija os valores e grave novamente.");
 		}
 
-		if (somaParcelas != somaMovimentos) {
+		if (somaParcelas.compareTo(somaMovimentos) != 0) {
 			throw new BusinessException(
 					"Verifique a soma das parcelas e soma dos movimentos, corrija os valores e grave novamente.");
 		}
@@ -231,7 +233,7 @@ public class ServicoIntegracaoFinanceira {
 		Long _parcelaId = 0L;
 		CarteiraFinanceira _carteiraFinanceira;
 		BigDecimal _valorBaixa = BigDecimal.ZERO;
-		
+
 		validaBaixaParcela();
 		for (ContainerParcelaBaixa containerBaixaParcela : container.getListContainerBaixaParcela()) {
 			List<MovimentoFinanceiro> listaMovimentoGravado = buscarListaMovimentoGravadoParaBaixa(
@@ -241,8 +243,7 @@ public class ServicoIntegracaoFinanceira {
 				_subSequenciaMovimento = listaMovimentoGravado.get(0).getSubSeqMvto() + 1;
 				_saldoParcela = listaMovimentoGravado.get(0).getSaldoParcela();
 			} else {
-				BigDecimal valorMovimentoTotal = buscaSomaMovimento(
-						containerBaixaParcela.getIdMovimentoParaBaixa());
+				BigDecimal valorMovimentoTotal = buscaSomaMovimento(containerBaixaParcela.getIdMovimentoParaBaixa());
 				_sequenciaMovimento = listaMovimentoGravado.get(0).getSeqMvto() + 1;
 				_subSequenciaMovimento = 1;
 				_saldoParcela = listaMovimentoGravado.get(0).getSaldoParcela().subtract(valorMovimentoTotal);
@@ -250,16 +251,15 @@ public class ServicoIntegracaoFinanceira {
 			_parcelaId = listaMovimentoGravado.get(0).getParcela().getId();
 			_carteiraFinanceira = listaMovimentoGravado.get(0).getCarteiraFinanceira();
 			_valorBaixa = containerBaixaParcela.getValorBaixa();
-			
+
 			baixaMovimento(_parcelaId, _sequenciaMovimento, _subSequenciaMovimento,
 					containerBaixaParcela.getOperacaoFinanceira(), _carteiraFinanceira, _valorBaixa, _saldoParcela,
-					containerBaixaParcela.getDepartamento(),
-					containerBaixaParcela.getDataMovimento(), containerBaixaParcela.getBancoId(),
-					containerBaixaParcela.getAgenciaId(), containerBaixaParcela.getContaId(),
-					containerBaixaParcela.getObservacao());
+					containerBaixaParcela.getDepartamento(), containerBaixaParcela.getDataMovimento(),
+					containerBaixaParcela.getBancoId(), containerBaixaParcela.getAgenciaId(),
+					containerBaixaParcela.getContaId(), containerBaixaParcela.getObservacao());
 		}
 	}
-	
+
 	private void validaBaixaParcela() {
 		if ((container.getListContainerBaixaParcela() == null || container.getListContainerBaixaParcela().isEmpty())) {
 			throw new BusinessException("Deve ser informado pelo menos uma parcela para integração da baixa");
@@ -275,13 +275,15 @@ public class ServicoIntegracaoFinanceira {
 
 	private OperacaoFinanceira validaOperacaoFinanceira(long tipoOperacaoFinanceiraId,
 			long operacaoMovimentoFinanceiroId, long operacaoAcessoriaFinanceiaId) {
+		OperacaoFinanceira operacaoFinanceira = operacaoFinanceiraRepository.findOperacaoFinanceira(
+				tipoOperacaoFinanceiraId, operacaoMovimentoFinanceiroId, operacaoAcessoriaFinanceiaId);
 		// validar Parametro Financeiro
-		return null;
+		return operacaoFinanceira;
 	}
 
 	private Titulo persistirTitulo() {
 		ContainerTitulo containerTitulo = this.container.getContainerTitulo();
-		Titulo titulo = Titulo.builder().departamento(containerTitulo.getDepartamento())
+		Titulo titulo = Titulo.builder().empresaFilial(containerTitulo.getEmpresaFilial()).departamento(containerTitulo.getDepartamento())
 				.parceiroLocal(containerTitulo.getParceiroLocal()).tipoTitulo(containerTitulo.getTipoTitulo())
 				.grupoFinanceiro(containerTitulo.getGrupoFinanceiro()).fatoGerador(containerTitulo.getFatoGerador())
 				.caracteristicaMovimentoFinanceiro(containerTitulo.getCaracteristicaMovimentoFinanceiro())
@@ -326,7 +328,7 @@ public class ServicoIntegracaoFinanceira {
 			}
 		}
 	}
-	
+
 	private List<MovimentoFinanceiro> buscarListaMovimentoGravadoParaBaixa(Long movimentoParaBaixaId) {
 		List<MovimentoFinanceiro> listaMovimento = movimentoRepository.findAllById(Arrays.asList(movimentoParaBaixaId));
 		if (listaMovimento != null && listaMovimento.size() > 0) {
@@ -343,7 +345,7 @@ public class ServicoIntegracaoFinanceira {
 		}
 		return listaMovimento;
 	}
-	
+
 	private BigDecimal buscaSomaMovimento(Long movimentoId) {
 		MovimentoFinanceiro movimentoFinanceiro = movimentoRepository.findById(movimentoId).get();
 		ParcelaFinanceiro parcelaFinanceiro = movimentoFinanceiro.getParcela();
@@ -360,11 +362,11 @@ public class ServicoIntegracaoFinanceira {
 			return valor;
 		}
 	}
-	
+
 	public void baixaMovimento(Long parcelaId, int sequenciaMovimento, int subSequenciaMovimento,
 			OperacaoFinanceira operacaoFinanceira, CarteiraFinanceira carteira, BigDecimal valorMovimento,
-			BigDecimal saldoParcela, Departamento departamento, LocalDate dataMovimento, Long bancoId,
-			Long agenciaId, Long contaId, String observacao) {
+			BigDecimal saldoParcela, Departamento departamento, LocalDate dataMovimento, Long bancoId, Long agenciaId,
+			Long contaId, String observacao) {
 		Optional<ParcelaFinanceiro> parcelaFinanceiroOptional = parcelaRepository.findById(parcelaId);
 		if (!parcelaFinanceiroOptional.isPresent()) {
 			throw new BusinessException("Não encontrado parcela financeira para id " + parcelaId);

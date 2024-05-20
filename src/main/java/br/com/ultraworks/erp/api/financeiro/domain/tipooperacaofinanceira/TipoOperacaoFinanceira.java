@@ -28,4 +28,7 @@ public class TipoOperacaoFinanceira extends UWEntityBase {
 	private String nome;
 	private String sigla;
 	
+	@Column(name = "idn_cria_titulo")
+	private boolean criaTitulo;
+	
 }

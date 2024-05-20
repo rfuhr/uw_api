@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import br.com.ultraworks.erp.api.financeiro.domain.grupofinanceiro.GrupoFinanceiro;
 import br.com.ultraworks.erp.api.financeiro.domain.grupofinanceiro.GrupoFinanceiroDTO;
 import br.com.ultraworks.erp.api.financeiro.mapper.GrupoFinanceiroMapper;
+import br.com.ultraworks.erp.api.financeiro.repository.CarteiraFinanceiraRepository;
 import br.com.ultraworks.erp.api.financeiro.repository.GrupoFinanceiroRepository;
 import br.com.ultraworks.erp.core.generics.GenericService;
 import lombok.NoArgsConstructor;
@@ -19,4 +20,7 @@ public class GrupoFinanceiroService extends GenericService<GrupoFinanceiro, Long
 		super(repository, mapper);
 	}
 
+	public int getProximoCodigo() {
+		return ((GrupoFinanceiroRepository) repository).getProximoCodigo();
+	}
 }
