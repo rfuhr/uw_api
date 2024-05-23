@@ -2,6 +2,7 @@ package br.com.ultraworks.erp.api.fiscal.domain.ncm;
 
 import java.time.LocalDate;
 
+import br.com.ultraworks.erp.api.tabela.domain.tiposinteticoanalitico.validator.ValidaTipoSinteticoAnalitico;
 import br.com.ultraworks.erp.core.annotation.FriendlyName;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -22,5 +23,10 @@ public class NcmDTO {
 	private String codigo;
 	private LocalDate dataInicioVigencia;
 	private LocalDate dataFinalVigencia;
+	
+	@ValidaTipoSinteticoAnalitico
+	private String tipoSinteticoAnalitico;
+	
+	private String tipoSinteticoAnaliticoName;
 
 }

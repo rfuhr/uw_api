@@ -86,7 +86,7 @@ public class ItemMapper extends GenericMapper<Item, ItemDTO> {
 		if (dto.getGrupoTributacaoId() != null && dto.getGrupoTributacaoId() > 0)
 			entity.setGrupoTributacao(grupoTributacaoService.getById(dto.getGrupoTributacaoId()).orElseThrow(
 					() -> new RegisterNotFoundException("Não encontrado Grupo Tributação com id " + dto.getGrupoTributacaoId())));
-		if (dto.getClassificacaoOperacaoId() != null && dto.getClassificacaoOperacaoId() > 0)
+		if (dto.getClassificacaoOperacaoId() != null)
 			entity.setClassificacaoOperacao(classificacaoOperacaoService.getById(dto.getClassificacaoOperacaoId()).orElseThrow(
 					() -> new RegisterNotFoundException("Não encontrado Classificação Operação com id " + dto.getClassificacaoOperacaoId())));		
 	}
