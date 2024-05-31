@@ -20,6 +20,7 @@ public class TipoPrecoMapper extends GenericMapper<TipoPreco, TipoPrecoDTO> {
 		entity.setCodigo(dto.getCodigo());
 		entity.setNome(dto.getNome());
 		entity.setTransferencia(dto.isTransferencia());
+		entity.setPromocional(dto.isPromocional());
 	}
 
 	@Override
@@ -28,5 +29,6 @@ public class TipoPrecoMapper extends GenericMapper<TipoPreco, TipoPrecoDTO> {
 		dto.setCodigo(entity.getCodigo());
 		dto.setNome(entity.getNome());
 		dto.setTransferencia(entity.isTransferencia());
+		dto.setPromocional(entity.isPromocional());
 	}
 }

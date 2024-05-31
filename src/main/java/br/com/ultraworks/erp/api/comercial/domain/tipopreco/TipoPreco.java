@@ -36,4 +36,6 @@ public class TipoPreco extends UWEntityBase {
 	
 	private boolean transferencia;
 	
+	private boolean promocional;
+	
 }

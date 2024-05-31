@@ -23,12 +23,14 @@ public class ConfigMarkupItemService extends GenericService<ConfigMarkupItem, Lo
 
 	ConfigMarkupItemIndiceService configConfigMarkupItemIndiceService;
 	VerificaDuplicidadeConfigMarkupItemQuery verificaDuplicidadeConfigMarkupItemQuery;
+	ConfigMarkupItemRepository repository;
 	
 	@Autowired
 	public ConfigMarkupItemService(ConfigMarkupItemRepository repository, ConfigMarkupItemMapper mapper,
 			ConfigMarkupItemIndiceService configConfigMarkupItemIndiceService,
 			VerificaDuplicidadeConfigMarkupItemQuery verificaDuplicidadeConfigMarkupItemQuery) {
 		super(repository, mapper);
+		this.repository = repository;
 		this.configConfigMarkupItemIndiceService = configConfigMarkupItemIndiceService;
 		this.verificaDuplicidadeConfigMarkupItemQuery = verificaDuplicidadeConfigMarkupItemQuery;
 	}
@@ -40,6 +42,15 @@ public class ConfigMarkupItemService extends GenericService<ConfigMarkupItem, Lo
 			registro.get().setConfigMarkupItemIndices(configConfigMarkupItemIndiceService.getAllByConfigMarkupItem(id));
 		}
 		return registro;
+	}
+	
+	public ConfigMarkupItem buscaConfigMarkupItemVigente(Long itemId) {
+		Long configMarkupItemId = repository.buscaConfigMarkupItemVigente(itemId);
+		if (configMarkupItemId == null) {
+			return null;
+		}
+		Optional<ConfigMarkupItem> confOptional = getById(configMarkupItemId);
+		return confOptional.isPresent() ? confOptional.get() : null;
 	}
 	
 	@Override

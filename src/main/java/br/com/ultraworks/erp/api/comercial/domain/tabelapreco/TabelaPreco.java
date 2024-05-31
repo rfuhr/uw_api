@@ -1,14 +1,13 @@
-package br.com.ultraworks.erp.api.comercial.domain.configcalculopreco;
+package br.com.ultraworks.erp.api.comercial.domain.tabelapreco;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-import br.com.ultraworks.erp.api.comercial.domain.configcalculoprecooperinterna.ConfigCalculoPrecoOperInterna;
+import br.com.ultraworks.erp.api.comercial.domain.tabelaprecoempresafilial.TabelaPrecoEmpresaFilial;
+import br.com.ultraworks.erp.api.comercial.domain.tabelaprecoitem.TabelaPrecoItem;
 import br.com.ultraworks.erp.api.comercial.domain.tipopreco.TipoPreco;
 import br.com.ultraworks.erp.api.estoque.domain.grupocontabil.GrupoContabil;
 import br.com.ultraworks.erp.api.organograma.domain.empresaFilial.EmpresaFilial;
-import br.com.ultraworks.erp.api.tabela.domain.operacaointerna.OperacaoInterna;
 import br.com.ultraworks.erp.core.annotation.UniqueValidation;
 import br.com.ultraworks.erp.core.annotation.UniqueValidationGroup;
 import br.com.ultraworks.erp.core.entity.UWEntityBase;
@@ -27,20 +26,25 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "config_calculo_preco")
+@Table(name = "tabela_preco")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode(callSuper=false)
 @UniqueValidationGroup({
-    @UniqueValidation(fields = {"id"}, label = "Já existe Configuração de Cálculo de Preço com esse Identificador")
+    @UniqueValidation(fields = {"codigo"}, label = "Já existe Tabela Preço com esse Código"),
+    @UniqueValidation(fields = {"nome"}, label = "Já existe Tabela Preço com esse Nome")
 })
-public class ConfigCalculoPreco extends UWEntityBase {
+public class TabelaPreco extends UWEntityBase {
 	
 	@Id
-	@SequenceGenerator(name = "configCalculoPrecoSeq", sequenceName = "seq_config_calculo_preco", allocationSize = 1)
-	@GeneratedValue(generator = "configCalculoPrecoSeq")
+	@SequenceGenerator(name = "tabelaPrecoSeq", sequenceName = "seq_tabela_preco", allocationSize = 1)
+	@GeneratedValue(generator = "tabelaPrecoSeq")
 	private Long id;
+	
+	private int codigo;
+	
+	private String nome;
 	
 	@OneToOne
 	@JoinColumn(name = "empresa_filial_id")
@@ -54,20 +58,7 @@ public class ConfigCalculoPreco extends UWEntityBase {
 	@JoinColumn(name = "grupo_contabil_id")
 	private GrupoContabil grupoContabil;
 	
-	@OneToOne
-	@JoinColumn(name = "operacao_interna_id")
-	private OperacaoInterna operacaoInterna;
-	
-	@Column(name = "aplica_indices_markup")
-	private boolean aplicaIndicesMarkup;
-	
-	@Column(name = "aplica_percentual_fixo")
-	private boolean aplicaPercentualFixo;
-	
-	@Column(name = "dias_busca_precos")
-	private int diasBuscaPrecos;
-	
-	private BigDecimal percentual;
+	private boolean promocional;
 	
 	@Column(name = "data_inicio_vigencia")
 	private LocalDate dataInicioVigencia;
@@ -76,6 +67,9 @@ public class ConfigCalculoPreco extends UWEntityBase {
 	private LocalDate dataFinalVigencia;
 	
 	@Transient
-	private List<ConfigCalculoPrecoOperInterna> configCalculoPrecoOperInternas;
+	private List<TabelaPrecoEmpresaFilial> tabelaPrecoEmpresaFiliais;
+	
+	@Transient
+	private List<TabelaPrecoItem> tabelaPrecoItens;
 
 }

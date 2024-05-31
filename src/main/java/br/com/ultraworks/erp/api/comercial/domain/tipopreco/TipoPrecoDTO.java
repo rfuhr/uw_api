@@ -17,4 +17,5 @@ public class TipoPrecoDTO {
 	private String nome;
 	private int codigo;
 	private boolean transferencia;
+	private boolean promocional;
 }

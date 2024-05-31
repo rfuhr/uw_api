@@ -21,6 +21,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ConfigMarkupPlanoItemService extends GenericService<ConfigMarkupPlanoItem, Long, ConfigMarkupPlanoItemDTO> {
 
+	ConfigMarkupPlanoItemRepository repository;
 	ConfigMarkupPlanoItemIndiceService configConfigMarkupPlanoItemIndiceService;
 	VerificaDuplicidadeConfigMarkupPlanoItemQuery verificaDuplicidadeConfigMarkupPlanoItemQuery;
 	
@@ -29,6 +30,7 @@ public class ConfigMarkupPlanoItemService extends GenericService<ConfigMarkupPla
 			ConfigMarkupPlanoItemIndiceService configConfigMarkupPlanoItemIndiceService,
 			VerificaDuplicidadeConfigMarkupPlanoItemQuery verificaDuplicidadeConfigMarkupPlanoItemQuery) {
 		super(repository, mapper);
+		this.repository = repository;
 		this.configConfigMarkupPlanoItemIndiceService = configConfigMarkupPlanoItemIndiceService;
 		this.verificaDuplicidadeConfigMarkupPlanoItemQuery = verificaDuplicidadeConfigMarkupPlanoItemQuery;
 	}
@@ -40,6 +42,15 @@ public class ConfigMarkupPlanoItemService extends GenericService<ConfigMarkupPla
 			registro.get().setConfigMarkupPlanoItemIndices(configConfigMarkupPlanoItemIndiceService.getAllByConfigMarkupPlanoItem(id));
 		}
 		return registro;
+	}
+	
+	public ConfigMarkupPlanoItem buscaConfigMarkupPlanoItemVigente(Long planoClassificacaoItemId) {
+		Long configMarkupPlanoItemId = repository.buscaConfigMarkupPlanoItemVigente(planoClassificacaoItemId);
+		if (configMarkupPlanoItemId == null) {
+			return null;
+		}
+		Optional<ConfigMarkupPlanoItem> confOptional = getById(configMarkupPlanoItemId);
+		return confOptional.isPresent() ? confOptional.get() : null;
 	}
 	
 	@Override

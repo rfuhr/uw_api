@@ -15,9 +15,15 @@ public class ConfigCalculoPrecoDTO {
 	private Long tipoPrecoId;
 	private String tipoPrecoNome;
 	private int tipoPrecoCodigo;
+	private Long empresaFilialId;
+	private String empresaFilialNome;
+	private String empresaFilialSigla;
 	private Long operacaoInternaId;
 	private String operacaoInternaNome;
 	private String operacaoInternaSigla;
+	private Long grupoContabilId;
+	private String grupoContabilNome;
+	private int grupoContabilCodigo;
 	private boolean aplicaIndicesMarkup;
 	private boolean aplicaPercentualFixo;
 	private int diasBuscaPrecos;
