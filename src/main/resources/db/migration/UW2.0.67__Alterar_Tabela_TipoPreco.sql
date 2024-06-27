@@ -1,0 +1,1 @@
+alter table tipo_preco add column promocional boolean not null default false;

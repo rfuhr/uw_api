@@ -3,10 +3,13 @@ package br.com.ultraworks.erp.api.fiscal.domain.ncm;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import br.com.ultraworks.erp.api.tabela.domain.tiposinteticoanalitico.TipoSinteticoAnalitico;
+import br.com.ultraworks.erp.api.tabela.domain.tiposinteticoanalitico.TipoSinteticoAnaliticoConverter;
 import br.com.ultraworks.erp.core.annotation.UniqueValidation;
 import br.com.ultraworks.erp.core.annotation.UniqueValidationGroup;
 import br.com.ultraworks.erp.core.entity.UWEntityBase;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -43,5 +46,9 @@ public class Ncm extends UWEntityBase implements Serializable{
 
 	@Column(name = "data_final_vigencia")
 	private LocalDate dataFinalVigencia;
+	
+	@Convert(converter = TipoSinteticoAnaliticoConverter.class)
+	@Column(name = "tipo_sintetico_analitico")
+	private TipoSinteticoAnalitico tipoSinteticoAnalitico;
 
 }
