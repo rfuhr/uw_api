@@ -5,9 +5,14 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import br.com.ultraworks.erp.api.financeiro.domain.carteirafinanceira.CarteiraFinanceira;
+import br.com.ultraworks.erp.api.financeiro.domain.conta.Conta;
+import br.com.ultraworks.erp.api.financeiro.domain.documentobaixafinanceiro.DocumentoBaixaFinanceiro;
 import br.com.ultraworks.erp.api.financeiro.domain.grupofinanceiro.GrupoFinanceiro;
-import br.com.ultraworks.erp.api.financeiro.domain.operacaofinanceira.OperacaoFinanceira;
+import br.com.ultraworks.erp.api.financeiro.domain.negociacao.NegociacaoFinanceira;
+import br.com.ultraworks.erp.api.financeiro.domain.operacaoacessoriafinanceira.OperacaoAcessoriaFinanceira;
+import br.com.ultraworks.erp.api.financeiro.domain.operacaomovimentofinanceiro.OperacaoMovimentoFinanceiro;
 import br.com.ultraworks.erp.api.financeiro.domain.parcela.ParcelaFinanceiro;
+import br.com.ultraworks.erp.api.financeiro.domain.tipooperacaofinanceira.TipoOperacaoFinanceira;
 import br.com.ultraworks.erp.api.organograma.domain.departamento.Departamento;
 import br.com.ultraworks.erp.core.entity.UWEntityBase;
 import jakarta.persistence.Column;
@@ -53,15 +58,23 @@ public class MovimentoFinanceiro extends UWEntityBase {
 	private int subSeqMvto;
 
 	@OneToOne
-	@JoinColumn(name = "operacao_financeira_id")
-	private OperacaoFinanceira operacaoFinanceira;
+	@JoinColumn(name = "tipo_operacao_financeira_id")
+	private TipoOperacaoFinanceira tipoOperacaoFinanceira;
+
+	@OneToOne
+	@JoinColumn(name = "operacao_movimento_financeiro_id")
+	private OperacaoMovimentoFinanceiro operacaoMovimentoFinanceiro;
+
+	@OneToOne
+	@JoinColumn(name = "operacao_acessoria_financeira_id")
+	private OperacaoAcessoriaFinanceira operacaoAcessoriaFinanceira;
 
 	@OneToOne
 	@JoinColumn(name = "grupo_financeiro_id")
 	private GrupoFinanceiro grupoFinanceiro;
 
 	@OneToOne
-	@JoinColumn(name = "carteira_id")
+	@JoinColumn(name = "carteira_financeira_id")
 	private CarteiraFinanceira carteiraFinanceira;
 
 	@Column(name = "valor_movimento")
@@ -77,4 +90,16 @@ public class MovimentoFinanceiro extends UWEntityBase {
 	private LocalDateTime dataLancamento;
 
 	private String observacao;
+
+	@OneToOne
+	@JoinColumn(name = "conta_id")
+	private Conta conta;
+
+	@OneToOne
+	@JoinColumn(name = "documento_baixa_financeiro_id")
+	private DocumentoBaixaFinanceiro documentoBaixaFinanceiro;
+	
+	@OneToOne
+	@JoinColumn(name = "negociacao_financeira_id")
+	private NegociacaoFinanceira negociacaoFinanceira;
 }

@@ -11,17 +11,17 @@ import br.com.ultraworks.erp.core.UWRepository;
 public interface ParametroFinanceiroRepository extends UWRepository<ParametroFinanceiro, Long> {
 
 	@Query("SELECT pf FROM ParametroFinanceiro pf " +
-            "WHERE pf.empresa.id = :empresaId " +
-            "AND pf.tipoTitulo.id = :tipoTituloId " +
+            "WHERE pf.tipoTitulo.id = :tipoTituloId " +
             "AND pf.caracteristicaMovimentoFinanceiro.id = :caracteristicaMovimentoFinanceiroId " +
             "AND pf.carteiraFinanceira.id = :carteiraFinanceiraId " +
             "AND pf.fatoGerador.id = :fatoGeradorId " +
-            "AND pf.operacaoFinanceira.id = :operacaoFinanceiraId")
+            "AND pf.operacaoMovimentoFinanceiro.id = :operacaoMovimentoFinanceiroId " +
+            "AND pf.operacaoAcessoriaFinanceira.id = :operacaoAcessoriaFinanceiraId ")
     ParametroFinanceiro findByParametros(
-            @Param("empresaId") Long empresaId,
             @Param("tipoTituloId") Long tipoTituloId,
             @Param("caracteristicaMovimentoFinanceiroId") Long caracteristicaMovimentoFinanceiroId,
             @Param("carteiraFinanceiraId") Long carteiraFinanceiraId,
             @Param("fatoGeradorId") Long fatoGeradorId,
-            @Param("operacaoFinanceiraId") Long operacaoFinanceiraId);
+            @Param("operacaoMovimentoFinanceiroId") Long operacaoMovimentoFinanceiroId,
+            @Param("operacaoAcessoriaFinanceiraId") Long operacaoAcessoriaFinanceiraId);
 }

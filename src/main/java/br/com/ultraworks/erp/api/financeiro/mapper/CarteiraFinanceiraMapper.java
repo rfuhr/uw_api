@@ -12,7 +12,7 @@ public class CarteiraFinanceiraMapper extends GenericMapper<CarteiraFinanceira, 
 
 	public CarteiraFinanceiraMapper(CarteiraFinanceiraRepository repository) {
 		super(repository, CarteiraFinanceira::new, CarteiraFinanceiraDTO::new);
-    }
+	}
 
 	@Override
 	protected void setValuesToEntity(CarteiraFinanceiraDTO dto, CarteiraFinanceira entity) {
@@ -20,6 +20,8 @@ public class CarteiraFinanceiraMapper extends GenericMapper<CarteiraFinanceira, 
 		entity.setCodigo(dto.getCodigo());
 		entity.setNome(dto.getNome());
 		entity.setSigla(dto.getSigla());
+		entity.setInformaBanco(dto.isInformaBanco());
+		entity.setListaPosicaoTitulo(dto.isListaPosicaoTitulo());
 	}
 
 	@Override
@@ -28,6 +30,7 @@ public class CarteiraFinanceiraMapper extends GenericMapper<CarteiraFinanceira, 
 		dto.setCodigo(entity.getCodigo());
 		dto.setNome(entity.getNome());
 		dto.setSigla(entity.getSigla());
+		dto.setInformaBanco(entity.isInformaBanco());
+		dto.setListaPosicaoTitulo(entity.isListaPosicaoTitulo());
 	}
 }
-

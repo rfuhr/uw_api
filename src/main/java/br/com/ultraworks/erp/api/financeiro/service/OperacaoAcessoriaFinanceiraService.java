@@ -1,5 +1,8 @@
 package br.com.ultraworks.erp.api.financeiro.service;
 
+import java.util.Collection;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +22,14 @@ public class OperacaoAcessoriaFinanceiraService
 	public OperacaoAcessoriaFinanceiraService(OperacaoAcessoriaFinanceiraRepository repository,
 			OperacaoAcessoriaFinanceiraMapper mapper) {
 		super(repository, mapper);
+	}
+
+	public List<OperacaoAcessoriaFinanceira> getAllJuros() {
+		return ((OperacaoAcessoriaFinanceiraRepository) repository).findByJuroDesconto("J");
+	}
+
+	public Collection<OperacaoAcessoriaFinanceira> getAllDescontos() {
+		return ((OperacaoAcessoriaFinanceiraRepository) repository).findByJuroDesconto("D");
 	}
 
 }

@@ -2,15 +2,19 @@ package br.com.ultraworks.erp.api.financeiro.domain.titulo;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 import br.com.ultraworks.erp.api.financeiro.domain.caracteristicamovfin.CaracteristicaMovimentoFinanceiro;
 import br.com.ultraworks.erp.api.financeiro.domain.fatogerador.FatoGerador;
 import br.com.ultraworks.erp.api.financeiro.domain.grupofinanceiro.GrupoFinanceiro;
+import br.com.ultraworks.erp.api.financeiro.domain.negociacao.NegociacaoFinanceira;
+import br.com.ultraworks.erp.api.financeiro.domain.parcela.ParcelaFinanceiro;
 import br.com.ultraworks.erp.api.financeiro.domain.tipotitulo.TipoTitulo;
 import br.com.ultraworks.erp.api.organograma.domain.departamento.Departamento;
 import br.com.ultraworks.erp.api.organograma.domain.empresaFilial.EmpresaFilial;
 import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocal.ParceiroLocal;
 import br.com.ultraworks.erp.api.tabela.domain.historicopadrao.HistoricoPadrao;
+import br.com.ultraworks.erp.api.tabela.domain.operacaointernafiscal.OperacaoInternaFiscal;
 import br.com.ultraworks.erp.core.entity.UWEntityBase;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,6 +24,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -81,4 +86,13 @@ public class Titulo extends UWEntityBase {
 	@Column(name = "valor_total")
 	private BigDecimal valorTotal;
 	private String historico;
+	@Column(name = "nosso_numero")
+	private Long nossoNumero;
+	
+	@OneToOne
+	@JoinColumn(name = "negociacao_financeira_id")
+	private NegociacaoFinanceira negociacaoFinanceira;
+	
+	@Transient
+	private List<ParcelaFinanceiro> parcelas;
 }

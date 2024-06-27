@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.ultraworks.erp.api.estoque.domain.saldoestoque.SaldoEstoque;
 import br.com.ultraworks.erp.api.estoque.domain.saldoestoque.SaldoEstoqueDTO;
@@ -28,6 +29,7 @@ public class SaldoEstoqueService extends GenericService<SaldoEstoque, Long, Sald
 		this.repository = repository;
 	}
 	
+	@Transactional
 	public void atualizaSaldoEstoque(Date dataInicio, Date dataFim, Long itemId, Long empresaFilialId,
 			Long localEstoqueId, Long grupoContabilId, Long userId) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

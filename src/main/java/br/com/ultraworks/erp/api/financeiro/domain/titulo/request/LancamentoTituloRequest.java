@@ -38,6 +38,7 @@ public class LancamentoTituloRequest {
 	@NotNull
 	private BigDecimal valorLiquido;
 	private String observacao;
+	private Long contaId;
 	
 	private List<LancamentoParcelaRequest> parcelas;
 	

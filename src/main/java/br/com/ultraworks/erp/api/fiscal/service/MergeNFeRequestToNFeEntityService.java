@@ -145,7 +145,7 @@ public class MergeNFeRequestToNFeEntityService {
 						.tpag(pag.getMeioPagamento()).vpag(pag.getValorPagamento()).build();
 				if (!pag.getMeioPagamento().equals(MeioPagamento.SEMPAGAMENTO.getValue())) {
 					pagamento.setIndpag(Integer.parseInt(pag.getIndicadorFormaPagamento()));
-					if (StringUtils.containsAny(pag.getMeioPagamento(), MeioPagamento.CARTAOCREDITO.getValue(),
+					if (StringUtils.equalsAny(pag.getMeioPagamento(), MeioPagamento.CARTAOCREDITO.getValue(),
 							MeioPagamento.CARTAODEBITO.getValue())) {
 						pagamento.setTpintegra(Integer.parseInt(pag.getTipoIntegracao()));
 						pagamento.setCnpj(pag.getCnpj());
@@ -251,7 +251,7 @@ public class MergeNFeRequestToNFeEntityService {
 	}
 
 	private BigDecimal getTotalVnf(NFeTotais nfeTotais) {
-		return nfeTotais.getVprod().min(nfeTotais.getVdesc()).min(nfeTotais.getVicmsdeson()).add(nfeTotais.getVst())
+		return nfeTotais.getVprod().subtract(nfeTotais.getVdesc()).subtract(nfeTotais.getVicmsdeson()).add(nfeTotais.getVst())
 				.add(nfeTotais.getVfcpst()).add(nfeTotais.getVfrete()).add(nfeTotais.getVseg())
 				.add(nfeTotais.getVoutro()).add(nfeTotais.getVii()).add(nfeTotais.getVipi())
 				.add(nfeTotais.getVipidevol());
@@ -512,7 +512,7 @@ public class MergeNFeRequestToNFeEntityService {
 
 	private NFeCofinsItem newNfeImpostosItemCofins(NFeImpostosItem nFeImpostosItem, Item item,
 			CofinsNFeRequest cofins) {
-		if (cofins != null && StringUtils.isNotBlank(cofins.getCst())) {
+		if (cofins != null && cofins.getConfiguracaoFiscalCofinsId() != null) {
 			ConfiguracaoFiscalCofins configuracaoFiscalCofins = this.configuracaoFiscalCofinsService
 					.getById(cofins.getConfiguracaoFiscalCofinsId()).orElseThrow(
 							() -> new RegisterNotFoundException("Não encontrado configuração fiscal de cofins com id: "
@@ -525,13 +525,13 @@ public class MergeNFeRequestToNFeEntityService {
 			nFeCofinsItem.setNFeImpostosItem(nFeImpostosItem);
 
 			nFeCofinsItem.setCst(cst);
-			if (!StringUtils.containsAny(cst, "04", "05", "06", "07", "08", "09")) {
-				if (configuracaoFiscalCofins.getTipoCalculo().equals(TipoCalculo.PERCENTUAL.getValue())) {
+			if (!StringUtils.equalsAny(cst, "04", "05", "06", "07", "08", "09")) {
+				if (configuracaoFiscalCofins.getTipoCalculo().equals(TipoCalculo.PERCENTUAL)) {
 					nFeCofinsItem.setVbc(cofins.getBcCofins());
 					nFeCofinsItem.setPcofins(configuracaoFiscalCofins.getAliquota());
 					nFeCofinsItem.setVcofins(cofins.getValorCofins());
 				}
-				if (configuracaoFiscalCofins.getTipoCalculo().equals(TipoCalculo.VALOR.getValue())) {
+				if (configuracaoFiscalCofins.getTipoCalculo().equals(TipoCalculo.VALOR)) {
 					nFeCofinsItem.setQbcprod(cofins.getQuantidadeVendida());
 					nFeCofinsItem.setValiqprod(configuracaoFiscalCofins.getAliquota());
 					nFeCofinsItem.setVcofins(cofins.getValorCofins());
@@ -543,7 +543,7 @@ public class MergeNFeRequestToNFeEntityService {
 	}
 
 	private NFePisItem newNfeImpostosItemPis(NFeImpostosItem nFeImpostosItem, Item item, PisNFeRequest pis) {
-		if (pis != null && StringUtils.isNotBlank(pis.getCst())) {
+		if (pis != null && pis.getConfiguracaoFiscalPisId() != null) {
 			ConfiguracaoFiscalPis configuracaoFiscalPis = this.configuracaoFiscalPisService
 					.getById(pis.getConfiguracaoFiscalPisId()).orElseThrow(() -> new RegisterNotFoundException(
 							"Não encontrado configuração fiscal de pis com id: " + pis.getConfiguracaoFiscalPisId()));
@@ -554,13 +554,13 @@ public class MergeNFeRequestToNFeEntityService {
 			NFePisItem nFePisItem = new NFePisItem();
 			nFePisItem.setNFeImpostosItem(nFeImpostosItem);
 			nFePisItem.setCst(cst);
-			if (!StringUtils.containsAny(cst, "04", "05", "06", "07", "08", "09")) {
-				if (configuracaoFiscalPis.getTipoCalculo().equals(TipoCalculo.PERCENTUAL.getValue())) {
+			if (!StringUtils.equalsAny(cst, "04", "05", "06", "07", "08", "09")) {
+				if (configuracaoFiscalPis.getTipoCalculo().equals(TipoCalculo.PERCENTUAL)) {
 					nFePisItem.setVbc(pis.getBcPis());
 					nFePisItem.setPpis(configuracaoFiscalPis.getAliquota());
 					nFePisItem.setVpis(pis.getValorPis());
 				}
-				if (configuracaoFiscalPis.getTipoCalculo().equals(TipoCalculo.VALOR.getValue())) {
+				if (configuracaoFiscalPis.getTipoCalculo().equals(TipoCalculo.VALOR)) {
 					nFePisItem.setQbcprod(pis.getQuantidadeVendida());
 					nFePisItem.setValiqprod(configuracaoFiscalPis.getAliquota());
 					nFePisItem.setVpis(pis.getValorPis());
@@ -588,12 +588,12 @@ public class MergeNFeRequestToNFeEntityService {
 					2, '0');
 			nFeIpiItem.setCenq(Integer.parseInt(configuracaoFiscalIpi.getEnquadramento().getCodigo()));
 			nFeIpiItem.setCst(cst);
-			if (StringUtils.containsAny(cst, "00", "49", "50", "99")) {
-				if (configuracaoFiscalIpi.getTipoCalculo().equals(TipoCalculo.PERCENTUAL.getValue())) {
+			if (StringUtils.equalsAny(cst, "00", "49", "50", "99")) {
+				if (configuracaoFiscalIpi.getTipoCalculo().equals(TipoCalculo.PERCENTUAL)) {
 					nFeIpiItem.setVbc(ipi.getBcIpi());
 					nFeIpiItem.setPipi(configuracaoFiscalIpi.getAliquota());
 				}
-				if (configuracaoFiscalIpi.getTipoCalculo().equals(TipoCalculo.VALOR.getValue())) {
+				if (configuracaoFiscalIpi.getTipoCalculo().equals(TipoCalculo.VALOR)) {
 					nFeIpiItem.setQunid(ipi.getQuantidade());
 					nFeIpiItem.setVunid(ipi.getValorUnidade());
 				}
@@ -785,7 +785,7 @@ public class MergeNFeRequestToNFeEntityService {
 		nfeProdItem.setVseg(detalhamentoItemNFeRequest.getValorSeguro());
 		nfeProdItem.setVdesc(detalhamentoItemNFeRequest.getValorDesconto());
 		nfeProdItem.setVoutro(detalhamentoItemNFeRequest.getValorOutrasDespesas());
-		nfeProdItem.setIndtot(0);
+		nfeProdItem.setIndtot(1);
 
 		return nfeProdItem;
 	}

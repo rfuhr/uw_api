@@ -58,6 +58,8 @@ public class SQLUtils {
 						filtroSpecification = FilterSpecification.createBooleanSpecification(chave, opcao);
 					} else if ("enum".equals(opcao.getTipo())) {
 						filtroSpecification = FilterSpecification.createEnumSpecification(chave, opcao);
+					} else if ("decimal".equals(opcao.getTipo())) {
+						filtroSpecification = FilterSpecification.createDecimalSpecification(chave, opcao);
 					}
 					else {
 						throw new BusinessException("Tipo de campo não implementado para o filtro.");

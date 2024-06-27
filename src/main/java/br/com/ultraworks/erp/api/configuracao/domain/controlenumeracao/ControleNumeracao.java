@@ -30,6 +30,10 @@ public class ControleNumeracao extends UWEntityBase {
 	private Long id;
 
 	@OneToOne
+	@JoinColumn(name = "empresaId")
+	private EmpresaFilial empresa;
+	
+	@OneToOne
 	@JoinColumn(name = "empresa_filial_id")
 	private EmpresaFilial empresaFilial;
 

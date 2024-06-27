@@ -121,6 +121,9 @@ public class GenericController<T, ID, D> {
 			new BusinessException("Não foi possível obter id do objeto");
 		}
     	return 0L;
-        
+    }
+	
+	protected void validate(D dto) {
+        dtoValidator.validate(dto);
     }
 }

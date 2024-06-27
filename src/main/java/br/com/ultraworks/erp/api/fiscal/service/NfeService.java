@@ -198,7 +198,7 @@ public class NfeService {
 		if (configEmpresaNFe == null)
 			throw new BusinessException("Não foi encontrado configuração de nfe para filial informada");
 		TipoDocumento tipoDocumento = tipoDocumentoService.findByCodigoReceita("55");
-		int proximoNumero = controleNumeracaoService.getProximoNumero(empresaFilialId, tipoDocumento.getId(),
+		int proximoNumero = controleNumeracaoService.getProximoNumero(empresaFilial.getEmpresa().getId(), empresaFilialId, tipoDocumento.getId(),
 				configEmpresaNFe.getSerie());
 
 		ParceiroLocal parceiroLocal = parceiroLocalService.getById(empresaFilialId).orElseThrow(

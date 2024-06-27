@@ -1,9 +1,7 @@
 package br.com.ultraworks.erp.api.financeiro.integrator.dto;
 
-import java.time.LocalDate;
-
-import br.com.ultraworks.erp.api.financeiro.domain.operacaofinanceira.OperacaoFinanceira;
-import br.com.ultraworks.erp.api.organograma.domain.departamento.Departamento;
+import br.com.ultraworks.erp.api.financeiro.domain.operacaoacessoriafinanceira.OperacaoAcessoriaFinanceira;
+import br.com.ultraworks.erp.api.financeiro.domain.operacaomovimentofinanceiro.OperacaoMovimentoFinanceiro;
 import lombok.Builder;
 import lombok.Data;
 
@@ -12,11 +10,6 @@ import lombok.Data;
 public class ContainerEstornoMovimento {
 
 	private Long idMovimentoEstorno;
-	private Long motivoEstornoId;
-	private OperacaoFinanceira operacaoFinanceira;
-	private Long reciboEmissaoId;
-	private String observacaoEstorno;
-	private LocalDate dataEstorno;
-	private boolean compoeSaldo;
-	private Departamento departamento;
+	private OperacaoMovimentoFinanceiro operacaoMovimentoFinanceiro;
+	private OperacaoAcessoriaFinanceira operacaoAcessoriaFinanceira;
 }
