@@ -32,6 +32,7 @@ public class TipoOperacaoFinanceiraMapper extends GenericMapper<TipoOperacaoFina
 		entity.setSelecionaSubstituicaoCarteira(dto.isSelecionaSubstituicaoCarteira());
 		entity.setSelecionaNegociacao(dto.isSelecionaNegociacao());
 		entity.setTipoIntegracaoCaixaBanco(TipoIntegracaoCaixaBanco.fromValue(dto.getIntegracaoCaixaBanco()));
+		entity.setListaPosicaoTituloBaixados(dto.isListaPosicaoTituloBaixados());
 		if (dto.getOperacaoCaixaBancoId() != null)
 			entity.setOperacaoCaixaBanco(operacaoCaixaBancoRepository.findById(dto.getOperacaoCaixaBancoId())
 					.orElseThrow(() -> new RegisterNotFoundException(
@@ -52,5 +53,6 @@ public class TipoOperacaoFinanceiraMapper extends GenericMapper<TipoOperacaoFina
 			dto.setOperacaoCaixaBancoId(entity.getOperacaoCaixaBanco().getId());
 		}
 		dto.setSelecionaNegociacao(entity.isSelecionaNegociacao());
+		dto.setListaPosicaoTituloBaixados(entity.isListaPosicaoTituloBaixados());
 	}
 }

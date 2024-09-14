@@ -3,6 +3,7 @@ package br.com.ultraworks.erp.api.tabela.domain.operacaointerna;
 import java.util.List;
 
 import br.com.ultraworks.erp.api.tabela.domain.naturezaOperacao.NaturezaOperacao;
+import br.com.ultraworks.erp.api.tabela.domain.operacaointernaagricola.OperacaoInternaAgricola;
 import br.com.ultraworks.erp.api.tabela.domain.operacaointernaestoque.OperacaoInternaEstoque;
 import br.com.ultraworks.erp.api.tabela.domain.operacaointernafiscal.OperacaoInternaFiscal;
 import br.com.ultraworks.erp.core.entity.UWEntityBase;
@@ -40,16 +41,22 @@ public class OperacaoInterna extends UWEntityBase {
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "natureza_operacao_id")
 	private NaturezaOperacao naturezaOperacao;
-	
+
 	@Column(name = "idn_fiscal")
 	private boolean caracteristicaFiscal;
-	
+
 	@Column(name = "caracteristica_estoque")
 	private boolean caracteristicaEstoque;
-	
+
+	@Column(name = "caracteristica_agricola")
+	private boolean caracteristicaAgricola;
+
 	@Transient
 	private List<OperacaoInternaFiscal> operacoesInternasFiscal;
-	
+
 	@Transient
 	private OperacaoInternaEstoque operacaoInternaEstoque;
+
+	@Transient
+	private OperacaoInternaAgricola operacaoInternaAgricola;
 }

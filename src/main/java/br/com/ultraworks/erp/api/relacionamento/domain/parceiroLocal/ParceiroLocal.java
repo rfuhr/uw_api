@@ -5,13 +5,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import br.com.ultraworks.erp.api.relacionamento.domain.parceiro.Parceiro;
 import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocalEmail.ParceiroLocalEmail;
 import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocalEndereco.ParceiroLocalEndereco;
 import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocalFisica.ParceiroLocalFisica;
 import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocalJuridica.ParceiroLocalJuridica;
+import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocalPropriedade.ParceiroLocalPropriedade;
 import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocalTelefone.ParceiroLocalTelefone;
 import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocalTipoParceiro.ParceiroLocalTipoParceiro;
 import br.com.ultraworks.erp.api.tabela.domain.tipoemail.TipoEmail;
@@ -22,12 +21,10 @@ import br.com.ultraworks.erp.core.annotation.UniqueValidationGroup;
 import br.com.ultraworks.erp.core.entity.UWEntityBase;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
@@ -74,6 +71,9 @@ public class ParceiroLocal extends UWEntityBase {
 	
 	@Transient
 	private List<ParceiroLocalEmail> emails;
+	
+	@Transient
+	private List<ParceiroLocalPropriedade> propriedades;	
 
 	public ParceiroLocal() {
 		super();
@@ -83,6 +83,7 @@ public class ParceiroLocal extends UWEntityBase {
 		this.enderecos = new ArrayList<>();
 		this.telefones = new ArrayList<>();
 		this.emails = new ArrayList<>();
+		this.propriedades = new ArrayList<>();
 	}
 
 	@Override

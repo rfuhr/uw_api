@@ -7,6 +7,7 @@ import java.security.InvalidParameterException;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import org.springframework.data.jpa.domain.Specification;
 
@@ -91,5 +92,25 @@ public class SQLUtils {
             Predicate predicate2 = specification2.toPredicate(root, query, criteriaBuilder);
             return criteriaBuilder.or(predicate1, predicate2);
         };
+    }
+	
+	public static String generateWhereClause(Map<String, String> conditions) {
+        if (conditions == null || conditions.isEmpty()) {
+            return "";
+        }
+
+        return conditions.entrySet()
+                         .stream()
+                         .map(entry -> entry.getKey() + " = '" + entry.getValue() + "'")
+                         .collect(Collectors.joining(" AND "));
+    }
+	
+	public static String generateWhereClause(List<String> conditions) {
+        if (conditions == null || conditions.isEmpty()) {
+            return "";
+        }
+
+        return conditions.stream()
+                         .collect(Collectors.joining(" AND "));
     }
 }

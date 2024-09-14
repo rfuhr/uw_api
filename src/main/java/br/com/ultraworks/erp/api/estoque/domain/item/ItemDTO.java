@@ -58,4 +58,8 @@ public class ItemDTO {
 	private String grupoTributacaoNome;
 	private Long classificacaoOperacaoId;
 	private String classificacaoOperacaoNome;
+	
+	private boolean informaPesagemAgricola;
+	private boolean usaClassificacaoAgricola;
+	private boolean informaSafraAgricola;
 }

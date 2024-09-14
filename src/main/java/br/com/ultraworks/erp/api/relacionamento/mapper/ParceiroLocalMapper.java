@@ -21,13 +21,15 @@ public class ParceiroLocalMapper extends GenericMapper<ParceiroLocal, ParceiroLo
 	private ParceiroLocalEnderecoMapper parceiroLocalEnderecoMapper;
 	private ParceiroLocalTelefoneMapper parceiroLocalTelefoneMapper;
 	private ParceiroLocalEmailMapper parceiroLocalEmailMapper;
-
+	private ParceiroLocalPropriedadeMapper parceiroLocalPropriedadeMapper;
+	
 	public ParceiroLocalMapper(ParceiroLocalRepository parceiroLocalRepository, ParceiroRepository parceiroRepository,
 			ParceiroLocalFisicaMapper parceiroFisicaMapper, ParceiroLocalJuridicaMapper parceiroJuridicaMapper,
 			ParceiroLocalTipoParceiroMapper parceiroLocalTipoParceiroMapper,
 			ParceiroLocalEnderecoMapper parceiroLocalEnderecoMapper,
 			ParceiroLocalTelefoneMapper parceiroLocalTelefoneMapper,
-			ParceiroLocalEmailMapper parceiroLocalEmailMapper) {
+			ParceiroLocalEmailMapper parceiroLocalEmailMapper,
+			ParceiroLocalPropriedadeMapper parceiroLocalPropriedadeMapper) {
 		super(parceiroLocalRepository, ParceiroLocal::new, ParceiroLocalDTO::new);
 		this.parceiroRepository = parceiroRepository;
 		this.parceiroFisicaMapper = parceiroFisicaMapper;
@@ -36,6 +38,7 @@ public class ParceiroLocalMapper extends GenericMapper<ParceiroLocal, ParceiroLo
 		this.parceiroLocalEnderecoMapper = parceiroLocalEnderecoMapper;
 		this.parceiroLocalTelefoneMapper = parceiroLocalTelefoneMapper;
 		this.parceiroLocalEmailMapper = parceiroLocalEmailMapper;
+		this.parceiroLocalPropriedadeMapper = parceiroLocalPropriedadeMapper;
 	}
 
 	@Override
@@ -77,6 +80,10 @@ public class ParceiroLocalMapper extends GenericMapper<ParceiroLocal, ParceiroLo
 			entity.setEmails(new ArrayList<>());
 			entity.getEmails().addAll(parceiroLocalEmailMapper.toEntity(dto.getEmails()));
 		}
+		if (dto.getPropriedades() != null && dto.getPropriedades().size() > 0) {
+			entity.setPropriedades(new ArrayList<>());
+			entity.getPropriedades().addAll(parceiroLocalPropriedadeMapper.toEntity(dto.getPropriedades()));
+		}
 
 	}
 
@@ -104,6 +111,10 @@ public class ParceiroLocalMapper extends GenericMapper<ParceiroLocal, ParceiroLo
 		dto.setEmails(new ArrayList<>());
 		if (entity.getEmails() != null) {
 			dto.getEmails().addAll(parceiroLocalEmailMapper.toDto(entity.getEmails()));
+		}
+		dto.setPropriedades(new ArrayList<>());
+		if (entity.getPropriedades() != null) {
+			dto.getPropriedades().addAll(parceiroLocalPropriedadeMapper.toDto(entity.getPropriedades()));
 		}
 	}
 }

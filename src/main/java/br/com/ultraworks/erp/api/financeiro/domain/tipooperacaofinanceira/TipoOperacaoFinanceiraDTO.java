@@ -23,4 +23,5 @@ public class TipoOperacaoFinanceiraDTO {
 	private Long operacaoCaixaBancoId;	
 	private boolean selecionaSubstituicaoCarteira;
 	private boolean selecionaNegociacao;
+	private boolean listaPosicaoTituloBaixados;
 }

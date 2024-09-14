@@ -56,4 +56,7 @@ public class TipoOperacaoFinanceira extends UWEntityBase {
 	
 	@Column(name = "idn_sel_substcart")
 	private boolean selecionaSubstituicaoCarteira;
+	
+	@Column(name = "idn_lista_postitbaixa")
+	private boolean listaPosicaoTituloBaixados;
 }

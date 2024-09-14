@@ -7,13 +7,13 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.ultraworks.erp.api.relacionamento.domain.parceiro.Parceiro;
 import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocal.ParceiroLocal;
 import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocal.ParceiroLocalDTO;
 import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocalEmail.ParceiroLocalEmail;
 import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocalEndereco.ParceiroLocalEndereco;
 import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocalFisica.ParceiroLocalFisica;
 import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocalJuridica.ParceiroLocalJuridica;
+import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocalPropriedade.ParceiroLocalPropriedade;
 import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocalTelefone.ParceiroLocalTelefone;
 import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocalTipoParceiro.ParceiroLocalTipoParceiro;
 import br.com.ultraworks.erp.api.relacionamento.mapper.ParceiroLocalMapper;
@@ -33,6 +33,7 @@ public class ParceiroLocalService extends GenericService<ParceiroLocal, Long, Pa
 	private ParceiroLocalEnderecoService parceiroLocalEnderecoService;
 	private ParceiroLocalTelefoneService parceiroLocalTelefoneService;
 	private ParceiroLocalEmailService parceiroLocalEmailService;
+	private ParceiroLocalPropriedadeService parceiroLocalPropriedadeService;
 
 	@Autowired
 	public ParceiroLocalService(ParceiroLocalRepository repository, ParceiroLocalMapper mapper,
@@ -40,7 +41,8 @@ public class ParceiroLocalService extends GenericService<ParceiroLocal, Long, Pa
 			ParceiroLocalTipoParceiroService parceiroLocalTipoParceiroService,
 			ParceiroLocalEnderecoService parceiroLocalEnderecoService,
 			ParceiroLocalTelefoneService parceiroLocalTelefoneService,
-			ParceiroLocalEmailService parceiroLocalEmailService) {
+			ParceiroLocalEmailService parceiroLocalEmailService,
+			ParceiroLocalPropriedadeService parceiroLocalPropriedadeService) {
 		super(repository, mapper);
 		this.repository = repository;
 		this.mapper = mapper;
@@ -50,6 +52,7 @@ public class ParceiroLocalService extends GenericService<ParceiroLocal, Long, Pa
 		this.parceiroLocalEnderecoService = parceiroLocalEnderecoService;
 		this.parceiroLocalTelefoneService = parceiroLocalTelefoneService;
 		this.parceiroLocalEmailService = parceiroLocalEmailService;
+		this.parceiroLocalPropriedadeService = parceiroLocalPropriedadeService;
 	}
 
 	public List<ParceiroLocal> getAllByParceiro(Long id) {
@@ -71,17 +74,16 @@ public class ParceiroLocalService extends GenericService<ParceiroLocal, Long, Pa
 		}
 		return null;
 	}
-	
+
 	private void getDadosListasDependentes(ParceiroLocal parceiroLocal) {
-		parceiroLocal.getDadosPessoaFisica()
-				.addAll(parceiroFisicaService.getAllByParceiroLocal(parceiroLocal.getId()));
+		parceiroLocal.getDadosPessoaFisica().addAll(parceiroFisicaService.getAllByParceiroLocal(parceiroLocal.getId()));
 		parceiroLocal.getDadosPessoaJuridica()
 				.addAll(parceiroJuridicaService.getAllByParceiroLocal(parceiroLocal.getId()));
-		parceiroLocal.getEnderecos()
-				.addAll(parceiroLocalEnderecoService.getAllByParceiroLocal(parceiroLocal.getId()));
-		parceiroLocal.getTelefones()
-				.addAll(parceiroLocalTelefoneService.getAllByParceiroLocal(parceiroLocal.getId()));
+		parceiroLocal.getEnderecos().addAll(parceiroLocalEnderecoService.getAllByParceiroLocal(parceiroLocal.getId()));
+		parceiroLocal.getTelefones().addAll(parceiroLocalTelefoneService.getAllByParceiroLocal(parceiroLocal.getId()));
 		parceiroLocal.getEmails().addAll(parceiroLocalEmailService.getAllByParceiroLocal(parceiroLocal.getId()));
+		parceiroLocal.getPropriedades()
+				.addAll(parceiroLocalPropriedadeService.getAllByParceiroLocal(parceiroLocal.getId()));
 	}
 
 	@Override
@@ -114,6 +116,11 @@ public class ParceiroLocalService extends GenericService<ParceiroLocal, Long, Pa
 		List<ParceiroLocalEmail> emailsSalvos = new ArrayList<>();
 		if (entity.getId() != null) {
 			emailsSalvos = parceiroLocalEmailService.getAllByParceiroLocal(entity.getId());
+		}
+
+		List<ParceiroLocalPropriedade> propriedadesSalvos = new ArrayList<>();
+		if (entity.getId() != null) {
+			propriedadesSalvos = parceiroLocalPropriedadeService.getAllByParceiroLocal(entity.getId());
 		}
 
 		repository.save(entity);
@@ -157,6 +164,13 @@ public class ParceiroLocalService extends GenericService<ParceiroLocal, Long, Pa
 			entity.getEmails().forEach(email -> {
 				email.setParceiroLocal(entity);
 				email = parceiroLocalEmailService.save(email);
+			});
+		}
+
+		if (entity.getPropriedades() != null && entity.getPropriedades().size() > 0) {
+			entity.getPropriedades().forEach(propriedade -> {
+				propriedade.setParceiroLocal(entity);
+				propriedade = parceiroLocalPropriedadeService.save(propriedade);
 			});
 		}
 
@@ -208,9 +222,17 @@ public class ParceiroLocalService extends GenericService<ParceiroLocal, Long, Pa
 			});
 		}
 
+		List<ParceiroLocalPropriedade> propriedadesExcluir = (List<ParceiroLocalPropriedade>) ListUtils
+				.compararListasERetornaDiferenca(propriedadesSalvos, entity.getPropriedades());
+		if (propriedadesExcluir.size() > 0) {
+			propriedadesExcluir.forEach(propriedade -> {
+				parceiroLocalPropriedadeService.delete(propriedade.getId());
+			});
+		}
+
 		return entity;
 	}
-	
+
 	@Override
 	public void delete(Long id) {
 		ParceiroLocal parceiroLocal = repository.findById(id).orElseThrow(RegisterNotFoundException::new);
@@ -228,6 +250,9 @@ public class ParceiroLocalService extends GenericService<ParceiroLocal, Long, Pa
 		});
 		parceiroLocal.getEmails().forEach(local -> {
 			parceiroLocalEmailService.delete(local.getId());
+		});
+		parceiroLocal.getPropriedades().forEach(propriedade -> {
+			parceiroLocalPropriedadeService.delete(propriedade.getId());
 		});
 		repository.deleteById(id);
 	}

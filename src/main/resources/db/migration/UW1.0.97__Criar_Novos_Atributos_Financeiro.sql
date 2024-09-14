@@ -5,6 +5,7 @@ alter table movimento_financeiro add CONSTRAINT conta_id_movimento_financeiro_fo
 alter table tipo_operacao_financeira add idn_sel_substcart  boolean not null default false;
 alter table tipo_operacao_financeira add idn_sel_negociacao boolean not null default false;
 alter table tipo_operacao_financeira add integra_cxbco varchar(1) not null default 'N';
+alter table tipo_operacao_financeira add idn_lista_postitbaixa boolean not null default false;
 alter table tipo_operacao_financeira add operacao_cxbco_id bigint;
 alter table tipo_operacao_financeira add CONSTRAINT operacao_cxbco_operacao_financeira_foreign FOREIGN KEY (operacao_cxbco_id) REFERENCES operacao_cxbco (id);
 alter table controle_numeracao add empresa_id bigint not null default 1;

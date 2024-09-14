@@ -1,0 +1,866 @@
+<!-- Created with Jaspersoft Studio version 7.0.0.final using JasperReports Library version 7.0.0-b478feaa9aab4375eba71de77b4ca138ad2f62aa  -->
+<jasperReport name="PosicaoTituloBaixados" language="java" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="NoPages" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ed0926fa-8866-4ce5-9f42-29ff618516b6">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="src\main\resources\reports\conexao.jrdax"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="348"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="645"/>
+	<parameter name="empresaNome" class="java.lang.String">
+		<defaultValueExpression><![CDATA["EMPRESA MODELO S/A"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="dataMovtoInicio" class="java.sql.Date">
+		<defaultValueExpression><![CDATA[new java.util.Date()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="dataMovtoFinal" class="java.sql.Date">
+		<defaultValueExpression><![CDATA[new java.util.Date()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="competencia" class="java.sql.Date">
+		<defaultValueExpression><![CDATA[new java.util.Date()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="usuarioNome" class="java.lang.String">
+		<defaultValueExpression><![CDATA["Admin"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="filtroTipoTitulo" class="java.lang.String">
+		<defaultValueExpression><![CDATA["<TODOS>"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="filtroDepartamento" class="java.lang.String">
+		<defaultValueExpression><![CDATA["<TODOS>"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="filtroCaractMovto" class="java.lang.String">
+		<defaultValueExpression><![CDATA["<TODOS>"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="filtroParceiro" class="java.lang.String">
+		<defaultValueExpression><![CDATA["<TODOS>"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="filtroCarteira" class="java.lang.String">
+		<defaultValueExpression><![CDATA["<TODOS>"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="sqlWhere" class="java.lang.String">
+		<defaultValueExpression><![CDATA["0 = 0"]]></defaultValueExpression>
+	</parameter>
+	<query language="SQL"><![CDATA[select * from vw_fin_posicaotitulobaixados]]></query>
+	<field name="tituloid" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="tituloid"/>
+		<property name="com.jaspersoft.studio.field.label" value="tituloid"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="parcelafinanceiraid" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="parcelafinanceiraid"/>
+		<property name="com.jaspersoft.studio.field.label" value="parcelafinanceiraid"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="parcelafinanceirasequencia" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="parcelafinanceirasequencia"/>
+		<property name="com.jaspersoft.studio.field.label" value="parcelafinanceirasequencia"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="tipotituloid" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="tipotituloid"/>
+		<property name="com.jaspersoft.studio.field.label" value="tipotituloid"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="tipotitulocodigo" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="tipotitulocodigo"/>
+		<property name="com.jaspersoft.studio.field.label" value="tipotitulocodigo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="tipotitulonome" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="tipotitulonome"/>
+		<property name="com.jaspersoft.studio.field.label" value="tipotitulonome"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="tipotitulosigla" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="tipotitulosigla"/>
+		<property name="com.jaspersoft.studio.field.label" value="tipotitulosigla"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="parceiroid" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="parceiroid"/>
+		<property name="com.jaspersoft.studio.field.label" value="parceiroid"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="parceironomerazaosocial" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="parceironomerazaosocial"/>
+		<property name="com.jaspersoft.studio.field.label" value="parceironomerazaosocial"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="parceirolocalid" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="parceirolocalid"/>
+		<property name="com.jaspersoft.studio.field.label" value="parceirolocalid"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="parceirolocalcpfcnpj" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="parceirolocalcpfcnpj"/>
+		<property name="com.jaspersoft.studio.field.label" value="parceirolocalcpfcnpj"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="parceirolocalnome" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="parceirolocalnome"/>
+		<property name="com.jaspersoft.studio.field.label" value="parceirolocalnome"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="caracteristicamovimentofinanceiroid" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="caracteristicamovimentofinanceiroid"/>
+		<property name="com.jaspersoft.studio.field.label" value="caracteristicamovimentofinanceiroid"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="caracteristicamovimentofinanceirocodigo" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="caracteristicamovimentofinanceirocodigo"/>
+		<property name="com.jaspersoft.studio.field.label" value="caracteristicamovimentofinanceirocodigo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="caracteristicamovimentofinanceironome" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="caracteristicamovimentofinanceironome"/>
+		<property name="com.jaspersoft.studio.field.label" value="caracteristicamovimentofinanceironome"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="caracteristicamovimentofinanceirosigla" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="caracteristicamovimentofinanceirosigla"/>
+		<property name="com.jaspersoft.studio.field.label" value="caracteristicamovimentofinanceirosigla"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="departamentoid" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="departamentoid"/>
+		<property name="com.jaspersoft.studio.field.label" value="departamentoid"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="departamentonome" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="departamentonome"/>
+		<property name="com.jaspersoft.studio.field.label" value="departamentonome"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="departamentosigla" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="departamentosigla"/>
+		<property name="com.jaspersoft.studio.field.label" value="departamentosigla"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="empresafilialid" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="empresafilialid"/>
+		<property name="com.jaspersoft.studio.field.label" value="empresafilialid"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="empresafilialnome" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="empresafilialnome"/>
+		<property name="com.jaspersoft.studio.field.label" value="empresafilialnome"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="empresafilialsigla" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="empresafilialsigla"/>
+		<property name="com.jaspersoft.studio.field.label" value="empresafilialsigla"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="empresaid" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="empresaid"/>
+		<property name="com.jaspersoft.studio.field.label" value="empresaid"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="empresanome" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="empresanome"/>
+		<property name="com.jaspersoft.studio.field.label" value="empresanome"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="empresasigla" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="empresasigla"/>
+		<property name="com.jaspersoft.studio.field.label" value="empresasigla"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="carteiraid" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="carteiraid"/>
+		<property name="com.jaspersoft.studio.field.label" value="carteiraid"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="carteiracodigo" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="carteiracodigo"/>
+		<property name="com.jaspersoft.studio.field.label" value="carteiracodigo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="carteiranome" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="carteiranome"/>
+		<property name="com.jaspersoft.studio.field.label" value="carteiranome"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="carteirasigla" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="carteirasigla"/>
+		<property name="com.jaspersoft.studio.field.label" value="carteirasigla"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="grupofinanceirocodigo" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="grupofinanceirocodigo"/>
+		<property name="com.jaspersoft.studio.field.label" value="grupofinanceirocodigo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="grupofinanceironome" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="grupofinanceironome"/>
+		<property name="com.jaspersoft.studio.field.label" value="grupofinanceironome"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="grupofinanceirosigla" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="grupofinanceirosigla"/>
+		<property name="com.jaspersoft.studio.field.label" value="grupofinanceirosigla"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="parcelafinanceiradatavencimento" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="parcelafinanceiradatavencimento"/>
+		<property name="com.jaspersoft.studio.field.label" value="parcelafinanceiradatavencimento"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="titulodatadocumento" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="titulodatadocumento"/>
+		<property name="com.jaspersoft.studio.field.label" value="titulodatadocumento"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="movimentofinanceirodatamovimento" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="movimentofinanceirodatamovimento"/>
+		<property name="com.jaspersoft.studio.field.label" value="movimentofinanceirodatamovimento"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="titulodocumento" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="titulodocumento"/>
+		<property name="com.jaspersoft.studio.field.label" value="titulodocumento"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="titulonossonumero" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="titulonossonumero"/>
+		<property name="com.jaspersoft.studio.field.label" value="titulonossonumero"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="parcelafinanceiranumero" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="parcelafinanceiranumero"/>
+		<property name="com.jaspersoft.studio.field.label" value="parcelafinanceiranumero"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="fatogeradorcodigo" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="fatogeradorcodigo"/>
+		<property name="com.jaspersoft.studio.field.label" value="fatogeradorcodigo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="fatogeradornome" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="fatogeradornome"/>
+		<property name="com.jaspersoft.studio.field.label" value="fatogeradornome"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="fatogeradorsigla" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="fatogeradorsigla"/>
+		<property name="com.jaspersoft.studio.field.label" value="fatogeradorsigla"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="tituloobservacao" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="tituloobservacao"/>
+		<property name="com.jaspersoft.studio.field.label" value="tituloobservacao"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="historicopadraocodigo" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="historicopadraocodigo"/>
+		<property name="com.jaspersoft.studio.field.label" value="historicopadraocodigo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="historicopadraonome" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="historicopadraonome"/>
+		<property name="com.jaspersoft.studio.field.label" value="historicopadraonome"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="historicopadraosigla" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="historicopadraosigla"/>
+		<property name="com.jaspersoft.studio.field.label" value="historicopadraosigla"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="valormovimento" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="valormovimento"/>
+		<property name="com.jaspersoft.studio.field.label" value="valormovimento"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="atraso" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="atraso"/>
+		<property name="com.jaspersoft.studio.field.label" value="atraso"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="titulodatamovimentoinclusao" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="titulodatamovimentoinclusao"/>
+		<property name="com.jaspersoft.studio.field.label" value="titulodatamovimentoinclusao"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="usuarionome" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="usuarionome"/>
+		<property name="com.jaspersoft.studio.field.label" value="usuarionome"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="usuariousername" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="usuariousername"/>
+		<property name="com.jaspersoft.studio.field.label" value="usuariousername"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="tipooperacaofinanceiraid" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="tipooperacaofinanceiraid"/>
+		<property name="com.jaspersoft.studio.field.label" value="tipooperacaofinanceiraid"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="tipooperacaofinanceiranome" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="tipooperacaofinanceiranome"/>
+		<property name="com.jaspersoft.studio.field.label" value="tipooperacaofinanceiranome"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<field name="tipooperacaofinanceirasigla" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="tipooperacaofinanceirasigla"/>
+		<property name="com.jaspersoft.studio.field.label" value="tipooperacaofinanceirasigla"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_fin_posicaotitulobaixados"/>
+	</field>
+	<variable name="TOTAL_CM" calculation="Sum" class="java.lang.Double">
+		<expression><![CDATA[$F{valormovimento}]]></expression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="TOTAL_PARCEIRO" calculation="Sum" class="java.lang.Double">
+		<expression><![CDATA[$F{valormovimento}]]></expression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="TOTAL_TITULO" calculation="Sum" class="java.lang.Double">
+		<expression><![CDATA[$F{valormovimento}]]></expression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<group name="Group1">
+		<expression><![CDATA[$F{tipotitulocodigo}]]></expression>
+		<groupHeader>
+			<band height="13">
+				<element kind="staticText" uuid="fb68ed95-8a0b-4be5-8e14-301a13ab61cc" x="4" y="0" width="86" height="10" fontName="Verdana" fontSize="8.0">
+					<text><![CDATA[Tipo do Título: ]]></text>
+				</element>
+				<element kind="textField" uuid="66764545-424d-4c63-b3f4-3d8b224385c7" x="100" y="0" width="392" height="10" fontName="Verdana" fontSize="8.0" bold="true" hTextAlign="Left">
+					<expression><![CDATA[$F{tipotitulocodigo} + " - " + $F{tipotitulonome}]]></expression>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</element>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="14">
+				<element kind="textField" uuid="00a2affe-f0e1-45be-a723-ea2f0ee87e8f" x="289" y="2" width="392" height="10" fontName="Verdana" fontSize="8.0" bold="true" hTextAlign="Left">
+					<expression><![CDATA[$F{tipotitulocodigo} + " - " + $F{tipotitulonome}]]></expression>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</element>
+				<element kind="staticText" uuid="96166583-e3d5-4f1e-9bad-02fcfa57d400" x="170" y="2" width="109" height="10" fontName="Verdana" fontSize="8.0">
+					<text><![CDATA[Total Tipo do Título: ]]></text>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</element>
+				<element kind="textField" uuid="3806a735-7987-4367-af60-576f01f0bf31" x="587" y="2" width="170" height="10" fontName="Verdana" fontSize="8.0" pattern="#,##0.00#;(#,##0.00#)" bold="true" hTextAlign="Right">
+					<expression><![CDATA[$V{TOTAL_TITULO}]]></expression>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</element>
+				<element kind="textField" uuid="af535d7c-38a6-4004-8106-0fc7b1873ed4" x="757" y="2" width="12" height="10" fontName="Verdana" fontSize="8.0" pattern="#,##0.00#;(#,##0.00#)" bold="true" hTextAlign="Right">
+					<expression><![CDATA[$V{TOTAL_TITULO} < 0 ? "D" : "C"]]></expression>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</element>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="Group2">
+		<expression><![CDATA[$F{parceiroid}]]></expression>
+		<groupHeader>
+			<band height="12">
+				<element kind="textField" uuid="4c7ba3b1-7e5a-47db-bd4e-3978248bf9d1" x="100" y="0" width="332" height="10" fontName="Verdana" fontSize="8.0" bold="true" hTextAlign="Left">
+					<expression><![CDATA[$F{parceirolocalid} + " -" + $F{parceironomerazaosocial}]]></expression>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</element>
+				<element kind="staticText" uuid="70b4a219-14ba-45bc-ac56-db5892ef1db0" x="4" y="0" width="86" height="10" fontName="Verdana" fontSize="8.0">
+					<text><![CDATA[Parceiro:]]></text>
+				</element>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="13">
+				<element kind="staticText" uuid="cef12ce7-d8a0-40d5-811b-0246851f795b" x="170" y="2" width="108" height="10" fontName="Verdana" fontSize="8.0">
+					<text><![CDATA[Total Parceiro:]]></text>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</element>
+				<element kind="textField" uuid="12d314dd-e0a6-44d2-b1b1-bcc3747b6941" x="288" y="2" width="332" height="10" fontName="Verdana" fontSize="8.0" bold="true" hTextAlign="Left">
+					<expression><![CDATA[$F{parceirolocalid} + " -" + $F{parceironomerazaosocial}]]></expression>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</element>
+				<element kind="textField" uuid="bddff773-2181-4e8e-8635-2d7e93c18f10" x="587" y="2" width="170" height="10" fontName="Verdana" fontSize="8.0" pattern="#,##0.00#;(#,##0.00#)" bold="true" hTextAlign="Right">
+					<expression><![CDATA[$V{TOTAL_PARCEIRO}]]></expression>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</element>
+				<element kind="textField" uuid="2c30e676-da36-421e-9145-ed6168f53dcb" x="757" y="2" width="12" height="10" fontName="Verdana" fontSize="8.0" pattern="#,##0.00#;(#,##0.00#)" bold="true" hTextAlign="Right">
+					<expression><![CDATA[$V{TOTAL_PARCEIRO} < 0 ? "D" : "C"]]></expression>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</element>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="Group3">
+		<expression><![CDATA[$F{caracteristicamovimentofinanceirocodigo}]]></expression>
+		<groupHeader>
+			<band height="15">
+				<element kind="staticText" uuid="9560305f-36ce-452d-a4b6-0ff979878d6b" x="4" y="0" width="86" height="10" fontName="Verdana" fontSize="8.0">
+					<text><![CDATA[Caract. Movimento:]]></text>
+				</element>
+				<element kind="textField" uuid="9417b551-9cf0-46d2-8de6-e73157cfffcb" x="100" y="0" width="392" height="10" fontName="Verdana" fontSize="8.0" bold="true" hTextAlign="Left">
+					<expression><![CDATA[$F{caracteristicamovimentofinanceirocodigo} + " - " + $F{caracteristicamovimentofinanceironome}]]></expression>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</element>
+				<element kind="line" uuid="36fd2210-5965-48a2-a9ef-84558e197590" x="4" y="12" width="802" height="1">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<pen lineStyle="Dotted" lineColor="#BDBBBB"/>
+				</element>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="14">
+				<element kind="staticText" uuid="f5159193-cb38-4d9b-bf91-59855081e971" x="170" y="2" width="108" height="10" fontName="Verdana" fontSize="8.0">
+					<text><![CDATA[Total Caract. Movimento:]]></text>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</element>
+				<element kind="textField" uuid="68356588-9b42-47a0-9776-2a92c809e7ac" x="288" y="2" width="292" height="10" fontName="Verdana" fontSize="8.0" bold="true" hTextAlign="Left">
+					<expression><![CDATA[$F{caracteristicamovimentofinanceirocodigo} + " - " + $F{caracteristicamovimentofinanceironome}]]></expression>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</element>
+				<element kind="textField" uuid="c0de0876-13f3-43e1-95b0-fb78b7050a51" x="587" y="2" width="170" height="10" fontName="Verdana" fontSize="8.0" pattern="#,##0.00#;(#,##0.00#)" bold="true" hTextAlign="Right">
+					<expression><![CDATA[$V{TOTAL_CM}]]></expression>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</element>
+				<element kind="textField" uuid="65cf0dfd-b061-476c-bfa3-a64d1de78d74" x="757" y="2" width="12" height="10" fontName="Verdana" fontSize="8.0" pattern="#,##0.00#;(#,##0.00#)" bold="true" hTextAlign="Right">
+					<expression><![CDATA[$V{TOTAL_CM} < 0 ? "D" : "C"]]></expression>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</element>
+			</band>
+		</groupFooter>
+	</group>
+	<background splitType="Stretch"/>
+	<pageHeader height="96" splitType="Stretch">
+		<element kind="textField" uuid="539eafad-7f57-44e2-a844-6c3a4c264082" mode="Transparent" x="65" y="5" width="615" height="15" fontName="Verdana" fontSize="9.0" bold="true">
+			<expression><![CDATA[$P{empresaNome}]]></expression>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+		</element>
+		<element kind="staticText" uuid="d794ae4d-e299-41a1-8770-d3fb55b3e241" x="65" y="20" width="615" height="15" fontName="Verdana" fontSize="9.0" bold="true">
+			<text><![CDATA[Módulo Financeiro]]></text>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="c982f4a3-c749-42ad-9714-3cb946452d80" x="65" y="35" width="415" height="15" fontName="Verdana" fontSize="9.0" bold="true">
+			<text><![CDATA[Posição de Títulos Baixados]]></text>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="line" uuid="02d77b29-36e5-4837-9749-5dc851d40459" x="4" y="52" width="802" height="1">
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<pen lineColor="#BDBBBB"/>
+		</element>
+		<element kind="staticText" uuid="596d69b8-acb2-47fe-b4e5-0180eb07ea64" x="4" y="55" width="38" height="10" forecolor="#FF1E05" fontName="Verdana" fontSize="8.0" italic="true" underline="true">
+			<text><![CDATA[Opções:]]></text>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="line" uuid="7ac05d67-fdbb-4327-a414-c3f73730c724" x="4" y="68" width="802" height="1">
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<pen lineColor="#BDBBBB"/>
+		</element>
+		<element kind="line" uuid="3706c83d-6012-4bb1-9480-cdcc7f2a0d8b" x="4" y="93" width="802" height="1">
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<pen lineColor="#BDBBBB"/>
+		</element>
+		<element kind="staticText" uuid="1a837878-bea0-427b-8248-d9f68e5f8510" x="4" y="70" width="40" height="10" fontName="Verdana" fontSize="7.0" hTextAlign="Center">
+			<text><![CDATA[Depto]]></text>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="bbe237ae-6e04-406d-87b1-e592582d783d" x="49" y="70" width="30" height="10" fontName="Verdana" fontSize="7.0" hTextAlign="Center">
+			<text><![CDATA[Tipo]]></text>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="7f9d8eba-61d3-434f-8795-c46001ed44e3" x="49" y="80" width="30" height="10" fontName="Verdana" fontSize="7.0" hTextAlign="Center">
+			<text><![CDATA[Título]]></text>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="6d8fc74c-9914-40d5-95bd-9f0a85b6967b" x="85" y="70" width="30" height="10" fontName="Verdana" fontSize="7.0" hTextAlign="Center">
+			<text><![CDATA[Caract.]]></text>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="7efd1bc1-73b4-47f5-8f3c-7800c022fd6d" x="85" y="80" width="30" height="10" fontName="Verdana" fontSize="7.0" hTextAlign="Center">
+			<text><![CDATA[Movto.]]></text>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="73a4d76e-e525-4e86-98b3-c083eedba159" x="121" y="70" width="30" height="10" fontName="Verdana" fontSize="7.0" hTextAlign="Center">
+			<text><![CDATA[Cart.]]></text>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="d2c59e22-2131-4081-a2c5-c0d6aaaa704c" x="157" y="80" width="30" height="10" fontName="Verdana" fontSize="7.0" hTextAlign="Center">
+			<text><![CDATA[Financ.]]></text>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="4815e008-6a9a-4f46-9608-398be1ade0c7" x="157" y="70" width="30" height="10" fontName="Verdana" fontSize="7.0" hTextAlign="Center">
+			<text><![CDATA[Grupo]]></text>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="aecab89f-e360-42b6-bf2c-b7aba3cfedc1" x="193" y="70" width="60" height="10" fontName="Verdana" fontSize="7.0" hTextAlign="Center">
+			<text><![CDATA[Data]]></text>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="b9d3d6b4-c8a6-4977-91ee-04988a1fb57c" x="193" y="80" width="60" height="10" fontName="Verdana" fontSize="7.0" hTextAlign="Center">
+			<text><![CDATA[Vencimento]]></text>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="8784a8d6-c958-4c27-b626-81ebd33eeea4" x="259" y="80" width="60" height="10" fontName="Verdana" fontSize="7.0" hTextAlign="Center">
+			<text><![CDATA[Documento]]></text>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="2fff2fea-1ab5-4472-a0e3-173c0f6aa3ea" x="259" y="70" width="60" height="10" fontName="Verdana" fontSize="7.0" hTextAlign="Center">
+			<text><![CDATA[Data]]></text>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="ae096d84-27d4-475e-a44b-c8924a7691db" x="325" y="70" width="60" height="10" fontName="Verdana" fontSize="7.0" hTextAlign="Center">
+			<text><![CDATA[Data]]></text>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="3e168563-c50a-43ff-a155-2063859e921a" x="325" y="80" width="60" height="10" fontName="Verdana" fontSize="7.0" hTextAlign="Center">
+			<text><![CDATA[Movimento]]></text>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="e27eeb64-f4cc-4ce2-893f-ad1ada94ead8" x="391" y="80" width="75" height="10" fontName="Verdana" fontSize="7.0" hTextAlign="Center">
+			<text><![CDATA[Número]]></text>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="8da6ddbb-9f8e-4a5d-82d2-e78cc28c4334" x="391" y="70" width="75" height="10" fontName="Verdana" fontSize="7.0" hTextAlign="Center">
+			<text><![CDATA[Nosso]]></text>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="44809818-c5a9-439f-a0ab-5357fb37e65c" x="472" y="80" width="25" height="10" fontName="Verdana" fontSize="7.0" hTextAlign="Center">
+			<text><![CDATA[Parc.]]></text>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="90727216-09bb-4785-b286-56bc860a1ddc" x="472" y="70" width="25" height="10" fontName="Verdana" fontSize="7.0" hTextAlign="Center">
+			<text><![CDATA[Nr.]]></text>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="6c3dc2ce-b759-4f6d-862d-6ecffc87a260" x="503" y="70" width="55" height="10" fontName="Verdana" fontSize="7.0" hTextAlign="Center">
+			<text><![CDATA[Nr.]]></text>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="7497dd91-5a6d-4515-a9bf-0b18ded2694c" x="503" y="80" width="55" height="10" fontName="Verdana" fontSize="7.0" hTextAlign="Center">
+			<text><![CDATA[Docto.]]></text>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="6d095aa2-a5fc-449c-bb75-8bffdc10126b" x="564" y="80" width="40" height="10" fontName="Verdana" fontSize="7.0" hTextAlign="Center">
+			<text><![CDATA[Gerador]]></text>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="f0334c25-b599-44ae-9417-9cf1edfb3d25" x="564" y="70" width="40" height="10" fontName="Verdana" fontSize="7.0" hTextAlign="Center">
+			<text><![CDATA[Fato]]></text>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="7e064f1f-f5c6-47f9-91a7-c68328991e12" x="610" y="70" width="79" height="10" fontName="Verdana" fontSize="7.0" hTextAlign="Center">
+			<text><![CDATA[Operação]]></text>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="12e7640e-8803-44f3-88b8-118e49d6d010" x="695" y="70" width="74" height="10" fontName="Verdana" fontSize="7.0" hTextAlign="Center">
+			<text><![CDATA[Valor]]></text>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="f860ffce-d458-4544-974f-8e3c862d9ac2" x="774" y="70" width="26" height="10" fontName="Verdana" fontSize="7.0" hTextAlign="Right">
+			<text><![CDATA[Atraso]]></text>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="39f14fbd-6ddc-4275-b752-b70430300bb9" x="45" y="55" width="34" height="10" forecolor="#030303" fontName="Verdana" fontSize="8.0" italic="true" underline="false">
+			<text><![CDATA[Tp Tit:]]></text>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="5a7d8753-92c8-435f-950d-63e1007e65b0" x="155" y="55" width="34" height="10" forecolor="#030303" fontName="Verdana" fontSize="8.0" italic="true" underline="false">
+			<text><![CDATA[Depto:]]></text>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="ae964698-3c4e-4251-b5ea-3bb1c050a395" x="375" y="55" width="44" height="10" forecolor="#030303" fontName="Verdana" fontSize="8.0" italic="true" underline="false">
+			<text><![CDATA[Parceiro:]]></text>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="17f23250-b1b5-468a-bbc8-387b89de72e0" x="265" y="55" width="44" height="10" forecolor="#030303" fontName="Verdana" fontSize="8.0" italic="true" underline="false">
+			<text><![CDATA[C Movto:]]></text>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="9a51e302-cb5b-4af6-92ca-17751cb58ce0" x="485" y="55" width="44" height="10" forecolor="#030303" fontName="Verdana" fontSize="8.0" italic="true" underline="false">
+			<text><![CDATA[Carteira:]]></text>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="ac58d4f8-7b93-4f59-a064-f132b8ad4a8c" x="595" y="55" width="44" height="10" forecolor="#030303" fontName="Verdana" fontSize="8.0" italic="true" underline="false">
+			<text><![CDATA[Dt Movto:]]></text>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="textField" uuid="1d3cc1fd-2000-4bb3-ad8a-5b0fb6dc6ac3" x="80" y="55" width="70" height="10" fontName="Verdana" fontSize="8.0">
+			<expression><![CDATA[$P{filtroTipoTitulo}]]></expression>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="textField" uuid="a80ca48e-3394-44f0-8bcd-b9f64fcad227" x="188" y="55" width="70" height="10" fontName="Verdana" fontSize="8.0">
+			<expression><![CDATA[$P{filtroDepartamento}]]></expression>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="textField" uuid="5db55eb6-0d4d-4c30-be71-20b17b16300c" x="309" y="55" width="66" height="10" fontName="Verdana" fontSize="8.0">
+			<expression><![CDATA[$P{filtroCaractMovto}]]></expression>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="textField" uuid="9def2a22-f312-4f16-93f3-c18b5ebf0010" x="418" y="55" width="66" height="10" fontName="Verdana" fontSize="8.0">
+			<expression><![CDATA[$P{filtroParceiro}]]></expression>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="textField" uuid="5835b772-d55d-4257-8ea7-4dea24212b22" x="530" y="55" width="66" height="10" fontName="Verdana" fontSize="8.0">
+			<expression><![CDATA[$P{filtroCarteira}]]></expression>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="textField" uuid="10d7a9e1-160f-4bce-890f-dd4e272d96e1" x="639" y="55" width="160" height="10" fontName="Verdana" fontSize="8.0" hTextAlign="Left">
+			<expression><![CDATA[new java.text.SimpleDateFormat("dd/MM/yyyy").format($P{dataMovtoInicio}) + " até " + new java.text.SimpleDateFormat("dd/MM/yyyy").format($P{dataMovtoFinal})]]></expression>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<property name="com.jaspersoft.studio.unit.height" value="px"/>
+	</pageHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<element kind="textField" uuid="bcb61d3a-195b-4ad2-b60b-13778c34353e" x="3" y="0" width="40" height="10" fontName="Verdana" fontSize="8.0" hTextAlign="Center">
+				<expression><![CDATA[$F{departamentosigla}]]></expression>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			</element>
+			<element kind="textField" uuid="a40b2f17-a75e-4ec6-811b-a2da20edaa03" x="49" y="0" width="30" height="10" fontName="Verdana" fontSize="8.0" pattern="000" hTextAlign="Center">
+				<expression><![CDATA[$F{tipotitulocodigo}]]></expression>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			</element>
+			<element kind="textField" uuid="5ff02f27-89ef-4d2e-8e7a-ecc775eb872a" x="85" y="0" width="30" height="10" fontName="Verdana" fontSize="8.0" pattern="000" hTextAlign="Center">
+				<expression><![CDATA[$F{caracteristicamovimentofinanceirocodigo}]]></expression>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			</element>
+			<element kind="textField" uuid="46412374-9f8c-42eb-90e8-0d8d966c31cb" x="121" y="0" width="30" height="10" fontName="Verdana" fontSize="8.0" pattern="000" hTextAlign="Center">
+				<expression><![CDATA[$F{carteiracodigo}]]></expression>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			</element>
+			<element kind="textField" uuid="87b04054-02e8-49d7-b283-5dd423820fe1" x="157" y="0" width="30" height="10" fontName="Verdana" fontSize="8.0" pattern="000" hTextAlign="Center">
+				<expression><![CDATA[$F{grupofinanceirocodigo}]]></expression>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			</element>
+			<element kind="textField" uuid="7474f501-97c4-430c-8f1e-91f9154ccc1e" x="193" y="0" width="60" height="10" fontName="Verdana" fontSize="8.0" hTextAlign="Center">
+				<expression><![CDATA[new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{parcelafinanceiradatavencimento})]]></expression>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			</element>
+			<element kind="textField" uuid="5b2116fa-a435-411b-94f4-83a9aeefb277" x="260" y="0" width="60" height="10" fontName="Verdana" fontSize="8.0" hTextAlign="Center">
+				<expression><![CDATA[$F{titulodatadocumento} != null ? new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{titulodatadocumento}): ""
+
+]]></expression>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			</element>
+			<element kind="textField" uuid="e92b2f39-4e39-416e-987b-5c12249d4e36" x="325" y="0" width="60" height="10" fontName="Verdana" fontSize="8.0" hTextAlign="Center">
+				<expression><![CDATA[new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{titulodatamovimentoinclusao})]]></expression>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			</element>
+			<element kind="textField" uuid="4b5b8c7c-0de4-4f68-aa3b-56c55c6dfafa" x="391" y="0" width="74" height="10" fontName="Verdana" fontSize="8.0" hTextAlign="Center">
+				<expression><![CDATA[$F{titulonossonumero}]]></expression>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			</element>
+			<element kind="textField" uuid="26d6b944-a282-454e-81b2-366834c2642a" x="472" y="0" width="24" height="10" fontName="Verdana" fontSize="8.0" pattern="000" hTextAlign="Center">
+				<expression><![CDATA[$F{parcelafinanceiranumero}]]></expression>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			</element>
+			<element kind="textField" uuid="7afc99b8-7ba9-45ab-8f4e-c26b1d48a1f7" x="503" y="0" width="54" height="10" fontName="Verdana" fontSize="8.0" hTextAlign="Center">
+				<expression><![CDATA[$F{titulodocumento} != null ? $F{titulodocumento}.toString() : ""
+]]></expression>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			</element>
+			<element kind="textField" uuid="71f3c571-fa64-4d7a-a610-374fc928d40c" x="564" y="0" width="40" height="10" fontName="Verdana" fontSize="8.0" pattern="000" hTextAlign="Center">
+				<expression><![CDATA[$F{fatogeradorcodigo}]]></expression>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			</element>
+			<element kind="textField" uuid="5990a9d8-501b-47fb-b4cb-29b50bc0b61c" x="695" y="0" width="74" height="10" fontName="Verdana" fontSize="8.0" pattern="#,##0.00#;(#,##0.00#)" hTextAlign="Right">
+				<expression><![CDATA[$F{valormovimento}]]></expression>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			</element>
+			<element kind="textField" uuid="3724fd1f-0f5d-4237-a297-7fe6a7ecb828" x="774" y="0" width="26" height="10" fontName="Verdana" fontSize="8.0" pattern="000" hTextAlign="Right">
+				<expression><![CDATA[$F{atraso}]]></expression>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			</element>
+			<element kind="textField" uuid="14507cd1-84ff-42c5-a494-1a504addb8cb" x="610" y="0" width="79" height="10" fontName="Verdana" fontSize="8.0" pattern="000" hTextAlign="Left">
+				<expression><![CDATA[$F{tipooperacaofinanceirasigla}]]></expression>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			</element>
+			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</band>
+	</detail>
+	<pageFooter height="12" splitType="Stretch">
+		<element kind="line" uuid="c2191ca4-d3b7-49af-b84a-a115f925e241" x="4" y="0" width="802" height="1">
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<pen lineColor="#BDBBBB"/>
+		</element>
+		<element kind="textField" uuid="64a2a00a-0bae-472e-a383-c8dd85a78726" x="354" y="2" width="62" height="10" fontName="Verdana" fontSize="6.0" bold="true">
+			<expression><![CDATA["Emitido em"]]></expression>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+		</element>
+		<element kind="textField" uuid="1c7ba984-9c10-4b32-8685-7f1a178cede3" x="730" y="2" width="48" height="10" fontName="Verdana" fontSize="6.0" bold="true" hTextAlign="Right">
+			<expression><![CDATA["Página " + $V{PAGE_NUMBER}]]></expression>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+		</element>
+		<element kind="textField" uuid="1a317429-3cf4-4ac1-adab-0ebf0a4a2a93" x="40" y="2" width="152" height="10" fontName="Verdana" fontSize="6.0" bold="true">
+			<expression><![CDATA[$P{usuarioNome}]]></expression>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+		</element>
+		<element kind="textField" uuid="f2a6b272-c613-4bc7-8e1f-8c14a0d2a91a" x="467" y="2" width="60" height="10" fontName="Verdana" fontSize="6.0" pattern="HH:mm:ss" bold="true">
+			<expression><![CDATA[new java.util.Date()]]></expression>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+		</element>
+		<element kind="staticText" uuid="ed8cb65f-8c34-44a9-9f98-37140efaab3b" x="0" y="2" width="36" height="10" fontName="Verdana" fontSize="6.0" bold="true">
+			<text><![CDATA[Usuário: ]]></text>
+		</element>
+		<element kind="textField" uuid="86bc4178-6cef-462c-ab12-bf1a3ea9809e" x="409" y="2" width="50" height="10" fontName="Verdana" fontSize="6.0" pattern="dd/MM/yyyy" bold="true" hTextAlign="Right">
+			<expression><![CDATA[new java.util.Date()]]></expression>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+		</element>
+		<element kind="textField" uuid="7617ba26-7567-48a3-aab5-43cc5ce20cb6" x="777" y="2" width="24" height="10" fontName="Verdana" fontSize="6.0" evaluationTime="Report" bold="true" hTextAlign="Left">
+			<expression><![CDATA[" / " + $V{PAGE_NUMBER}]]></expression>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<property name="com.jaspersoft.studio.unit.height" value="px"/>
+	</pageFooter>
+</jasperReport>

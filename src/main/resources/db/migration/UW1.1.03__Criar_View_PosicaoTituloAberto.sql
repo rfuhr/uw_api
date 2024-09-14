@@ -1,77 +1,208 @@
-create view vw_fin_posicaotituloaberto as 
-select	t.id as tituloId,
-		pf.id as parcelaFinanceiraId,
-		pf.seq_parcela as parcelaFinanceiraSequencia,
-		mf.id as movimentoFinanceiroId,
-		mf.seq_mvto as movimentoFinanceiroSequencia,
-		tt.id as tipoTituloId,
-		tt.codigo as tipoTituloCodigo,
-		tt.nome   as tipoTituloNome,
-		tt.sigla  as tipoTituloSigla,
-		p.id as parceiroId,
-		p.nome_razao_social as parceiroNomeRazaoSocial,
-		pl.id as parceiroLocalId,
-		pl.cpf_cnpj as parceiroLocalCpfCnpj,
-		pl.nome_local as parceiroLocalNome,
-		cmf.id as caracteristicaMovimentoFinanceiroId,
-		cmf.codigo as caracteristicaMovimentoFinanceiroCodigo,
-		cmf.nome as caracteristicaMovimentoFinanceiroNome,
-		cmf.sigla as caracteristicaMovimentoFinanceiroSigla,
-		d.nome as departamentoNome,
-		d.sigla as departamentoSigla,
-		ef.nome as empresaFilialNome,
-		ef.sigla as empresaFilialSigla,
-		e.nome as empresaNome,
-		e.sigla as empresaSigla,
-		cf.id as carteiraId,
-		cf.codigo as carteiraCodigo,
-		cf.nome as carteiraNome,
-		cf.sigla as carteiraSigla,
-		gf.codigo as grupoFinanceiroCodigo,
-		gf.nome as grupoFinanceiroNome,
-		gf.sigla as grupoFinanceiroSigla,
-		pf.data_vencimento as parcelaFinanceiraDataVencimento,
-		t.data_documento as tituloDataDocumento,
-		mf.data_movimento as movimentoFinanceiroDataMovimento,
-		t.documento as tituloDocumento,
-		t.nosso_numero as tituloNossoNumero,
-		pf.num_parcela as parcelaFinanceiraNumero,
-		fg.codigo as fatoGeradorCodigo,
-		fg.nome as fatoGeradorNome,
-		fg.sigla as fatoGeradorSigla,
-		t.observacao as tituloObservacao,
-		hp.codigo as historicoPadraoCodigo,
-		hp.nome as historicoPadraoNome,
-		hp.sigla as historicoPadraoSigla,
-		case when tt.indicador_dc = 'C' and cmf.inverte_indicador = false then mf.saldo_parcela
-			 when tt.indicador_dc = 'C' and cmf.inverte_indicador = true then (mf.saldo_parcela * -1)
-		     when tt.indicador_dc = 'D' and cmf.inverte_indicador = false then (mf.saldo_parcela * -1)
-		     when tt.indicador_dc = 'D' and cmf.inverte_indicador = true then mf.saldo_parcela end as valoresSaldoParcela,
-		case when (CURRENT_DATE - pf.data_vencimento) < 0 then 0
-        	 else (CURRENT_DATE - pf.data_vencimento) end as atraso,
-		case when tt.indicador_dc = 'C' and cmf.inverte_indicador = false then 'C'
-			 when tt.indicador_dc = 'C' and cmf.inverte_indicador = true then 'D'
-		     when tt.indicador_dc = 'D' and cmf.inverte_indicador = false then 'D'
-		     when tt.indicador_dc = 'D' and cmf.inverte_indicador = true then 'C' end as indicadorDC,
-		vwfininctitulo.data_movimento_inclusao as tituloDataMovimentoInclusao
-from	movimento_financeiro mf
-		join parcela_financeiro pf on pf.id = mf.parcela_id
-		join titulo t on t.id = pf.titulo_id 
-		join tipo_titulo tt on tt.id = t.tipo_titulo_id 
-		join caracteristica_movimento_financeiro cmf on cmf.id = t.caracteristica_movimento_financeiro_id 
-		join carteira_financeira cf on cf.id = mf.carteira_financeira_id
-		join parceiro_local pl on pl.id = t.parceiro_local_id 
-		join parceiro p on p.id = pl.parceiro_id
-		join departamento d on d.id = t.departamento_id 
-		join empresa_filial ef on ef.id = d.empresa_filial_id 
-		join empresa e on e.id = ef.empresa_id 
-		join grupo_financeiro gf on gf.id = t.grupo_financeiro_id 
-		join fato_gerador fg on fg.id = t.fato_gerador_id 
-		join vw_fin_infoinclusaotitulo vwfininctitulo on vwfininctitulo.titulo_id = t.id
-		left join historico_padrao hp on hp.id = t.historico_padrao_id 
-where	pf.ult_seq_mvto = mf.seq_mvto 
-and     cf.lista_pos_titulo = true
-and     pf.seq_parcela = (select max(pfMax.seq_parcela) from parcela_financeiro pfMax
-							where pfMax.titulo_id = t.id and pfMax.num_parcela = pf.num_parcela);
-							
-				
+create or replace view vw_fin_posicaotitulobaixados
+AS
+select 
+	tituloid,
+    parcelafinanceiraid,
+    parcelafinanceirasequencia,
+    tipotituloid,
+    tipotitulocodigo,
+    tipotitulonome,
+    tipotitulosigla,
+    parceiroid,
+    parceironomerazaosocial,
+    parceirolocalid,
+    parceirolocalcpfcnpj,
+    parceirolocalnome,
+    caracteristicamovimentofinanceiroid,
+    caracteristicamovimentofinanceirocodigo,
+    caracteristicamovimentofinanceironome,
+    caracteristicamovimentofinanceirosigla,
+    departamentoid,
+    departamentonome,
+    departamentosigla,
+    empresafilialid,
+    empresafilialnome,
+    empresafilialsigla,
+    empresaid,
+    empresanome,
+    empresasigla,
+    carteiraid,
+    carteiracodigo,
+    carteiranome,
+    carteirasigla,
+    grupofinanceirocodigo,
+    grupofinanceironome,
+    grupofinanceirosigla,
+    parcelafinanceiradatavencimento,
+    titulodatadocumento,
+    movimentofinanceirodatamovimento,
+    titulodocumento,
+    titulonossonumero,
+    parcelafinanceiranumero,
+    fatogeradorcodigo,
+    fatogeradornome,
+    fatogeradorsigla,
+    tituloobservacao,
+    historicopadraocodigo,
+    historicopadraonome,
+    historicopadraosigla,
+    SUM(valormovimento) as VALORMOVIMENTO,
+	atraso,
+    titulodatamovimentoinclusao,
+    usuarionome,
+    usuariousername,
+    tipooperacaofinanceiraid,
+    tipooperacaofinanceiranome,
+    tipooperacaofinanceirasigla
+from 
+(
+SELECT DISTINCT t.id AS tituloid,
+    pf.id AS parcelafinanceiraid,
+    pf.seq_parcela AS parcelafinanceirasequencia,
+    mf.id AS movimentofinanceiroid,
+    mf.seq_mvto AS movimentofinanceirosequencia,
+    tt.id AS tipotituloid,
+    tt.codigo AS tipotitulocodigo,
+    tt.nome AS tipotitulonome,
+    tt.sigla AS tipotitulosigla,
+    p.id AS parceiroid,
+    p.nome_razao_social AS parceironomerazaosocial,
+    pl.id AS parceirolocalid,
+    pl.cpf_cnpj AS parceirolocalcpfcnpj,
+    pl.nome_local AS parceirolocalnome,
+    cmf.id AS caracteristicamovimentofinanceiroid,
+    cmf.codigo AS caracteristicamovimentofinanceirocodigo,
+    cmf.nome AS caracteristicamovimentofinanceironome,
+    cmf.sigla AS caracteristicamovimentofinanceirosigla,
+    d.id AS departamentoid,
+    d.nome AS departamentonome,
+    d.sigla AS departamentosigla,
+    ef.id AS empresafilialid,
+    ef.nome AS empresafilialnome,
+    ef.sigla AS empresafilialsigla,
+    e.id AS empresaid,
+    e.nome AS empresanome,
+    e.sigla AS empresasigla,
+    cf.id AS carteiraid,
+    cf.codigo AS carteiracodigo,
+    cf.nome AS carteiranome,
+    cf.sigla AS carteirasigla,
+    gf.codigo AS grupofinanceirocodigo,
+    gf.nome AS grupofinanceironome,
+    gf.sigla AS grupofinanceirosigla,
+    pf.data_vencimento AS parcelafinanceiradatavencimento,
+    t.data_documento AS titulodatadocumento,
+    mf.data_movimento AS movimentofinanceirodatamovimento,
+    t.documento AS titulodocumento,
+    t.nosso_numero AS titulonossonumero,
+    pf.num_parcela AS parcelafinanceiranumero,
+    fg.codigo AS fatogeradorcodigo,
+    fg.nome AS fatogeradornome,
+    fg.sigla AS fatogeradorsigla,
+    t.observacao AS tituloobservacao,
+    hp.codigo AS historicopadraocodigo,
+    hp.nome AS historicopadraonome,
+    hp.sigla AS historicopadraosigla,
+        CASE
+            WHEN tt.indicador_dc = 'C'::bpchar AND cmf.inverte_indicador = false THEN mf.valor_movimento 
+            WHEN tt.indicador_dc = 'C'::bpchar AND cmf.inverte_indicador = true THEN mf.valor_movimento * '-1'::integer::numeric
+            WHEN tt.indicador_dc = 'D'::bpchar AND cmf.inverte_indicador = false THEN mf.valor_movimento * '-1'::integer::numeric
+            WHEN tt.indicador_dc = 'D'::bpchar AND cmf.inverte_indicador = true THEN mf.valor_movimento
+            ELSE NULL::numeric
+        END AS valormovimento,
+        CASE
+            WHEN (PF.data_vencimento - mf.data_movimento) > 0 THEN 0
+            ELSE pf.data_vencimento  - mf.data_movimento 
+        END AS atraso,
+        CASE
+            WHEN tt.indicador_dc = 'C'::bpchar AND cmf.inverte_indicador = false THEN 'C'::text
+            WHEN tt.indicador_dc = 'C'::bpchar AND cmf.inverte_indicador = true THEN 'D'::text
+            WHEN tt.indicador_dc = 'D'::bpchar AND cmf.inverte_indicador = false THEN 'D'::text
+            WHEN tt.indicador_dc = 'D'::bpchar AND cmf.inverte_indicador = true THEN 'C'::text
+            ELSE NULL::text
+        END AS indicadordc,
+    vwfininctitulo.data_movimento_inclusao AS titulodatamovimentoinclusao,
+    u.nome AS usuarionome,
+    u2.username AS usuariousername,
+    tof.id AS tipooperacaofinanceiraid,
+    tof.nome AS tipooperacaofinanceiranome,
+    tof.sigla AS tipooperacaofinanceirasigla
+   FROM movimento_financeiro mf
+     JOIN parcela_financeiro pf ON pf.id = mf.parcela_id
+     JOIN titulo t ON t.id = pf.titulo_id
+     JOIN tipo_titulo tt ON tt.id = t.tipo_titulo_id
+     JOIN caracteristica_movimento_financeiro cmf ON cmf.id = t.caracteristica_movimento_financeiro_id
+     JOIN carteira_financeira cf ON cf.id = mf.carteira_financeira_id
+     JOIN parceiro_local pl ON pl.id = t.parceiro_local_id
+     JOIN parceiro p ON p.id = pl.parceiro_id
+     JOIN departamento d ON d.id = t.departamento_id
+     JOIN empresa_filial ef ON ef.id = d.empresa_filial_id
+     JOIN empresa e ON e.id = ef.empresa_id
+     JOIN grupo_financeiro gf ON gf.id = t.grupo_financeiro_id
+     JOIN fato_gerador fg ON fg.id = t.fato_gerador_id
+     JOIN tipo_operacao_financeira tof ON tof.id = mf.tipo_operacao_financeira_id
+     JOIN vw_fin_infoinclusaotitulo vwfininctitulo ON vwfininctitulo.titulo_id = t.id
+     JOIN usuario u ON u.user_id = mf.user_create
+     JOIN users u2 ON u2.id = mf.user_create
+     LEFT JOIN historico_padrao hp ON hp.id = t.historico_padrao_id
+where MF.DATA_MOVIMENTO <= current_date 
+and   tof.IDN_LISTA_POSTITBAIXA = true
+) as VALORES
+group by 
+tituloid,
+    parcelafinanceiraid,
+    parcelafinanceirasequencia,
+    tipotituloid,
+    tipotitulocodigo,
+    tipotitulonome,
+    tipotitulosigla,
+    parceiroid,
+    parceironomerazaosocial,
+    parceirolocalid,
+    parceirolocalcpfcnpj,
+    parceirolocalnome,
+    caracteristicamovimentofinanceiroid,
+    caracteristicamovimentofinanceirocodigo,
+    caracteristicamovimentofinanceironome,
+    caracteristicamovimentofinanceirosigla,
+    departamentoid,
+    departamentonome,
+    departamentosigla,
+    empresafilialid,
+    empresafilialnome,
+    empresafilialsigla,
+    empresaid,
+    empresanome,
+    empresasigla,
+    carteiraid,
+    carteiracodigo,
+    carteiranome,
+    carteirasigla,
+    grupofinanceirocodigo,
+    grupofinanceironome,
+    grupofinanceirosigla,
+    parcelafinanceiradatavencimento,
+    titulodatadocumento,
+    movimentofinanceirodatamovimento,
+    titulodocumento,
+    titulonossonumero,
+    parcelafinanceiranumero,
+    fatogeradorcodigo,
+    fatogeradornome,
+    fatogeradorsigla,
+    tituloobservacao,
+    historicopadraocodigo,
+    historicopadraonome,
+    historicopadraosigla,
+	atraso,
+    titulodatamovimentoinclusao,
+    usuarionome,
+    usuariousername,
+    tipooperacaofinanceiraid,
+    tipooperacaofinanceiranome,
+    tipooperacaofinanceirasigla
+
+
+
+
+
