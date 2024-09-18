@@ -9,6 +9,6 @@ import br.com.ultraworks.erp.core.UWRepository;
 @Repository
 public interface ControleNumeracaoRepository extends UWRepository<ControleNumeracao, Long> {
 
-	@Query(value = "SELECT obter_proximo_numero(:empresaFilialId, :tipoDocumentoId, :serie)", nativeQuery = true)
-	int getProximoNumero(Long empresaFilialId, Long tipoDocumentoId, int serie);
+	@Query(value = "SELECT obter_proximo_numero(:empresaId, :empresaFilialId, :tipoDocumentoId, :serie)", nativeQuery = true)
+	int getProximoNumero(Long empresaId, Long empresaFilialId, Long tipoDocumentoId, int serie);
 }

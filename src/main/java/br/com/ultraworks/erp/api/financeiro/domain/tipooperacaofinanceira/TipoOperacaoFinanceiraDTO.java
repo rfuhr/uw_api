@@ -17,4 +17,11 @@ public class TipoOperacaoFinanceiraDTO {
 	private String nome;
 	private String sigla;
 	private boolean criaTitulo;
+	private boolean baixaTitulo;
+	private boolean selecionaBaixa;
+	private String integracaoCaixaBanco;
+	private Long operacaoCaixaBancoId;	
+	private boolean selecionaSubstituicaoCarteira;
+	private boolean selecionaNegociacao;
+	private boolean listaPosicaoTituloBaixados;
 }

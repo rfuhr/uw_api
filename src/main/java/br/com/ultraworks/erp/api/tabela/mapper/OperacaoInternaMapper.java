@@ -18,16 +18,19 @@ public class OperacaoInternaMapper extends GenericMapper<OperacaoInterna, Operac
 	private NaturezaOperacaoService naturezaOperacaoService;
 	private OperacaoInternaFiscalMapper operacaoInternaFiscalMapper;
 	private OperacaoInternaEstoqueMapper operacaoInternaEstoqueMapper;
+	private OperacaoInternaAgricolaMapper operacaoInternaAgricolaMapper;
 
 	public OperacaoInternaMapper(OperacaoInternaRepository repository,
 			NaturezaOperacaoMapper naturezaOperacaoInternaMapper, NaturezaOperacaoService naturezaOperacaoService,
 			OperacaoInternaFiscalMapper operacaoInternaFiscalMapper,
-			OperacaoInternaEstoqueMapper operacaoInternaEstoqueMapper) {
+			OperacaoInternaEstoqueMapper operacaoInternaEstoqueMapper,
+			OperacaoInternaAgricolaMapper operacaoInternaAgricolaMapper) {
 		super(repository, OperacaoInterna::new, OperacaoInternaDTO::new);
 		this.naturezaOperacaoInternaMapper = naturezaOperacaoInternaMapper;
 		this.naturezaOperacaoService = naturezaOperacaoService;
 		this.operacaoInternaFiscalMapper = operacaoInternaFiscalMapper;
 		this.operacaoInternaEstoqueMapper = operacaoInternaEstoqueMapper;
+		this.operacaoInternaAgricolaMapper = operacaoInternaAgricolaMapper;
 	}
 
 	@Override
@@ -40,6 +43,7 @@ public class OperacaoInternaMapper extends GenericMapper<OperacaoInterna, Operac
 						"Não encontrado empresa filial com id " + dto.getNaturezaOperacaoId())));
 		entity.setCaracteristicaFiscal(dto.isCaracteristicaFiscal());
 		entity.setCaracteristicaEstoque(dto.isCaracteristicaEstoque());
+		entity.setCaracteristicaAgricola(dto.isCaracteristicaAgricola());
 		if (dto.getOperacaoInternaFiscal() != null) {
 			entity.setOperacoesInternasFiscal(new ArrayList<>());
 			entity.getOperacoesInternasFiscal()
@@ -51,6 +55,9 @@ public class OperacaoInternaMapper extends GenericMapper<OperacaoInterna, Operac
 		}
 		if (dto.getOperacaoInternaEstoque() != null) {
 			entity.setOperacaoInternaEstoque(operacaoInternaEstoqueMapper.toEntity(dto.getOperacaoInternaEstoque()));
+		}
+		if (dto.getOperacaoInternaAgricola() != null) {
+			entity.setOperacaoInternaAgricola(operacaoInternaAgricolaMapper.toEntity(dto.getOperacaoInternaAgricola()));
 		}
 	}
 
@@ -64,11 +71,15 @@ public class OperacaoInternaMapper extends GenericMapper<OperacaoInterna, Operac
 		dto.setNaturezaOperacaoId(entity.getNaturezaOperacao().getId());
 		dto.setCaracteristicaFiscal(entity.isCaracteristicaFiscal());
 		dto.setCaracteristicaEstoque(entity.isCaracteristicaEstoque());
+		dto.setCaracteristicaAgricola(entity.isCaracteristicaAgricola());
 		if (entity.getOperacoesInternasFiscal() != null && entity.getOperacoesInternasFiscal().size() > 0) {
 			dto.setOperacaoInternaFiscal(operacaoInternaFiscalMapper.toDto(entity.getOperacoesInternasFiscal()).get(0));
 		}
 		if (entity.getOperacaoInternaEstoque() != null) {
-			dto.setOperacaoInternaEstoque(operacaoInternaEstoqueMapper.toDto(entity.getOperacaoInternaEstoque()));			
+			dto.setOperacaoInternaEstoque(operacaoInternaEstoqueMapper.toDto(entity.getOperacaoInternaEstoque()));
+		}
+		if (entity.getOperacaoInternaAgricola() != null) {
+			dto.setOperacaoInternaAgricola(operacaoInternaAgricolaMapper.toDto(entity.getOperacaoInternaAgricola()));
 		}
 	}
 }

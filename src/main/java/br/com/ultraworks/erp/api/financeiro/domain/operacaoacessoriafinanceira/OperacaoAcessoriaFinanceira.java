@@ -30,6 +30,9 @@ public class OperacaoAcessoriaFinanceira extends UWEntityBase {
 	@Column(name = "idn_juro_desconto")
 	private String juroDesconto; 
 	
+	@Column(name = "idn_cria_sub_seq_movto")
+	private boolean criaSubSequenciaMovimento;
 
-	
+	@Column(name = "idn_compoe_saldo")
+	private boolean compoeSaldo;
 }

@@ -12,6 +12,7 @@ public class SelecaoBaixaTituloRequest {
 	private Long tipoTituloId;
 	private Long empresaFilialId;
 	private Long departamentoId;
+	private Long parceiroLocalId;
 	private Long caracteristicaMovimentoFinanceiroId;
 	private Long carteiraFinanceiraId;
 	private Long grupoFinanceiroId;
@@ -20,6 +21,6 @@ public class SelecaoBaixaTituloRequest {
 	private LocalDate vencimentoFinal;
 	private LocalDate dataMovimentoInicial;
 	private LocalDate dataMovimentoFinal;
-	private int nossoNumero;
+	private Long nossoNumero;
 	private String documento;
 }

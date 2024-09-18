@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.ultraworks.erp.api.configuracao.domain.tipocertificado.TipoCertificado;
-import br.com.ultraworks.erp.api.fiscal.domain.tipocalculo.TipoCalculo;
 
 @RestController
 @RequestMapping("/configuracao/tipo-certificado")

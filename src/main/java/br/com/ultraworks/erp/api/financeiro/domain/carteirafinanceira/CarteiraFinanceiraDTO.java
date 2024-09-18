@@ -17,4 +17,6 @@ public class CarteiraFinanceiraDTO {
 	@FriendlyName("Nome")
 	private String nome;
 	private String sigla;
+	private boolean informaBanco;
+	private boolean listaPosicaoTitulo;
 }

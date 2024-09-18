@@ -21,10 +21,10 @@ public class ParametroFinanceiroService extends GenericService<ParametroFinancei
 		super(repository, mapper);
 	}
 
-	public ParametroFinanceiro findByParametros(Long empresaId, Long tipoTituloId,
-			Long caracteristicaMovimentoFinanceiroId, Long carteiraFinanceiraId, Long fatoGeradorId,
-			Long operacaoFinanceiraId) {
-		return repository.findByParametros(empresaId, tipoTituloId, caracteristicaMovimentoFinanceiroId,
-				carteiraFinanceiraId, fatoGeradorId, operacaoFinanceiraId);
+	public ParametroFinanceiro findByParametros(Long tipoTituloId, Long caracteristicaMovimentoFinanceiroId,
+			Long carteiraFinanceiraId, Long fatoGeradorId, Long operacaoMovimentoFinanceiroId,
+			Long operacaoAcessoriaFinanceiraId) {
+		return repository.findByParametros(tipoTituloId, caracteristicaMovimentoFinanceiroId, carteiraFinanceiraId,
+				fatoGeradorId, operacaoMovimentoFinanceiroId, operacaoAcessoriaFinanceiraId);
 	}
 }

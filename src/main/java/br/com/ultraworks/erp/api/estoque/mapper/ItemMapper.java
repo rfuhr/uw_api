@@ -88,7 +88,11 @@ public class ItemMapper extends GenericMapper<Item, ItemDTO> {
 					() -> new RegisterNotFoundException("Não encontrado Grupo Tributação com id " + dto.getGrupoTributacaoId())));
 		if (dto.getClassificacaoOperacaoId() != null)
 			entity.setClassificacaoOperacao(classificacaoOperacaoService.getById(dto.getClassificacaoOperacaoId()).orElseThrow(
-					() -> new RegisterNotFoundException("Não encontrado Classificação Operação com id " + dto.getClassificacaoOperacaoId())));		
+					() -> new RegisterNotFoundException("Não encontrado Classificação Operação com id " + dto.getClassificacaoOperacaoId())));
+		
+		entity.setInformaPesagemAgricola(dto.isInformaPesagemAgricola());
+		entity.setUsaClassificacaoAgricola(dto.isUsaClassificacaoAgricola());
+		entity.setInformaSafraAgricola(dto.isInformaSafraAgricola());
 	}
 
 	@Override
@@ -131,5 +135,8 @@ public class ItemMapper extends GenericMapper<Item, ItemDTO> {
 			dto.setClassificacaoOperacaoId(entity.getClassificacaoOperacao().getId());
 			dto.setClassificacaoOperacaoNome(entity.getClassificacaoOperacao().getNome());
 		}
+		dto.setInformaPesagemAgricola(entity.isInformaPesagemAgricola());
+		dto.setUsaClassificacaoAgricola(entity.isUsaClassificacaoAgricola());
+		dto.setInformaSafraAgricola(entity.isInformaSafraAgricola());
 	}
 }

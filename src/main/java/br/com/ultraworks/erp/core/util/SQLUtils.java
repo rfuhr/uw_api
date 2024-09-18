@@ -7,6 +7,7 @@ import java.security.InvalidParameterException;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import org.springframework.data.jpa.domain.Specification;
 
@@ -58,6 +59,8 @@ public class SQLUtils {
 						filtroSpecification = FilterSpecification.createBooleanSpecification(chave, opcao);
 					} else if ("enum".equals(opcao.getTipo())) {
 						filtroSpecification = FilterSpecification.createEnumSpecification(chave, opcao);
+					} else if ("decimal".equals(opcao.getTipo())) {
+						filtroSpecification = FilterSpecification.createDecimalSpecification(chave, opcao);
 					}
 					else {
 						throw new BusinessException("Tipo de campo não implementado para o filtro.");
@@ -89,5 +92,25 @@ public class SQLUtils {
             Predicate predicate2 = specification2.toPredicate(root, query, criteriaBuilder);
             return criteriaBuilder.or(predicate1, predicate2);
         };
+    }
+	
+	public static String generateWhereClause(Map<String, String> conditions) {
+        if (conditions == null || conditions.isEmpty()) {
+            return "";
+        }
+
+        return conditions.entrySet()
+                         .stream()
+                         .map(entry -> entry.getKey() + " = '" + entry.getValue() + "'")
+                         .collect(Collectors.joining(" AND "));
+    }
+	
+	public static String generateWhereClause(List<String> conditions) {
+        if (conditions == null || conditions.isEmpty()) {
+            return "";
+        }
+
+        return conditions.stream()
+                         .collect(Collectors.joining(" AND "));
     }
 }

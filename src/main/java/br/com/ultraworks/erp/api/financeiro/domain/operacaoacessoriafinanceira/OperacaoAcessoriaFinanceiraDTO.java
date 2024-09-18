@@ -15,4 +15,5 @@ public class OperacaoAcessoriaFinanceiraDTO {
 	@Size(max = 250)
 	@FriendlyName("Nome")
 	private String nome;
+	
 }

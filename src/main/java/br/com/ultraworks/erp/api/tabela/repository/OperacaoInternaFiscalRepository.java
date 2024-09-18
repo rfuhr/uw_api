@@ -12,6 +12,6 @@ import jakarta.persistence.QueryHint;
 @Repository
 public interface OperacaoInternaFiscalRepository extends UWRepository<OperacaoInternaFiscal, Long> {
 
-	@QueryHints(value = {@QueryHint(name = "javax.persistence.cache.retrieveMode", value = "BYPASS")})
+	@QueryHints(value = {@QueryHint(name = "jakarta.persistence.cache.retrieveMode", value = "BYPASS")})
 	List<OperacaoInternaFiscal> findByOperacaoInternaId(Long operacaoInternaId);
 }

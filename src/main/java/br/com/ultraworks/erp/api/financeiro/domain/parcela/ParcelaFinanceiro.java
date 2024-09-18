@@ -2,7 +2,9 @@ package br.com.ultraworks.erp.api.financeiro.domain.parcela;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
+import br.com.ultraworks.erp.api.financeiro.domain.movimento.MovimentoFinanceiro;
 import br.com.ultraworks.erp.api.financeiro.domain.titulo.Titulo;
 import br.com.ultraworks.erp.core.entity.UWEntityBase;
 import jakarta.persistence.Column;
@@ -13,6 +15,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -51,4 +54,7 @@ public class ParcelaFinanceiro extends UWEntityBase {
 
 	@Column(name = "ult_seq_mvto")
 	private int ultimaSeqMvto;
+
+	@Transient
+	private List<MovimentoFinanceiro> movimentos;
 }

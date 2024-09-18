@@ -64,4 +64,8 @@ public class ItemDTO {
 	private BigDecimal valor;
 	private BigDecimal valorAtual;
 	private boolean promocional;
+
+	private boolean informaPesagemAgricola;
+	private boolean usaClassificacaoAgricola;
+	private boolean informaSafraAgricola;
 }

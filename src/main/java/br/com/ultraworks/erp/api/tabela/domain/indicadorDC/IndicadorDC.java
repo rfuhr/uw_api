@@ -1,5 +1,11 @@
 package br.com.ultraworks.erp.api.tabela.domain.indicadorDC;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import br.com.ultraworks.erp.api.tabela.domain.indicadoroperacao.IndicadorOperacao;
+import br.com.ultraworks.erp.core.dto.EnumResponse;
+
 public enum IndicadorDC {
     DEBITO("D", "Débito"),
     CRÉDITO("C", "Crédito");
@@ -28,5 +34,17 @@ public enum IndicadorDC {
         }
         return null; 
     }
+    
+    public static List<EnumResponse> valuesResponse() {
+		List<EnumResponse> list = new ArrayList<>();
+
+		for (int i = 0; i < IndicadorDC.values().length; i++) {
+			IndicadorDC indicador = IndicadorDC.values()[i];
+
+			list.add(EnumResponse.builder().name(indicador.getName()).value(indicador.getValue()).build());
+		}
+
+		return list;
+	}
 }
 

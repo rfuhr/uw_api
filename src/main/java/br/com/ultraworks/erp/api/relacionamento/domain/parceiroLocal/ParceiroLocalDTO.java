@@ -7,6 +7,7 @@ import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocalEmail.Parcei
 import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocalEndereco.ParceiroLocalEnderecoDTO;
 import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocalFisica.ParceiroLocalFisicaDTO;
 import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocalJuridica.ParceiroLocalJuridicaDTO;
+import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocalPropriedade.ParceiroLocalPropriedadeDTO;
 import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocalTelefone.ParceiroLocalTelefoneDTO;
 import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocalTipoParceiro.ParceiroLocalTipoParceiroDTO;
 import jakarta.validation.Valid;
@@ -52,5 +53,8 @@ public class ParceiroLocalDTO implements Serializable {
 
 	@Valid
 	private List<ParceiroLocalEmailDTO> emails;
+
+	@Valid
+	private List<ParceiroLocalPropriedadeDTO> propriedades;
 
 }

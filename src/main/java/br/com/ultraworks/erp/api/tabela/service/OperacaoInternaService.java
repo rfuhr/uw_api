@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.ultraworks.erp.api.tabela.domain.operacaointerna.OperacaoInterna;
 import br.com.ultraworks.erp.api.tabela.domain.operacaointerna.OperacaoInternaDTO;
+import br.com.ultraworks.erp.api.tabela.domain.operacaointernaagricola.OperacaoInternaAgricola;
 import br.com.ultraworks.erp.api.tabela.domain.operacaointernaestoque.OperacaoInternaEstoque;
 import br.com.ultraworks.erp.api.tabela.domain.operacaointernafiscal.OperacaoInternaFiscal;
 import br.com.ultraworks.erp.api.tabela.mapper.OperacaoInternaMapper;
@@ -22,14 +23,17 @@ public class OperacaoInternaService extends GenericService<OperacaoInterna, Long
 
 	OperacaoInternaFiscalService operacaoInternaFiscalService;
 	OperacaoInternaEstoqueService operacaoInternaEstoqueService;
+	OperacaoInternaAgricolaService operacaoInternaAgricolaService;
 
 	@Autowired
 	public OperacaoInternaService(OperacaoInternaRepository repository, OperacaoInternaMapper mapper,
 			OperacaoInternaFiscalService operacaoInternaFiscalService,
-			OperacaoInternaEstoqueService operacaoInternaEstoqueService) {
+			OperacaoInternaEstoqueService operacaoInternaEstoqueService,
+			OperacaoInternaAgricolaService operacaoInternaAgricolaService) {
 		super(repository, mapper);
 		this.operacaoInternaFiscalService = operacaoInternaFiscalService;
 		this.operacaoInternaEstoqueService = operacaoInternaEstoqueService;
+		this.operacaoInternaAgricolaService = operacaoInternaAgricolaService;
 	}
 
 	@Override
@@ -38,6 +42,7 @@ public class OperacaoInternaService extends GenericService<OperacaoInterna, Long
 		if (operacaoInternaOptional.isPresent()) {
 			getDadosListasDependentes(operacaoInternaOptional.get());
 			operacaoInternaOptional.get().setOperacaoInternaEstoque(operacaoInternaEstoqueService.getByOperacaoInterna(id));
+			operacaoInternaOptional.get().setOperacaoInternaAgricola(operacaoInternaAgricolaService.getByOperacaoInterna(id));
 		}
 		return operacaoInternaOptional;
 	}
@@ -65,6 +70,16 @@ public class OperacaoInternaService extends GenericService<OperacaoInterna, Long
 			operacaoInternaEstoqueService.save(entity.getOperacaoInternaEstoque());
 		}
 		
+		if (!entity.isCaracteristicaAgricola()) {
+			OperacaoInternaAgricola oper = operacaoInternaAgricolaService.getByOperacaoInterna(newEntity.getId());
+			if (oper != null) {
+				operacaoInternaAgricolaService.delete(oper.getId());
+			}
+		} else if (entity.getOperacaoInternaAgricola() != null) {
+			entity.getOperacaoInternaAgricola().setOperacaoInterna(newEntity);
+			operacaoInternaAgricolaService.save(entity.getOperacaoInternaAgricola());
+		}
+		
 		return entity;
 	}
 
@@ -75,6 +90,9 @@ public class OperacaoInternaService extends GenericService<OperacaoInterna, Long
 			operacaoInternaFiscalService.deleteList(operOptionalOptional.get().getOperacoesInternasFiscal());
 			if (operOptionalOptional.get().getOperacaoInternaEstoque() != null) {
 				operacaoInternaEstoqueService.delete(operOptionalOptional.get().getOperacaoInternaEstoque().getId());
+			}
+			if (operOptionalOptional.get().getOperacaoInternaAgricola() != null) {
+				operacaoInternaAgricolaService.delete(operOptionalOptional.get().getOperacaoInternaAgricola().getId());
 			}
 			repository.deleteById(id);
 		}
