@@ -15,6 +15,7 @@ public class TabelaPrecoItemDTO {
 	private Long itemId;
 	private String itemNome;
 	private int itemCodigo;
+	private String unidadeMedidaSigla;
 	private BigDecimal valorCusto;
 	private BigDecimal valorMarkup;
 	private BigDecimal valorCalculado;

@@ -58,4 +58,10 @@ public class ItemDTO {
 	private String grupoTributacaoNome;
 	private Long classificacaoOperacaoId;
 	private String classificacaoOperacaoNome;
+	
+	private Long tabelaPrecoItemId;
+	private BigDecimal saldoEstoque;
+	private BigDecimal valor;
+	private BigDecimal valorAtual;
+	private boolean promocional;
 }
