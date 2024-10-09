@@ -15,9 +15,9 @@ public class CalcularIpiHelper {
 		ValoresIPI valoresIPI = new ValoresIPI();
 		valoresIPI.setCST(configuracaoFiscalIpi.getSituacaoTributaria().getCodigo());
 		valoresIPI.setCEnq(configuracaoFiscalIpi.getEnquadramento().getCodigo());
-		valoresIPI.setTipoCalculo(configuracaoFiscalIpi.getTipoCalculo().getValue());
 		
 		if (!configuracaoFiscalIpi.getSituacaoTributaria().isAliquotaZero()) {
+			valoresIPI.setTipoCalculo(configuracaoFiscalIpi.getTipoCalculo().getValue());
 			if (TipoCalculo.PERCENTUAL.getValue().equals(configuracaoFiscalIpi.getTipoCalculo().getValue())) {
 				valoresIPI.setVBC(calculoImpostoRequest.getValorTotal());
 				valoresIPI.setPIPI(configuracaoFiscalIpi.getAliquota());

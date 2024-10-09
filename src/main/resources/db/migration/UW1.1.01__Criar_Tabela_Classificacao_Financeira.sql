@@ -14,5 +14,5 @@ create table plano_classificacao_financeira (
 	CONSTRAINT superior_plano_classificacao_financeira_foreign FOREIGN KEY (id_superior) REFERENCES plano_classificacao_financeira (id)						
 );
 
-alter table parametro_financeiro add column plano_classificacao_financeira_id bigint not null;
-alter table parametro_financeiro CONSTRAINT plano_cassfificacao_parametro_financeiro_foreign FOREIGN KEY (plano_classificacao_financeira_id) REFERENCES plano_classificacao_financeira (id)
+alter table parametro_financeiro add column plano_classificacao_financeira_id bigint;
+alter table parametro_financeiro add CONSTRAINT plano_cassfificacao_parametro_financeiro_foreign FOREIGN KEY (plano_classificacao_financeira_id) REFERENCES plano_classificacao_financeira (id)

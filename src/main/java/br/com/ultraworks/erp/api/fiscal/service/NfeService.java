@@ -12,7 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import br.com.swconsultoria.nfe.dom.enuns.EstadosEnum;
 import br.com.swconsultoria.nfe.util.ChaveUtil;
@@ -70,6 +74,9 @@ public class NfeService {
 	private BuscaListagemNFeQuery buscaListagemNFeQuery;
 	private CacheNFeRepository cacheNFeRepository;
 	private MergeNFeRequestToNFeEntityService mergeNFeRequestToNFeEntityService;
+	
+	@Autowired
+    private PlatformTransactionManager transactionManager;
 
 	@Autowired
 	public NfeService(ResourceLoader resourceLoader, ApplicationContext context, EmpresaFilialService empresaFilialService, NFeRepository nfeRepository,
@@ -295,17 +302,46 @@ public class NfeService {
 		nfe = this.save(nfe);
 	}
 
-	@Transactional
+	
 	public byte[] enviarNFe(Long nfeId) {
-		NFe nfe = nfeRepository.findById(nfeId).orElseThrow(() -> new RegisterNotFoundException("Não encontrado nfe para o id informado"));
-		IServicoEnvioNFe servicoIntegracaoNFe = context.getBean(IServicoEnvioNFe.class);
-		RetornoNFeIntegracao retornoNfeIntegracao = servicoIntegracaoNFe
-				.enviarNFe(nfe);
+		RetornoNFeIntegracao retornoNfeIntegracao = enviar(nfeId);
 		if (StringUtils.isNotBlank(retornoNfeIntegracao.getXml())) {
 			IServicoImpressaoNFe servicoImpressaoNFe = context.getBean(IServicoImpressaoNFe.class);
 			return servicoImpressaoNFe.imprimeParaBytes(retornoNfeIntegracao.getXml());
 		}
 		return null;
+	}
+	
+	private RetornoNFeIntegracao enviar(Long nfeId) {
+		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+        def.setIsolationLevel(TransactionDefinition.ISOLATION_DEFAULT);
+        def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+      
+        TransactionStatus status = transactionManager.getTransaction(def);
+        try {
+        	NFe nfe = nfeRepository.findById(nfeId).orElseThrow(() -> new RegisterNotFoundException("Não encontrado nfe para o id informado"));
+        	IServicoEnvioNFe servicoIntegracaoNFe = context.getBean(IServicoEnvioNFe.class);
+        	RetornoNFeIntegracao retornoNfeIntegracao =  servicoIntegracaoNFe.enviarNFe(nfe);
+        	
+    		if (retornoNfeIntegracao.getErroValidarRetorno() == null && retornoNfeIntegracao.getStatus().equals("100")) {
+    			nfe.setSituacao(SituacaoDocumento.AUTORIZADO);
+    			nfe.setCstat(retornoNfeIntegracao.getStatus());
+    			nfe.setXml(retornoNfeIntegracao.getXml().getBytes()); 
+    			nfe.setNprotnfe(retornoNfeIntegracao.getProtocolo());
+    		} else {
+    			nfe.setSituacao(SituacaoDocumento.REJEITADO);
+    			nfe.setXmotivo(retornoNfeIntegracao.getErroValidarRetorno());
+    		}
+    		this.save(nfe);
+			
+        	transactionManager.commit(status);
+        	
+        	return retornoNfeIntegracao;
+		} catch (Exception e) {
+			transactionManager.rollback(status);
+			throw e;
+		}
+        
 	}
 
 }

@@ -31,7 +31,7 @@ public class ReportsService {
     private DynamicDataSourceBasedMultiTenantConnectionProvider dy;
 
     public byte[] generateReport(String reportTemplate, Map<String, Object> parameters) throws Exception {
-        Resource resource = resourceLoader.getResource("classpath:reports/" + reportTemplate + ".jrxml");
+        Resource resource = resourceLoader.getResource("classpath:/reports/" + reportTemplate + ".jrxml");
         InputStream inputStream = resource.getInputStream();
         
         JasperReport jasperReport = JasperCompileManager.compileReport(inputStream);
@@ -43,7 +43,7 @@ public class ReportsService {
     }
     
     public byte[] generateReport(String reportTemplate, String sqlQuery, Map<String, Object> parameters) throws Exception {
-        Resource resource = resourceLoader.getResource("classpath:reports/" + reportTemplate + ".jrxml");
+        Resource resource = resourceLoader.getResource("classpath:/reports/" + reportTemplate + ".jrxml");
         InputStream inputStream = resource.getInputStream();
         
         JasperDesign jasperDesign = JRXmlLoader.load(inputStream);
