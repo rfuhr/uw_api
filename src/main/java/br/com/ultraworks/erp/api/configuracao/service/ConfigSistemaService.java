@@ -20,14 +20,17 @@ public class ConfigSistemaService extends GenericService<ConfigSistema, Long, Co
 	ConfigSistemaRepository repository;
 	ConfigSistemaMapper mapper;
 	private ConfigSistemaFinanceiroService configSistemaFinanceiroService;
+	private ConfigSistemaAgricolaService configSistemaAgricolaService;
 
 	@Autowired
 	public ConfigSistemaService(ConfigSistemaRepository repository, ConfigSistemaMapper mapper,
-			ConfigSistemaFinanceiroService configSistemaFinanceiroService) {
+			ConfigSistemaFinanceiroService configSistemaFinanceiroService,
+			ConfigSistemaAgricolaService configSistemaAgricolaService) {
 		super(repository, mapper);
 		this.repository = repository;
 		this.mapper = mapper;
 		this.configSistemaFinanceiroService = configSistemaFinanceiroService;
+		this.configSistemaAgricolaService = configSistemaAgricolaService;
 	}
 
 	@Override
@@ -37,6 +40,10 @@ public class ConfigSistemaService extends GenericService<ConfigSistema, Long, Co
 			configSistema.get().setConfiguracoesFinanceiro(new ArrayList<>());
 			configSistema.get().getConfiguracoesFinanceiro()
 					.addAll(configSistemaFinanceiroService.getAllByConfigSistema(configSistema.get().getId()));
+
+			configSistema.get().setConfiguracoesAgricola(new ArrayList<>());
+			configSistema.get().getConfiguracoesAgricola()
+					.addAll(configSistemaAgricolaService.getAllByConfigSistema(configSistema.get().getId()));
 		}
 		return configSistema;
 	}
@@ -47,6 +54,10 @@ public class ConfigSistemaService extends GenericService<ConfigSistema, Long, Co
 		if (entity.getConfiguracoesFinanceiro() != null)
 			entity.getConfiguracoesFinanceiro().forEach(csfin -> csfin.setConfigSistema(entitySaved));
 		configSistemaFinanceiroService.persistList(entitySaved.getId(), entitySaved.getConfiguracoesFinanceiro());
+
+		if (entity.getConfiguracoesAgricola() != null)
+			entity.getConfiguracoesAgricola().forEach(csfin -> csfin.setConfigSistema(entitySaved));
+		configSistemaAgricolaService.persistList(entitySaved.getId(), entitySaved.getConfiguracoesAgricola());
 		return entitySaved;
 	}
 
@@ -55,8 +66,9 @@ public class ConfigSistemaService extends GenericService<ConfigSistema, Long, Co
 		Optional<ConfigSistema> optional = this.getById(id);
 		if (optional.isPresent()) {
 			configSistemaFinanceiroService.deleteList(optional.get().getConfiguracoesFinanceiro());
+			configSistemaAgricolaService.deleteList(optional.get().getConfiguracoesAgricola());
 			repository.deleteById(id);
 		}
 	}
-	
+
 }

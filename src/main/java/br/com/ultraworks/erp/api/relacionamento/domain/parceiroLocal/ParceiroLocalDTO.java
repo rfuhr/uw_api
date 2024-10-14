@@ -25,6 +25,7 @@ public class ParceiroLocalDTO implements Serializable {
 
 	private Long parceiroId;
 	private String nomeRazaoSocial;
+	private String tipoPessoa;
 
 	@NotNull
 	@NotEmpty

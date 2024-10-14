@@ -21,4 +21,19 @@ public class BigDecimalHelper {
 		df.setGroupingUsed(false);
 		return df.format(valor);
 	}
+	
+	public static String toCurrencyString(BigDecimal valor) {
+        if (valor == null) {
+            valor = BigDecimal.ZERO;
+        }
+
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(new Locale("pt", "BR"));
+        symbols.setCurrencySymbol("R$");
+        symbols.setGroupingSeparator('.');  
+        symbols.setDecimalSeparator(',');  
+
+        DecimalFormat df = new DecimalFormat("¤ #,##0.00", symbols); 
+
+        return df.format(valor);
+    }
 }

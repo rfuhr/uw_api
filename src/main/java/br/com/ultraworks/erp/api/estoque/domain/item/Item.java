@@ -106,13 +106,11 @@ public class Item extends UWEntityBase {
 	@JoinColumn(name = "classificacao_operacao_id")
 	private ClassificacaoOperacao classificacaoOperacao;
 	
-	@Column(name = "informa_pesagem_agricola")
-	private boolean informaPesagemAgricola;
-	
-	@Column(name = "usa_classificacao_agricola")
-	private boolean usaClassificacaoAgricola;
-	
+	@Column(name = "produto_agricola")
+	private boolean produtoAgricola;
 	@Column(name = "informa_safra_agricola")
 	private boolean informaSafraAgricola;
+	@Column(name = "usa_romaneio_agricola")
+	private boolean usaRomaneioAgricola;
 	
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocal.ParceiroLocal;
+import br.com.ultraworks.erp.api.relacionamento.domain.parceiroRegraAtividade.ParceiroRegraAtividade;
 import br.com.ultraworks.erp.api.tabela.domain.tipopessoa.TipoPessoa;
 import br.com.ultraworks.erp.api.tabela.domain.tipopessoa.TipoPessoaConverter;
 import br.com.ultraworks.erp.core.annotation.UniqueValidation;
@@ -50,10 +51,14 @@ public class Parceiro extends UWEntityBase {
 	
 	@Transient
 	private List<ParceiroLocal> locais;
+	
+	@Transient
+	private List<ParceiroRegraAtividade> regras;
 
 	public Parceiro() {
 		super();
 		this.locais = new ArrayList<>();
+		this.regras = new ArrayList<>();
 	}
 	
 	

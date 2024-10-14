@@ -1,6 +1,6 @@
 package br.com.ultraworks.erp.api.tabela.domain.operacaointernaagricola;
 
-import br.com.ultraworks.erp.api.estoque.domain.operacaoestoque.validator.ValidaOperacaoEstoque;
+import br.com.ultraworks.erp.api.agricola.domain.identificacaodocumentoagricola.validator.ValidaIdentificacaoDocumentoAgricola;
 import lombok.Data;
 
 @Data
@@ -8,5 +8,16 @@ public class OperacaoInternaAgricolaDTO {
 
 	private Long id;
 	private Long operacaoInternaId;
-	private boolean selecionaPesagem;
+	@ValidaIdentificacaoDocumentoAgricola
+	private String identificacaoDocumentoAgricola;
+	private boolean exigeNotaEntrada;
+	private boolean fixaAutomatico;
+	private boolean complementoPrecoFixacao;
+	private boolean contratoAvista;
+	private Long tipoPrecoAgricolaId;
+	private Long tipoContratoAgricolaId;
+
+	private String identificacaoDocumentoAgricolaNome;
+	private String tipoPrecoAgricolaNome;
+	private String tipoContratoAgricolaNome;
 }

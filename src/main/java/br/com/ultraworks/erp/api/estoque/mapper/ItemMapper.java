@@ -84,15 +84,16 @@ public class ItemMapper extends GenericMapper<Item, ItemDTO> {
 				.orElseThrow(() -> new RegisterNotFoundException(
 						"Não encontrado unidade de medida tributável com id " + dto.getUnidadeMedidaTributavelId())));
 		if (dto.getGrupoTributacaoId() != null && dto.getGrupoTributacaoId() > 0)
-			entity.setGrupoTributacao(grupoTributacaoService.getById(dto.getGrupoTributacaoId()).orElseThrow(
-					() -> new RegisterNotFoundException("Não encontrado Grupo Tributação com id " + dto.getGrupoTributacaoId())));
+			entity.setGrupoTributacao(grupoTributacaoService.getById(dto.getGrupoTributacaoId())
+					.orElseThrow(() -> new RegisterNotFoundException(
+							"Não encontrado Grupo Tributação com id " + dto.getGrupoTributacaoId())));
 		if (dto.getClassificacaoOperacaoId() != null)
-			entity.setClassificacaoOperacao(classificacaoOperacaoService.getById(dto.getClassificacaoOperacaoId()).orElseThrow(
-					() -> new RegisterNotFoundException("Não encontrado Classificação Operação com id " + dto.getClassificacaoOperacaoId())));
-		
-		entity.setInformaPesagemAgricola(dto.isInformaPesagemAgricola());
-		entity.setUsaClassificacaoAgricola(dto.isUsaClassificacaoAgricola());
+			entity.setClassificacaoOperacao(classificacaoOperacaoService.getById(dto.getClassificacaoOperacaoId())
+					.orElseThrow(() -> new RegisterNotFoundException(
+							"Não encontrado Classificação Operação com id " + dto.getClassificacaoOperacaoId())));
+		entity.setProdutoAgricola(dto.isProdutoAgricola());
 		entity.setInformaSafraAgricola(dto.isInformaSafraAgricola());
+		entity.setUsaRomaneioAgricola(dto.isUsaRomaneioAgricola());
 	}
 
 	@Override
@@ -135,8 +136,8 @@ public class ItemMapper extends GenericMapper<Item, ItemDTO> {
 			dto.setClassificacaoOperacaoId(entity.getClassificacaoOperacao().getId());
 			dto.setClassificacaoOperacaoNome(entity.getClassificacaoOperacao().getNome());
 		}
-		dto.setInformaPesagemAgricola(entity.isInformaPesagemAgricola());
-		dto.setUsaClassificacaoAgricola(entity.isUsaClassificacaoAgricola());
+		dto.setProdutoAgricola(entity.isProdutoAgricola());
 		dto.setInformaSafraAgricola(entity.isInformaSafraAgricola());
+		dto.setUsaRomaneioAgricola(entity.isUsaRomaneioAgricola());
 	}
 }

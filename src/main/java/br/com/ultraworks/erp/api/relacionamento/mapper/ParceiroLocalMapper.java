@@ -92,6 +92,7 @@ public class ParceiroLocalMapper extends GenericMapper<ParceiroLocal, ParceiroLo
 		dto.setId(entity.getId());
 		dto.setParceiroId(entity.getParceiro().getId());
 		dto.setNomeRazaoSocial(entity.getParceiro().getNomeRazaoSocial());
+		dto.setTipoPessoa(entity.getParceiro().getTipoPessoa().getValue());
 		dto.setCpfCnpj(entity.getCpfCnpj());
 		dto.setNomeLocal(entity.getNomeLocal());
 		if (entity.getDadosPessoaFisica() != null && entity.getDadosPessoaFisica().size() > 0) {

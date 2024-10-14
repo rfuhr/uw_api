@@ -2,6 +2,7 @@ package br.com.ultraworks.erp.api.configuracao.domain.configsistema;
 
 import java.util.List;
 
+import br.com.ultraworks.erp.api.configuracao.domain.configsistemaagricola.ConfigSistemaAgricola;
 import br.com.ultraworks.erp.api.configuracao.domain.configsistemafinanceiro.ConfigSistemaFinanceiro;
 import br.com.ultraworks.erp.core.entity.UWEntityBase;
 import jakarta.persistence.Entity;
@@ -29,5 +30,8 @@ public class ConfigSistema extends UWEntityBase {
 	private Long id;
 
 	@Transient
-	private List<ConfigSistemaFinanceiro> configuracoesFinanceiro;	
+	private List<ConfigSistemaFinanceiro> configuracoesFinanceiro;
+
+	@Transient
+	private List<ConfigSistemaAgricola> configuracoesAgricola;
 }

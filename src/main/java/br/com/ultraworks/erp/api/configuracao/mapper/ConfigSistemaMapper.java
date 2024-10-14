@@ -13,11 +13,14 @@ import br.com.ultraworks.erp.core.mapper.GenericMapper;
 public class ConfigSistemaMapper extends GenericMapper<ConfigSistema, ConfigSistemaDTO> {
 
 	private ConfigSistemaFinanceiroMapper configSistemaFinanceiroMapper;
+	private ConfigSistemaAgricolaMapper configSistemaAgricolaMapper;
 
-	public ConfigSistemaMapper(ConfigSistemaRepository repository, 
-			ConfigSistemaFinanceiroMapper configSistemaFinanceiroMapper) {
+	public ConfigSistemaMapper(ConfigSistemaRepository repository,
+			ConfigSistemaFinanceiroMapper configSistemaFinanceiroMapper,
+			ConfigSistemaAgricolaMapper configSistemaAgricolaMapper) {
 		super(repository, ConfigSistema::new, ConfigSistemaDTO::new);
 		this.configSistemaFinanceiroMapper = configSistemaFinanceiroMapper;
+		this.configSistemaAgricolaMapper = configSistemaAgricolaMapper;
 	}
 
 	@Override
@@ -25,7 +28,13 @@ public class ConfigSistemaMapper extends GenericMapper<ConfigSistema, ConfigSist
 		entity.setId(dto.getId());
 		if (dto.getConfiguracoesFinanceiro() != null && dto.getConfiguracoesFinanceiro().size() > 0) {
 			entity.setConfiguracoesFinanceiro(new ArrayList<>());
-			entity.getConfiguracoesFinanceiro().addAll(configSistemaFinanceiroMapper.toEntity(dto.getConfiguracoesFinanceiro()));
+			entity.getConfiguracoesFinanceiro()
+					.addAll(configSistemaFinanceiroMapper.toEntity(dto.getConfiguracoesFinanceiro()));
+		}
+		if (dto.getConfiguracoesAgricola() != null && dto.getConfiguracoesAgricola().size() > 0) {
+			entity.setConfiguracoesAgricola(new ArrayList<>());
+			entity.getConfiguracoesAgricola()
+					.addAll(configSistemaAgricolaMapper.toEntity(dto.getConfiguracoesAgricola()));
 		}
 
 	}
@@ -35,7 +44,12 @@ public class ConfigSistemaMapper extends GenericMapper<ConfigSistema, ConfigSist
 		dto.setId(entity.getId());
 		dto.setConfiguracoesFinanceiro(new ArrayList<>());
 		if (entity.getConfiguracoesFinanceiro() != null) {
-			dto.getConfiguracoesFinanceiro().addAll(configSistemaFinanceiroMapper.toDto(entity.getConfiguracoesFinanceiro()));
+			dto.getConfiguracoesFinanceiro()
+					.addAll(configSistemaFinanceiroMapper.toDto(entity.getConfiguracoesFinanceiro()));
+		}
+		dto.setConfiguracoesAgricola(new ArrayList<>());
+		if (entity.getConfiguracoesAgricola() != null) {
+			dto.getConfiguracoesAgricola().addAll(configSistemaAgricolaMapper.toDto(entity.getConfiguracoesAgricola()));
 		}
 	}
 }

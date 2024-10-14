@@ -15,15 +15,10 @@ import br.com.ultraworks.erp.core.generics.GenericController;
 @RequestMapping("/configuracao/sistema")
 public class ConfigSistemaController extends GenericController<ConfigSistema, Long, ConfigSistemaDTO> {
 
-	private ConfigSistemaFinanceiroService configSistemaFinanceiroService;
-	private ConfigSistemaFinanceiroMapper configSistemaFinanceiroMapper;
-
 	public ConfigSistemaController(ConfigSistemaService service, ConfigSistemaMapper mapper,
 			ConfigSistemaFinanceiroService configSistemaFinanceiroService,
 			ConfigSistemaFinanceiroMapper configSistemaFinanceiroMapper) {
 		super(service, mapper);
-		this.configSistemaFinanceiroService = configSistemaFinanceiroService;
-		this.configSistemaFinanceiroMapper = configSistemaFinanceiroMapper;
 	}
 
 }

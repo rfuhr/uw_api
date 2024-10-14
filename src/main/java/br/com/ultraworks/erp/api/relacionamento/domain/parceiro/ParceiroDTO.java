@@ -3,13 +3,13 @@ package br.com.ultraworks.erp.api.relacionamento.domain.parceiro;
 import java.util.List;
 
 import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocal.ParceiroLocalDTO;
+import br.com.ultraworks.erp.api.relacionamento.domain.parceiroRegraAtividade.ParceiroRegraAtividadeDTO;
 import br.com.ultraworks.erp.api.tabela.domain.tipopessoa.validator.ValidaTipoPessoa;
 import br.com.ultraworks.erp.core.annotation.FriendlyName;
 import br.com.ultraworks.erp.core.validators.minlistsize.MinSize;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Null;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
@@ -35,4 +35,6 @@ public class ParceiroDTO {
 	@Valid
 	@MinSize(min = 1)
 	private List<ParceiroLocalDTO> locais;
+
+	private List<ParceiroRegraAtividadeDTO> regras;
 }

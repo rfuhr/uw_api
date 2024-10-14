@@ -12,4 +12,5 @@ public interface OperacaoInternaAgricolaRepository extends UWRepository<Operacao
 
 	@QueryHints(value = { @QueryHint(name = "jakarta.persistence.cache.retrieveMode", value = "BYPASS") })
 	OperacaoInternaAgricola findByOperacaoInternaId(Long operacaoInternaId);
+
 }

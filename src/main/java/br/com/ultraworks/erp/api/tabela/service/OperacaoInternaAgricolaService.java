@@ -24,4 +24,5 @@ public class OperacaoInternaAgricolaService
 	public OperacaoInternaAgricola getByOperacaoInterna(Long id) {
 		return ((OperacaoInternaAgricolaRepository) repository).findByOperacaoInternaId(id);
 	}
+
 }

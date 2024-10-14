@@ -41,6 +41,7 @@ public class ParceiroLocalEnderecoMapper extends GenericMapper<ParceiroLocalEnde
 		entity.setComplemento(dto.getComplemento());
 		entity.setNumero(dto.getNumero());
 		entity.setBairro(dto.getBairro());
+		entity.setPrincipal(dto.isPrincipal());
 		
 	}
 
@@ -60,6 +61,7 @@ public class ParceiroLocalEnderecoMapper extends GenericMapper<ParceiroLocalEnde
 		dto.setEndereco(entity.getEndereco());
 		dto.setComplemento(entity.getComplemento());
 		dto.setNumero(entity.getNumero());
-		dto.setBairro(entity.getBairro());		
+		dto.setBairro(entity.getBairro());	
+		dto.setPrincipal(entity.isPrincipal());
 	}
 }

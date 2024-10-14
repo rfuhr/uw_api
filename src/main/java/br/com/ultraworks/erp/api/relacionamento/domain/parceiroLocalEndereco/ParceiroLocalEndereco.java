@@ -54,4 +54,6 @@ public class ParceiroLocalEndereco extends UWEntityBase {
 	
 	private String bairro;
 	
+	private boolean principal;
+	
 }

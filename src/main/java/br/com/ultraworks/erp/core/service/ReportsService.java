@@ -25,38 +25,43 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 public class ReportsService {
 
 	@Autowired
-    private ResourceLoader resourceLoader;
+	private ResourceLoader resourceLoader;
 
-    @Autowired
-    private DynamicDataSourceBasedMultiTenantConnectionProvider dy;
+	@Autowired
+	private DynamicDataSourceBasedMultiTenantConnectionProvider dy;
 
-    public byte[] generateReport(String reportTemplate, Map<String, Object> parameters) throws Exception {
-        Resource resource = resourceLoader.getResource("classpath:reports/" + reportTemplate + ".jrxml");
-        InputStream inputStream = resource.getInputStream();
-        
-        JasperReport jasperReport = JasperCompileManager.compileReport(inputStream);
+	public byte[] generateReport(String reportTemplate, Map<String, Object> parameters) throws Exception {
+		Resource resource = resourceLoader.getResource("classpath:reports/" + reportTemplate + ".jrxml");
+		if (resource.exists()) {
+			InputStream inputStream = resource.getInputStream();
 
-        try (Connection connection = dy.getConnection(TenantContext.getTenantId())) {
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, connection);
-            return JasperExportManager.exportReportToPdf(jasperPrint);
-        }
-    }
-    
-    public byte[] generateReport(String reportTemplate, String sqlQuery, Map<String, Object> parameters) throws Exception {
-        Resource resource = resourceLoader.getResource("classpath:reports/" + reportTemplate + ".jrxml");
-        InputStream inputStream = resource.getInputStream();
-        
-        JasperDesign jasperDesign = JRXmlLoader.load(inputStream);
-        JRDesignQuery newQuery = new JRDesignQuery();
-        newQuery.setText(sqlQuery);
-        jasperDesign.setQuery(newQuery);
-        
-        JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
+			JasperReport jasperReport = JasperCompileManager.compileReport(inputStream);
 
-        try (Connection connection = dy.getConnection(TenantContext.getTenantId())) {
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, connection);
-            return JasperExportManager.exportReportToPdf(jasperPrint);
-        }
-    }
-    
+			try (Connection connection = dy.getConnection(TenantContext.getTenantId())) {
+				JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, connection);
+				return JasperExportManager.exportReportToPdf(jasperPrint);
+			}
+		} else {
+			throw new RuntimeException("Não encontrado o template do relatório");
+		}
+	}
+
+	public byte[] generateReport(String reportTemplate, String sqlQuery, Map<String, Object> parameters)
+			throws Exception {
+		Resource resource = resourceLoader.getResource("classpath:reports/" + reportTemplate + ".jrxml");
+		InputStream inputStream = resource.getInputStream();
+
+		JasperDesign jasperDesign = JRXmlLoader.load(inputStream);
+		JRDesignQuery newQuery = new JRDesignQuery();
+		newQuery.setText(sqlQuery);
+		jasperDesign.setQuery(newQuery);
+
+		JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
+
+		try (Connection connection = dy.getConnection(TenantContext.getTenantId())) {
+			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, connection);
+			return JasperExportManager.exportReportToPdf(jasperPrint);
+		}
+	}
+
 }

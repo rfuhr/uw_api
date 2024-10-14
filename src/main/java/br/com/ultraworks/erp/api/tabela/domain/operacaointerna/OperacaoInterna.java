@@ -5,6 +5,7 @@ import java.util.List;
 import br.com.ultraworks.erp.api.tabela.domain.naturezaOperacao.NaturezaOperacao;
 import br.com.ultraworks.erp.api.tabela.domain.operacaointernaagricola.OperacaoInternaAgricola;
 import br.com.ultraworks.erp.api.tabela.domain.operacaointernaestoque.OperacaoInternaEstoque;
+import br.com.ultraworks.erp.api.tabela.domain.operacaointernafinanceiro.OperacaoInternaFinanceiro;
 import br.com.ultraworks.erp.api.tabela.domain.operacaointernafiscal.OperacaoInternaFiscal;
 import br.com.ultraworks.erp.core.entity.UWEntityBase;
 import jakarta.persistence.Column;
@@ -51,6 +52,9 @@ public class OperacaoInterna extends UWEntityBase {
 	@Column(name = "caracteristica_agricola")
 	private boolean caracteristicaAgricola;
 
+	@Column(name = "caracteristica_financeira")
+	private boolean caracteristicaFinanceira;
+
 	@Transient
 	private List<OperacaoInternaFiscal> operacoesInternasFiscal;
 
@@ -59,4 +63,7 @@ public class OperacaoInterna extends UWEntityBase {
 
 	@Transient
 	private OperacaoInternaAgricola operacaoInternaAgricola;
+
+	@Transient
+	private OperacaoInternaFinanceiro operacaoInternaFinanceiro;
 }

@@ -17,4 +17,5 @@ public class SafraController extends GenericController<Safra, Long, SafraDTO> {
 		super(service, mapper);
 	}
 
+	
 }

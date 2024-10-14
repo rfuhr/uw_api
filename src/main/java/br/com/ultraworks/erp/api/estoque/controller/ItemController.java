@@ -1,8 +1,5 @@
 package br.com.ultraworks.erp.api.estoque.controller;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,4 +23,5 @@ public class ItemController extends GenericController<Item, Long, ItemDTO> {
 	public ResponseEntity<?> getProximoCodigo() {
 		return ResponseEntity.ok(((ItemService) service).getProximoCodigo());
 	}
+
 }

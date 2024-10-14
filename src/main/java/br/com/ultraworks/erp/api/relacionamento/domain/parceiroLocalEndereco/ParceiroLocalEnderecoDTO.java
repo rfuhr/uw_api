@@ -48,5 +48,7 @@ public class ParceiroLocalEnderecoDTO implements Serializable {
 
 	@Size(max = 80)
 	private String bairro;
+	
+	private boolean principal;
 
 }

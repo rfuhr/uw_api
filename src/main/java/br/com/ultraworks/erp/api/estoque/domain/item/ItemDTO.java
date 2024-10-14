@@ -59,7 +59,8 @@ public class ItemDTO {
 	private Long classificacaoOperacaoId;
 	private String classificacaoOperacaoNome;
 	
-	private boolean informaPesagemAgricola;
-	private boolean usaClassificacaoAgricola;
+	private boolean produtoAgricola;
 	private boolean informaSafraAgricola;
+	private boolean usaRomaneioAgricola;
+
 }

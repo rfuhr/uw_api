@@ -19,18 +19,21 @@ public class OperacaoInternaMapper extends GenericMapper<OperacaoInterna, Operac
 	private OperacaoInternaFiscalMapper operacaoInternaFiscalMapper;
 	private OperacaoInternaEstoqueMapper operacaoInternaEstoqueMapper;
 	private OperacaoInternaAgricolaMapper operacaoInternaAgricolaMapper;
+	private OperacaoInternaFinanceiroMapper operacaoInternaFinanceiroMapper;
 
 	public OperacaoInternaMapper(OperacaoInternaRepository repository,
 			NaturezaOperacaoMapper naturezaOperacaoInternaMapper, NaturezaOperacaoService naturezaOperacaoService,
 			OperacaoInternaFiscalMapper operacaoInternaFiscalMapper,
 			OperacaoInternaEstoqueMapper operacaoInternaEstoqueMapper,
-			OperacaoInternaAgricolaMapper operacaoInternaAgricolaMapper) {
+			OperacaoInternaAgricolaMapper operacaoInternaAgricolaMapper,
+			OperacaoInternaFinanceiroMapper operacaoInternaFinanceiroMapper) {
 		super(repository, OperacaoInterna::new, OperacaoInternaDTO::new);
 		this.naturezaOperacaoInternaMapper = naturezaOperacaoInternaMapper;
 		this.naturezaOperacaoService = naturezaOperacaoService;
 		this.operacaoInternaFiscalMapper = operacaoInternaFiscalMapper;
 		this.operacaoInternaEstoqueMapper = operacaoInternaEstoqueMapper;
 		this.operacaoInternaAgricolaMapper = operacaoInternaAgricolaMapper;
+		this.operacaoInternaFinanceiroMapper = operacaoInternaFinanceiroMapper;
 	}
 
 	@Override
@@ -44,6 +47,7 @@ public class OperacaoInternaMapper extends GenericMapper<OperacaoInterna, Operac
 		entity.setCaracteristicaFiscal(dto.isCaracteristicaFiscal());
 		entity.setCaracteristicaEstoque(dto.isCaracteristicaEstoque());
 		entity.setCaracteristicaAgricola(dto.isCaracteristicaAgricola());
+		entity.setCaracteristicaFinanceira(dto.isCaracteristicaFinanceira());
 		if (dto.getOperacaoInternaFiscal() != null) {
 			entity.setOperacoesInternasFiscal(new ArrayList<>());
 			entity.getOperacoesInternasFiscal()
@@ -59,6 +63,10 @@ public class OperacaoInternaMapper extends GenericMapper<OperacaoInterna, Operac
 		if (dto.getOperacaoInternaAgricola() != null) {
 			entity.setOperacaoInternaAgricola(operacaoInternaAgricolaMapper.toEntity(dto.getOperacaoInternaAgricola()));
 		}
+		if (dto.getOperacaoInternaFinanceiro() != null) {
+			entity.setOperacaoInternaFinanceiro(
+					operacaoInternaFinanceiroMapper.toEntity(dto.getOperacaoInternaFinanceiro()));
+		}
 	}
 
 	@Override
@@ -72,6 +80,7 @@ public class OperacaoInternaMapper extends GenericMapper<OperacaoInterna, Operac
 		dto.setCaracteristicaFiscal(entity.isCaracteristicaFiscal());
 		dto.setCaracteristicaEstoque(entity.isCaracteristicaEstoque());
 		dto.setCaracteristicaAgricola(entity.isCaracteristicaAgricola());
+		dto.setCaracteristicaFinanceira(entity.isCaracteristicaFinanceira());
 		if (entity.getOperacoesInternasFiscal() != null && entity.getOperacoesInternasFiscal().size() > 0) {
 			dto.setOperacaoInternaFiscal(operacaoInternaFiscalMapper.toDto(entity.getOperacoesInternasFiscal()).get(0));
 		}
@@ -80,6 +89,10 @@ public class OperacaoInternaMapper extends GenericMapper<OperacaoInterna, Operac
 		}
 		if (entity.getOperacaoInternaAgricola() != null) {
 			dto.setOperacaoInternaAgricola(operacaoInternaAgricolaMapper.toDto(entity.getOperacaoInternaAgricola()));
+		}
+		if (entity.getOperacaoInternaFinanceiro() != null) {
+			dto.setOperacaoInternaFinanceiro(
+					operacaoInternaFinanceiroMapper.toDto(entity.getOperacaoInternaFinanceiro()));
 		}
 	}
 }
