@@ -60,6 +60,14 @@ public class ItemDTO {
 	private String classificacaoOperacaoNome;
 	
 	private boolean produtoAgricola;
+	private Long tabelaPrecoItemId;
+	private BigDecimal saldoEstoque;
+	private BigDecimal valor;
+	private BigDecimal valorAtual;
+	private boolean promocional;
+
+	private boolean informaPesagemAgricola;
+	private boolean usaClassificacaoAgricola;
 	private boolean informaSafraAgricola;
 	private boolean usaRomaneioAgricola;
 

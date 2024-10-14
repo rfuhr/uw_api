@@ -5,7 +5,7 @@ create table config_sistema (
 	user_create     	bigint 		 not null,
 	date_create			timestamp with time zone not null,
 	user_update     	bigint,
-	date_update			timestamp with time zone,
+	date_update			timestamp with time zone
 );
 
 create sequence seq_config_sistema_financeiro;
@@ -42,4 +42,4 @@ create table config_sistema_financeiro (
 	CONSTRAINT hist_padrao_neg_config_sistema FOREIGN KEY (hist_padrao_neg) REFERENCES historico_padrao (id)
 );
 
-insert into config_sistema (id, user_create, date_create, user_update, date_update) ) values (nextval('seq_config_sistema'), 1, NOW()::timestamp,1,NOW()::timestamp);	
+insert into config_sistema (id, user_create, date_create, user_update, date_update) values (nextval('seq_config_sistema'), 1, NOW()::timestamp,1,NOW()::timestamp);	

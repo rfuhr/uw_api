@@ -15,5 +15,6 @@ public class Precos {
 	private BigDecimal valorPrecoBase;
 	private BigDecimal valorMarkup;
 	private BigDecimal valorCalculado;
+	private BigDecimal valorAtual;
 
 }

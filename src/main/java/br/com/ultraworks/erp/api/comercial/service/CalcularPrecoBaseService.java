@@ -19,6 +19,7 @@ import br.com.ultraworks.erp.api.comercial.domain.configmarkupplanoitem.ConfigMa
 import br.com.ultraworks.erp.api.comercial.domain.configmarkupplanoitemindice.ConfigMarkupPlanoItemIndice;
 import br.com.ultraworks.erp.api.comercial.domain.indicemarkup.IndiceMarkup;
 import br.com.ultraworks.erp.api.comercial.repository.query.BuscaPrecoBaseDoItemQuery;
+import br.com.ultraworks.erp.api.comercial.repository.query.BuscaPrecoItemAtualQuery;
 import br.com.ultraworks.erp.api.configuracao.domain.configempresa.ConfigEmpresa;
 import br.com.ultraworks.erp.api.configuracao.service.ConfigEmpresaService;
 import br.com.ultraworks.erp.api.estoque.domain.item.Item;
@@ -35,6 +36,7 @@ import br.com.ultraworks.erp.api.tabela.domain.uf.Uf;
 public class CalcularPrecoBaseService {
 	
 	private BuscaPrecoBaseDoItemQuery buscaPrecoBaseDoItemQuery;
+	private BuscaPrecoItemAtualQuery buscaPrecoItemAtualQuery;
 	private ItemService itemService;
 	private ConfigCalculoPrecoService configCalculoPrecoService;
 	private ConfigMarkupItemService configMarkupItemService;
@@ -44,6 +46,7 @@ public class CalcularPrecoBaseService {
 	private ConfigEmpresaService configEmpresaService;
 	
 	public CalcularPrecoBaseService(BuscaPrecoBaseDoItemQuery buscaPrecoBaseDoItemQuery,
+			BuscaPrecoItemAtualQuery buscaPrecoItemAtualQuery,
 			ItemService itemService,
 			ConfigCalculoPrecoService configCalculoPrecoService,
 			ConfigMarkupItemService configMarkupItemService,
@@ -51,6 +54,7 @@ public class CalcularPrecoBaseService {
 			ConfiguracaoFiscalService configuracaoFiscalService,
 			ConfigEmpresaService configEmpresaService) {
 		this.buscaPrecoBaseDoItemQuery = buscaPrecoBaseDoItemQuery;
+		this.buscaPrecoItemAtualQuery = buscaPrecoItemAtualQuery;
 		this.itemService = itemService;
 		this.configCalculoPrecoService = configCalculoPrecoService;
 		this.configMarkupItemService = configMarkupItemService;
@@ -67,7 +71,14 @@ public class CalcularPrecoBaseService {
 			precos.setTipoPrecoId(tipoTabelaId);
 			precos.setItemId(itemId);
 			precos = buscaPrecoBaseDoItemQuery.executeSQL(precos);
-			precos = calcularValoresMarkup(item.get(), precos);
+			if (precos != null && precos.getValorPrecoBase() != null && precos.getValorPrecoBase().doubleValue() > 0) {
+				precos = calcularValoresMarkup(item.get(), precos);				
+			} else {
+				precos.setValorPrecoBase(BigDecimal.ZERO);
+				precos.setValorCalculado(BigDecimal.ZERO);
+				precos.setValorMarkup(BigDecimal.ZERO);				
+			}
+			precos.setValorAtual(buscaPrecoItemAtualQuery.executeSQL(itemId));
 		}
 		
 		return precos;

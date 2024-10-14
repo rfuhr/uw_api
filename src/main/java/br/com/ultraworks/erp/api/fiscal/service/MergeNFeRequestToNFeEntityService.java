@@ -17,6 +17,7 @@ import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscalipi.Configuraca
 import br.com.ultraworks.erp.api.fiscal.domain.configuracaofiscalpis.ConfiguracaoFiscalPis;
 import br.com.ultraworks.erp.api.fiscal.domain.destinooperacao.DestinoOperacao;
 import br.com.ultraworks.erp.api.fiscal.domain.finalidadenfe.FinalidadeNfe;
+import br.com.ultraworks.erp.api.fiscal.domain.indicadoriedestinatario.IndicadorIEDestinatario;
 import br.com.ultraworks.erp.api.fiscal.domain.meiopagamento.MeioPagamento;
 import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFe;
 import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFeAut;
@@ -917,11 +918,15 @@ public class MergeNFeRequestToNFeEntityService {
 		nfeDest.setCep(parceiroLocalEndereco.getCep());
 		nfeDest.setCpais(parceiroLocalEndereco.getCidade().getPais().getCodigoIBGE());
 		nfeDest.setXpais(parceiroLocalEndereco.getCidade().getPais().getNome());
-		nfeDest.setFone(parceiroLocalTelefone.getNumero());
+		if (parceiroLocalTelefone != null) {
+			nfeDest.setFone(parceiroLocalTelefone.getNumero());			
+		}
 		if (parceiroLocal.getParceiro().getTipoPessoa().equals(TipoPessoa.PESSOA_JURIDICA)) {
 			nfeDest.setIndiedest(Integer.parseInt(parceiroLocal.getDadosPessoaJuridica().get(0).getIndicadorIE().getCodigoReceita()));
 			nfeDest.setIe(parceiroLocal.getDadosPessoaJuridica().get(0).getInscricaoEstadual());
 //			nfeDest.setIsuf(parceiroLocal.getDadosPessoaJuridica().get(0).getInscricaoSuframa());
+		} else {
+			nfeDest.setIndiedest(Integer.parseInt(IndicadorIEDestinatario.NAOCONTRIBUINTE.getValue()));
 		}
 		if (parceiroLocalEmail != null) {
 			nfeDest.setEmail(parceiroLocalEmail.getEmail());

@@ -106,6 +106,7 @@ import br.com.swconsultoria.nfe.util.RetornoUtil;
 import br.com.swconsultoria.nfe.util.XmlNfeUtil;
 import br.com.ultraworks.erp.api.configuracao.domain.certificado.EmpresaCertificado;
 import br.com.ultraworks.erp.api.configuracao.domain.configempresanfe.ConfigEmpresaNFe;
+import br.com.ultraworks.erp.api.configuracao.domain.tipoambiente.TipoAmbiente;
 import br.com.ultraworks.erp.api.configuracao.service.ConfigEmpresaNFeService;
 import br.com.ultraworks.erp.api.configuracao.service.EmpresaCertificadoService;
 import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFe;
@@ -133,6 +134,7 @@ import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFeTransporte;
 import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFeVolume;
 import br.com.ultraworks.erp.api.fiscal.integrator.nfe.dto.RetornoNFeIntegracao;
 import br.com.ultraworks.erp.api.relacionamento.service.ParceiroLocalService;
+import br.com.ultraworks.erp.api.tabela.domain.situacaodocumento.SituacaoDocumento;
 import br.com.ultraworks.erp.core.exception.BusinessException;
 import br.com.ultraworks.erp.core.util.BigDecimalHelper;
 
@@ -199,7 +201,7 @@ public class ServicoEnvioNFeImpl implements IServicoEnvioNFe {
 					retornoNFeIntegracao.setStatus(retorno.getProtNFe().getInfProt().getCStat());
 					retornoNFeIntegracao.setProtocolo(retorno.getProtNFe().getInfProt().getNProt());
 					xmlFinal = XmlNfeUtil.criaNfeProc(enviNFe, retorno.getProtNFe());
-					retornoNFeIntegracao.setXml(xmlFinal);
+					retornoNFeIntegracao.setXml(xmlFinal);				
 				}
 			} catch (Exception e) {
 				retornoNFeIntegracao.setErroValidarRetorno(e.getMessage());
@@ -207,6 +209,7 @@ public class ServicoEnvioNFeImpl implements IServicoEnvioNFe {
 //		} else {
 //			retornoNFeIntegracao.setErroValidarRetorno(retorno.getXMotivo());
 //		}
+		
 
 		return retornoNFeIntegracao;
 	}
@@ -247,12 +250,13 @@ public class ServicoEnvioNFeImpl implements IServicoEnvioNFe {
 	}
 
 	private InfNFe getInfNFe(ConfiguracoesNfe configuracoesNfe, NFe uwNFe, ConfigEmpresaNFe configEmpresaNFe) {
+		boolean homologacao = TipoAmbiente.HOMOLOCACAO.equals(configEmpresaNFe.getTipoAmbiente());
 		TNFe.InfNFe infNFe = new TNFe.InfNFe();
 		infNFe.setId(uwNFe.getChaveNfe());
 		infNFe.setVersao(ConstantesUtil.VERSAO.NFE);
 		infNFe.setIde(montaIde(configuracoesNfe, uwNFe, configEmpresaNFe));
 		infNFe.setEmit(montaEmitente(configEmpresaNFe, uwNFe));
-		infNFe.setDest(montaDestinatario(uwNFe));
+		infNFe.setDest(montaDestinatario(uwNFe, homologacao));
 		if (uwNFe.getNfeRetirada() != null)
 			infNFe.setRetirada(montaLocalRetirada(uwNFe.getNfeRetirada()));
 		if (uwNFe.getAutorizacoes() != null && !uwNFe.getAutorizacoes().isEmpty()) {
@@ -275,7 +279,11 @@ public class ServicoEnvioNFeImpl implements IServicoEnvioNFe {
 
 	private TInfRespTec montaRespTecnico() {
 		TInfRespTec respTec = new TInfRespTec();
-		respTec.setCNPJ("19560114000114");
+//		respTec.setCNPJ("19560114000114");
+//		respTec.setXContato("RODRIGO CRISTO FUHR");
+//		respTec.setEmail("rcfuhr@gmail.com");
+//		respTec.setFone("45991216800");
+		respTec.setCNPJ("05861998000132");
 		respTec.setXContato("RODRIGO CRISTO FUHR");
 		respTec.setEmail("rcfuhr@gmail.com");
 		respTec.setFone("45991216800");
@@ -1308,13 +1316,13 @@ public class ServicoEnvioNFeImpl implements IServicoEnvioNFe {
 		return local;
 	}
 
-	private Dest montaDestinatario(NFe uwNFe) {
+	private Dest montaDestinatario(NFe uwNFe, boolean homologacao) {
 		NFeDest uwNfeDest = uwNFe.getNfeDest();
 
 		TNFe.InfNFe.Dest dest = new TNFe.InfNFe.Dest();
 		dest.setCNPJ(uwNfeDest.getCnpj());
 		dest.setCPF(uwNfeDest.getCpf());
-		dest.setXNome(uwNfeDest.getXnome());
+		dest.setXNome(homologacao ? "NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL" : uwNfeDest.getXnome());
 		dest.setIndIEDest(String.valueOf(uwNfeDest.getIndiedest()));
 		dest.setIE(uwNfeDest.getIe());
 		dest.setEmail(uwNfeDest.getEmail());
@@ -1453,7 +1461,7 @@ public class ServicoEnvioNFeImpl implements IServicoEnvioNFe {
 
 		try {
 			Resource resource = resourceLoader.getResource("classpath:schemas");
-			String path = resource.getFile().getAbsolutePath().concat("\\nfe");
+			String path = resource.getFile().getAbsolutePath().concat("/nfe");
 
 			Certificado certificado = carregarCertificado(configEmpresaNFe);
 			System.out.println(certificado.getCnpjCpf());

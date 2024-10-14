@@ -59,6 +59,9 @@ public class TabelaPrecoItemMapper extends GenericMapper<TabelaPrecoItem, Tabela
 			dto.setItemCodigo(entity.getItem().getCodigo());
 			dto.setItemNome(entity.getItem().getNome());
 			dto.setItemId(entity.getItem().getId());
+			if (entity.getItem().getUnidadeMedidaComercial() != null) {
+				dto.setUnidadeMedidaSigla(entity.getItem().getUnidadeMedidaComercial().getSigla());				
+			}
 		}
 	}
 }
