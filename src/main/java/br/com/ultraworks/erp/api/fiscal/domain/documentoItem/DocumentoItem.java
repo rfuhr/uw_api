@@ -2,6 +2,8 @@ package br.com.ultraworks.erp.api.fiscal.domain.documentoItem;
 
 import java.math.BigDecimal;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import br.com.ultraworks.erp.api.estoque.domain.item.Item;
 import br.com.ultraworks.erp.api.fiscal.domain.documento.Documento;
 import br.com.ultraworks.erp.core.entity.UWEntityBase;
@@ -33,7 +35,11 @@ public class DocumentoItem extends UWEntityBase {
 
 	@OneToOne
 	@JoinColumn(name = "documento_id")
+	@JsonBackReference
 	private Documento documento;
+	
+	@Column(name = "sequencia")
+	private int sequencia;
 	
 	@OneToOne
 	@JoinColumn(name = "item_id")
@@ -65,10 +71,5 @@ public class DocumentoItem extends UWEntityBase {
 	
 	@Column(name = "valor_liquido")
 	private BigDecimal valorLiquido;
-
-
-
-
-
 
 }

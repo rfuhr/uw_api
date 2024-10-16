@@ -1,0 +1,1 @@
+alter table documento add column valor decimal(15,2) not null default 0.00;
