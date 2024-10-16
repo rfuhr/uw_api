@@ -60,7 +60,7 @@ create sequence seq_item_classificacao_agricola;
 
 create table item_classificacao_agricola (
 	id					bigint not null constraint item_classificacao_agricola_pk primary key,
-	grupo_classificação_agricola_id bigint not null,
+	grupo_classificacao_agricola_id bigint not null,
 	codigo   			bigint not null,
 	nome				varchar(80) not null,
 	tipo_calculo_agricola_id_romaneio bigint,
@@ -70,11 +70,11 @@ create table item_classificacao_agricola (
 	date_create			timestamp with time zone 	 not null,
 	user_update     	bigint,
 	date_update			timestamp with time zone,
-	CONSTRAINT grupo_classificacao_item_classificacao_agricola_foreign FOREIGN KEY (grupo_classificacao_agricola_id) REFERENCES grupo_classificação_agricola (id),
+	CONSTRAINT grupo_classificacao_item_classificacao_agricola_foreign FOREIGN KEY (grupo_classificacao_agricola_id) REFERENCES grupo_classificacao_agricola (id),
 	CONSTRAINT tipo_calculo_item_classificacao_agricola_foreign FOREIGN KEY (tipo_calculo_agricola_id_romaneio) REFERENCES tipo_calculo_agricola (id)
 );
 
-insert into item_classificacao_agricola (id, grupo_classificação_agricola_id, codigo, nome, tipo_calculo_agricola_id_romaneio, data_inicio_vigencia, data_final_vigencia, user_create, date_create, user_update, date_update)
+insert into item_classificacao_agricola (id, grupo_classificacao_agricola_id, codigo, nome, tipo_calculo_agricola_id_romaneio, data_inicio_vigencia, data_final_vigencia, user_create, date_create, user_update, date_update)
 values (nextval('seq_item_classificacao_agricola'), (select id from grupo_classificacao_agricola where codigo = '0'), '0', 'Sem Classificação', null, '2024-01-01 00:00:00', '2999-12-31 23:59:59', 1, NOW()::timestamp, 1, NOW()::timestamp);
 
 -------------------------------------------------------------
@@ -193,13 +193,13 @@ create table identificacao_documento_agricola (
 );
 
 insert into identificacao_documento_agricola values ('0', 'Regra Geral');
-insert into identificacao_documento_agricola values ('1', 'Romaneio');s
+insert into identificacao_documento_agricola values ('1', 'Romaneio');
 insert into identificacao_documento_agricola values ('2', 'Fixação');
 insert into identificacao_documento_agricola values ('3', 'Contrato');
 insert into identificacao_documento_agricola values ('4', 'Pesagem');
 
 alter table operacao_interna_agricola drop column seleciona_pesagem;
-alter table operacao_interna_agricola add column identificacao_documento_agricola bigint not null default '0';
+alter table operacao_interna_agricola add column identificacao_documento_agricola varchar(3) not null default '0';
 alter table operacao_interna_agricola add CONSTRAINT identificacao_documento_operacao_interna_foreign FOREIGN KEY (identificacao_documento_agricola) REFERENCES identificacao_documento_agricola (value);
 alter table operacao_interna_agricola add exige_nota_entrada boolean not null default false;
 alter table operacao_interna_agricola add fixa_automatico boolean not null default false;
@@ -269,9 +269,26 @@ create table origem_producao_agricola (
 
 insert into origem_producao_agricola (id, codigo, nome, data_inicio_vigencia, data_final_vigencia, user_create, date_create, user_update, date_update)
 values (nextval('seq_origem_producao_agricola'), '1', 'Direto Produtor', '2024-01-01 00:00:00', '2999-12-31 23:59:59', 1, NOW()::timestamp, 1, NOW()::timestamp);
--------------------------------------------------------------
+
+----------------------------------------------------
+drop sequence seq_config_classificacao_agricola;
+drop sequence seq_tipo_classificacao_agricola;
+drop sequence seq_pesagem;
+drop sequence seq_romaneio;
+drop table pesagem_classificacao ;
+drop table pesagem;
+drop table config_classificacao_agricola;
+drop table tipo_classificacao_agricola;
+drop table romaneio;
 drop table safra;
 
+alter table item drop column informa_pesagem_agricola;
+alter table item drop column usa_classificacao_agricola;
+
+alter table item add column produto_agricola boolean not null default false;
+alter table item add column usa_romaneio_agricola boolean not null default false;
+
+-------------------------------------------------------------
 create table safra (
 	id					bigint not null constraint safra_pk primary key,
 	item_id             bigint not null,
@@ -287,9 +304,6 @@ create table safra (
 );
 
 -------------------------------------------------------------
-drop sequence seq_romaneio;
-drop table romaneio;
-
 create sequence seq_romaneio_agricola;
 
 create table romaneio_agricola (
@@ -462,23 +476,6 @@ create table compl_ordem_calculo_agricola (
 	CONSTRAINT doc_agricola_ordem_calculo_foreign FOREIGN KEY (identificacao_documento_agricola) REFERENCES identificacao_documento_agricola (value)
 );
 
-----------------------------------------------------
-drop sequence seq_config_classificacao_agricola;
-drop sequence seq_tipo_classificacao_agricola;
-drop sequence seq_pesagem;
-drop table pesagem_classificacao ;
-drop table pesagem;
-drop table tipo_classificacao_agricola;
-drop table config_classificacao_agricola;
-
-alter table item drop column informa_pesagem_agricola;
-alter table item drop column usa_classificacao_agricola;
-
-alter table item add column produto_agricola boolean not null default false;
-alter table item add column usa_romaneio_agricola boolean not null default false;
-
--------------------------------------------------------
-
 create sequence seq_romaneio_agricola_classificacao;
 
 create table romaneio_agricola_classificacao (
@@ -524,8 +521,8 @@ create table config_sistema_agricola (
 	CONSTRAINT config_sistema_financeiro_foreign FOREIGN KEY (config_sistema_id) REFERENCES config_sistema (id),
 	CONSTRAINT tipo_documento_rom_config_sistema FOREIGN KEY (tipo_documento_rom) REFERENCES tipo_documento (id),
 	CONSTRAINT operacao_interna_fixacao_config_sistema FOREIGN KEY (operacao_interna_fixacao_id) REFERENCES operacao_interna (id),
-	CONSTRAINT tipo_preco_balcao_config_sistema FOREIGN KEY (tipo_preco_agricola_balcao_id) REFERENCES tipo_preco_agricola (id),
-)
+	CONSTRAINT tipo_preco_balcao_config_sistema FOREIGN KEY (tipo_preco_agricola_balcao_id) REFERENCES tipo_preco_agricola (id)
+);
 
 ------------------------------------------------
 
@@ -577,7 +574,7 @@ create table indice_financeiro (
 	date_create		timestamp with time zone 	 not null,
 	user_update     bigint,
 	date_update		timestamp with time zone
-)
+);
 -------------------------------------------------------------------------
 
 create table caracteristica_contrato_agricola (
@@ -610,7 +607,7 @@ create table tipo_contrato_agricola (
 	user_update     bigint,
 	date_update		timestamp with time zone,
 	CONSTRAINT caracteristica_tipo_contrato_agricola_foreign FOREIGN KEY (caracteristica_contrato_agricola) REFERENCES caracteristica_contrato_agricola (value)
-)
+);
 -------------------------------------------------------------------------
 create sequence seq_predefinicao_preco_agricola;
 
@@ -632,7 +629,7 @@ create table predefinicao_preco_agricola (
 	CONSTRAINT item_classif2_predefinicao_preco_foreign FOREIGN KEY (item_class_2_id) REFERENCES item_classificacao_agricola (id),
 	CONSTRAINT item_classif3_predefinicao_preco_foreign FOREIGN KEY (item_class_3_id) REFERENCES item_classificacao_agricola (id),
 	CONSTRAINT item_classif4_predefinicao_preco_foreign FOREIGN KEY (item_class_4_id) REFERENCES item_classificacao_agricola (id)
-)
+);
 
 -------------------------------------------------------------------------
 create sequence seq_finalidade_contrato_agricola;
@@ -648,7 +645,7 @@ create table finalidade_contrato_agricola (
 	date_create		timestamp with time zone 	 not null,
 	user_update     bigint,
 	date_update		timestamp with time zone
-)
+);
 -------------------------------------------------------------------------
 create sequence seq_contrato_agricola;
 
@@ -705,7 +702,7 @@ create table contrato_agricola (
 	CONSTRAINT predefinicao_preco_contrato_agricola_foreign FOREIGN KEY (predefinicao_preco_agricola_id) REFERENCES predefinicao_preco_agricola (id),
 	CONSTRAINT safra_contrato_agricola_foreign FOREIGN KEY (safra_id) REFERENCES safra (id),
 	CONSTRAINT regra_atividade_contrato_agricola_foreign FOREIGN KEY (regra_atividade_id) REFERENCES regra_atividade (id)
-)
+);
 
 -----------------------------------------------------------------
 
@@ -719,7 +716,7 @@ create table romaneio_agricola_parcela_fixacao (
 	date_create			timestamp with time zone 	 not null,
 	user_update     	bigint,
 	date_update			timestamp with time zone
-)	
+);	
 
 ----------------------------------------------------------------------
 create sequence seq_valida_preco_agricola_item;
@@ -815,7 +812,7 @@ create table fixacao_agricola (
 	date_create			timestamp with time zone 	 not null,
 	user_update     	bigint,
 	date_update			timestamp with time zone
-)	
+);	
 
 ----------------------------------------------------------------------------------------
 

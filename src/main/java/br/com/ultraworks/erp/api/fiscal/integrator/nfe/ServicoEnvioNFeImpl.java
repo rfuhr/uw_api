@@ -204,6 +204,7 @@ public class ServicoEnvioNFeImpl implements IServicoEnvioNFe {
 					retornoNFeIntegracao.setXml(xmlFinal);				
 				}
 			} catch (Exception e) {
+				retornoNFeIntegracao.setStatus(retorno.getCStat());
 				retornoNFeIntegracao.setErroValidarRetorno(e.getMessage());
 			}
 //		} else {

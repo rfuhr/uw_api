@@ -25,6 +25,8 @@ import br.com.ultraworks.erp.api.configuracao.domain.configempresanfe.ConfigEmpr
 import br.com.ultraworks.erp.api.configuracao.service.ConfigEmpresaNFeService;
 import br.com.ultraworks.erp.api.configuracao.service.ConfigEmpresaService;
 import br.com.ultraworks.erp.api.configuracao.service.ControleNumeracaoService;
+import br.com.ultraworks.erp.api.estoque.domain.movimentoestoque.AtualizaEstoqueRequest;
+import br.com.ultraworks.erp.api.estoque.service.EstoqueService;
 import br.com.ultraworks.erp.api.fiscal.domain.nfe.cache.CacheNFe;
 import br.com.ultraworks.erp.api.fiscal.domain.nfe.cache.ChacheNFeRequest;
 import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFe;
@@ -74,6 +76,8 @@ public class NfeService {
 	private BuscaListagemNFeQuery buscaListagemNFeQuery;
 	private CacheNFeRepository cacheNFeRepository;
 	private MergeNFeRequestToNFeEntityService mergeNFeRequestToNFeEntityService;
+	private EstoqueService estoqueService;
+	private DocumentoService documentoService;
 	
 	@Autowired
     private PlatformTransactionManager transactionManager;
@@ -86,7 +90,8 @@ public class NfeService {
 			ParceiroLocalEnderecoMapper parceiroLocalEnderecoMapper,
 			ParceiroLocalTelefoneService parceiroLocalTelefoneService, ParceiroLocalService parceiroLocalService,
 			BuscaListagemNFeQuery buscaListagemNFeQuery, CacheNFeRepository cacheNFeRepository,
-			MergeNFeRequestToNFeEntityService mergeNFeRequestToNFeEntityService) {
+			MergeNFeRequestToNFeEntityService mergeNFeRequestToNFeEntityService,
+			EstoqueService estoqueService, DocumentoService documentoService) {
 		this.resourceLoader = resourceLoader;
 		this.context = context;
 		this.empresaFilialService = empresaFilialService;
@@ -102,6 +107,8 @@ public class NfeService {
 		this.buscaListagemNFeQuery = buscaListagemNFeQuery;
 		this.cacheNFeRepository = cacheNFeRepository;
 		this.mergeNFeRequestToNFeEntityService = mergeNFeRequestToNFeEntityService;
+		this.estoqueService = estoqueService;
+		this.documentoService = documentoService;
 	}
 
 //	public NfeService(
@@ -300,6 +307,7 @@ public class NfeService {
 	public void salvarNFe(NFeRequest nFeRequest) {
 		NFe nfe = nfeRepository.findById(nFeRequest.getNfeId()).orElse(new NFe());		nfe = mergeNFeRequestToNFeEntityService.merge(nfe, nFeRequest);
 		nfe = this.save(nfe);
+		documentoService.criarDocumentoByNFe(nFeRequest, nfe);
 	}
 
 	
@@ -313,35 +321,76 @@ public class NfeService {
 	}
 	
 	private RetornoNFeIntegracao enviar(Long nfeId) {
-		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-        def.setIsolationLevel(TransactionDefinition.ISOLATION_DEFAULT);
-        def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-      
-        TransactionStatus status = transactionManager.getTransaction(def);
+		TransactionStatus status = criaNovaTransacao();
+		boolean atualizaEstoque = false;
+		boolean atualizaFinanceiro = false;
+		NFe nfe = null;
+		RetornoNFeIntegracao retornoNfeIntegracao = null;
         try {
-        	NFe nfe = nfeRepository.findById(nfeId).orElseThrow(() -> new RegisterNotFoundException("Não encontrado nfe para o id informado"));
+        	nfe = nfeRepository.findById(nfeId).orElseThrow(() -> new RegisterNotFoundException("Não encontrado nfe para o id informado"));
         	IServicoEnvioNFe servicoIntegracaoNFe = context.getBean(IServicoEnvioNFe.class);
-        	RetornoNFeIntegracao retornoNfeIntegracao =  servicoIntegracaoNFe.enviarNFe(nfe);
+        	retornoNfeIntegracao = servicoIntegracaoNFe.enviarNFe(nfe);
         	
     		if (retornoNfeIntegracao.getErroValidarRetorno() == null && retornoNfeIntegracao.getStatus().equals("100")) {
     			nfe.setSituacao(SituacaoDocumento.AUTORIZADO);
-    			nfe.setCstat(retornoNfeIntegracao.getStatus());
     			nfe.setXml(retornoNfeIntegracao.getXml().getBytes()); 
     			nfe.setNprotnfe(retornoNfeIntegracao.getProtocolo());
+    			atualizaEstoque = true;
+    			atualizaFinanceiro = true;
     		} else {
     			nfe.setSituacao(SituacaoDocumento.REJEITADO);
     			nfe.setXmotivo(retornoNfeIntegracao.getErroValidarRetorno());
     		}
+    		nfe.setCstat(retornoNfeIntegracao.getStatus());
     		this.save(nfe);
 			
         	transactionManager.commit(status);
         	
-        	return retornoNfeIntegracao;
 		} catch (Exception e) {
 			transactionManager.rollback(status);
 			throw e;
 		}
         
+        if (atualizaEstoque) {
+        	integrarEstoque(nfe);
+        }
+        
+        if (atualizaFinanceiro) {
+        	integrarFinanceiro(nfe);
+        }
+        
+        return retornoNfeIntegracao;
+	}
+	
+	private void integrarEstoque (NFe nfe) {
+		TransactionStatus status = criaNovaTransacao();
+		try {
+			AtualizaEstoqueRequest atuaEstoqueRequest = criaAtualizaEstoqueRequest(nfe);
+			estoqueService.atualizar(atuaEstoqueRequest);
+			
+			transactionManager.commit(status);
+		} catch (Exception e) {
+			transactionManager.rollback(status);
+			throw e;
+		}
+	}
+	
+	private AtualizaEstoqueRequest criaAtualizaEstoqueRequest(NFe nfe) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private void integrarFinanceiro (NFe nfe) {
+		
+	}
+
+	private TransactionStatus criaNovaTransacao() {
+		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+        def.setIsolationLevel(TransactionDefinition.ISOLATION_DEFAULT);
+        def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+      
+        TransactionStatus status = transactionManager.getTransaction(def);
+		return status;
 	}
 
 }
