@@ -54,6 +54,9 @@ public class OperacaoInternaAgricola extends UWEntityBase {
 	@Column(name = "contrato_avista")
 	private boolean contratoAvista;
 
+	@Column(name = "contrato_afixar")
+	private boolean contratoAfixar;
+	
 	@OneToOne
 	@JoinColumn(name = "tipo_preco_agricola_id")
 	private TipoPrecoAgricola tipoPrecoAgricola;

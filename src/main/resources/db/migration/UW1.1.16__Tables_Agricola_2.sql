@@ -1,0 +1,1 @@
+alter table operacao_interna_agricola add contrato_afixar boolean not null default false;

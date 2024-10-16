@@ -14,6 +14,7 @@ public class OperacaoInternaAgricolaDTO {
 	private boolean fixaAutomatico;
 	private boolean complementoPrecoFixacao;
 	private boolean contratoAvista;
+	private boolean contratoAfixar;
 	private Long tipoPrecoAgricolaId;
 	private Long tipoContratoAgricolaId;
 

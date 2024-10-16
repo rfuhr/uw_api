@@ -93,6 +93,7 @@ public class ContratoAgricolaService extends GenericService<ContratoAgricola, Lo
 		if (contratoAgricola.getId() != null) {
 			throw new BusinessException("Não é possível alterar um contrato agrícola");
 		}		
+		
 		return null;
 	}
 }

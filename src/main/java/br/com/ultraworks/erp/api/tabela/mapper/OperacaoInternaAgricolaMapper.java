@@ -43,6 +43,7 @@ public class OperacaoInternaAgricolaMapper extends GenericMapper<OperacaoInterna
 		entity.setFixaAutomatico(dto.isFixaAutomatico());
 		entity.setComplementoPrecoFixacao(dto.isComplementoPrecoFixacao());
 		entity.setContratoAvista(dto.isContratoAvista());
+		entity.setContratoAfixar(dto.isContratoAfixar());
 		if (dto.getTipoPrecoAgricolaId() != null) {
 			entity.setTipoPrecoAgricola(tipoPrecoAgricolaRepository.findById(dto.getTipoPrecoAgricolaId())
 					.orElseThrow(() -> new RegisterNotFoundException(
@@ -65,6 +66,7 @@ public class OperacaoInternaAgricolaMapper extends GenericMapper<OperacaoInterna
 		dto.setFixaAutomatico(entity.isFixaAutomatico());
 		dto.setComplementoPrecoFixacao(entity.isComplementoPrecoFixacao());
 		dto.setContratoAvista(entity.isContratoAvista());
+		dto.setContratoAfixar(entity.isContratoAfixar());
 		if (entity.getTipoPrecoAgricola() != null) {
 			dto.setTipoPrecoAgricolaId(entity.getTipoPrecoAgricola().getId());
 			dto.setTipoPrecoAgricolaNome(entity.getTipoPrecoAgricola().getNome());
