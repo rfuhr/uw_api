@@ -2,7 +2,9 @@ package br.com.ultraworks.erp.api.agricola.domain.contratoagricola;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
+import br.com.ultraworks.erp.api.agricola.domain.contratoagricolaparcela.ContratoAgricolaParcelaDTO;
 import lombok.Data;
 
 @Data
@@ -70,4 +72,6 @@ public class ContratoAgricolaDTO {
 	private BigDecimal nivelClass2;
 	private BigDecimal nivelClass3;
 	private BigDecimal nivelClass4;
+	
+	private List<ContratoAgricolaParcelaDTO> parcelas;
 }

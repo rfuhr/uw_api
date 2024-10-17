@@ -24,8 +24,10 @@ import br.com.ultraworks.erp.api.agricola.repository.query.SelecionaContratoAgri
 import br.com.ultraworks.erp.api.agricola.repository.query.SelecionaContratoAgricolaParaRomaneioQuery;
 import br.com.ultraworks.erp.api.agricola.service.TaxaCalculoAgricolaService;
 import br.com.ultraworks.erp.api.agricola.service.ValidaCalculoAgricolaService;
+import br.com.ultraworks.erp.api.tabela.domain.operacaointernaagricola.OperacaoInternaAgricola;
 import br.com.ultraworks.erp.core.exception.BusinessException;
 import br.com.ultraworks.erp.core.generics.GenericService;
+import jakarta.transaction.Transactional;
 import lombok.NoArgsConstructor;
 
 @Service
@@ -83,17 +85,24 @@ public class ContratoAgricolaService extends GenericService<ContratoAgricola, Lo
 					.departamentoId(request.getDepartamentoId()).tipoCalculoAgricolaId(tipo.getId())
 					.percentualTaxaContrato(taxaCalculoAgricola.getFatorCalculo())
 					.percentualTaxaAtual(taxaCalculoAgricola.getFatorCalculo()).valor(valor).build();
-			descontos.add(desconto);
-		});
+			descontos.add(desconto);		});
 		return descontos;
 	}
 	
 	@Override
+	@Transactional
 	public ContratoAgricola save(ContratoAgricola contratoAgricola) {
 		if (contratoAgricola.getId() != null) {
 			throw new BusinessException("Não é possível alterar um contrato agrícola");
 		}		
-		
+		checkParcelasFinanceiro(contratoAgricola);
 		return null;
+	}
+
+	private void checkParcelasFinanceiro(ContratoAgricola contratoAgricola) {
+		OperacaoInternaAgricola operacaoInternaAgricola = contratoAgricola.getOperacaoInterna().getOperacaoInternaAgricola();
+		if (!operacaoInternaAgricola.isContratoAfixar()) {
+		}
+		
 	}
 }

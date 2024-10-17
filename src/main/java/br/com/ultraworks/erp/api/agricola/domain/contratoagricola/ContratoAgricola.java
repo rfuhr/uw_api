@@ -2,7 +2,9 @@ package br.com.ultraworks.erp.api.agricola.domain.contratoagricola;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
+import br.com.ultraworks.erp.api.agricola.domain.contratoagricolaparcela.ContratoAgricolaParcela;
 import br.com.ultraworks.erp.api.agricola.domain.finalidadecontratoagricola.FinalidadeContratoAgricola;
 import br.com.ultraworks.erp.api.agricola.domain.grupooperacaoagricola.GrupoOperacaoAgricola;
 import br.com.ultraworks.erp.api.agricola.domain.predefinicaoprecoagricola.PredefinicaoPrecoAgricola;
@@ -27,6 +29,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -160,4 +163,6 @@ public class ContratoAgricola extends UWEntityBase {
 	@Column(name = "nivel_class4")
 	private BigDecimal nivelClass4;
 
+	@Transient
+	private List<ContratoAgricolaParcela> parcelas;
 }

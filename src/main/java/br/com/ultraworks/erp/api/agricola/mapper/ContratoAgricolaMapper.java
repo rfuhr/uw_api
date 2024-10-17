@@ -1,5 +1,7 @@
 package br.com.ultraworks.erp.api.agricola.mapper;
 
+import java.util.ArrayList;
+
 import org.springframework.stereotype.Component;
 
 import br.com.ultraworks.erp.api.agricola.domain.contratoagricola.ContratoAgricola;
@@ -37,6 +39,7 @@ public class ContratoAgricolaMapper extends GenericMapper<ContratoAgricola, Cont
 	private PredefinicaoPrecoAgricolaRepository predefinicaoPrecoAgricolaRepository;
 	private SafraRepository safraRepository;
 	private RegraAtividadeRepository regraAtividadeRepository;
+	private ContratoAgricolaParcelaMapper contratoAgricolaParcelaMapper;
 
 	public ContratoAgricolaMapper(ContratoAgricolaRepository contratoAgricolaRepository,
 			DepartamentoRepository departamentoRepository, ItemRepository itemRepository,
@@ -48,7 +51,8 @@ public class ContratoAgricolaMapper extends GenericMapper<ContratoAgricola, Cont
 			GrupoOperacaoAgricolaRepository grupoOperacaoAgricolaRepository,
 			FinalidadeContratoAgricolaRepository finalidadeContratoAgricolaRepository,
 			PredefinicaoPrecoAgricolaRepository predefinicaoPrecoAgricolaRepository, SafraRepository safraRepository,
-			RegraAtividadeRepository regraAtividadeRepository) {
+			RegraAtividadeRepository regraAtividadeRepository,
+			ContratoAgricolaParcelaMapper contratoAgricolaParcelaMapper) {
 		super(contratoAgricolaRepository, ContratoAgricola::new, ContratoAgricolaDTO::new);
 		this.departamentoRepository = departamentoRepository;
 		this.itemRepository = itemRepository;
@@ -63,6 +67,7 @@ public class ContratoAgricolaMapper extends GenericMapper<ContratoAgricola, Cont
 		this.predefinicaoPrecoAgricolaRepository = predefinicaoPrecoAgricolaRepository;
 		this.safraRepository = safraRepository;
 		this.regraAtividadeRepository = regraAtividadeRepository;
+		this.contratoAgricolaParcelaMapper = contratoAgricolaParcelaMapper;
 	}
 
 	@Override
@@ -150,6 +155,11 @@ public class ContratoAgricolaMapper extends GenericMapper<ContratoAgricola, Cont
 		entity.setNivelClass2(dto.getNivelClass2());
 		entity.setNivelClass3(dto.getNivelClass3());
 		entity.setNivelClass4(dto.getNivelClass4());
+
+		if (dto.getParcelas() != null && dto.getParcelas().size() > 0) {
+			entity.setParcelas(new ArrayList<>());
+			entity.getParcelas().addAll(contratoAgricolaParcelaMapper.toEntity(dto.getParcelas()));
+		}
 	}
 
 	@Override
@@ -201,6 +211,11 @@ public class ContratoAgricolaMapper extends GenericMapper<ContratoAgricola, Cont
 		dto.setNivelClass2(entity.getNivelClass2());
 		dto.setNivelClass3(entity.getNivelClass3());
 		dto.setNivelClass4(entity.getNivelClass4());
+
+		dto.setParcelas(new ArrayList<>());
+		if (entity.getParcelas() != null) {
+			dto.getParcelas().addAll(contratoAgricolaParcelaMapper.toDto(entity.getParcelas()));
+		}
 
 	}
 }
