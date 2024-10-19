@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import br.com.ultraworks.erp.api.agricola.domain.contratoagricoladesconto.ContratoAgricolaDescontoDTO;
 import br.com.ultraworks.erp.api.agricola.domain.contratoagricolaparcela.ContratoAgricolaParcelaDTO;
 import lombok.Data;
 
@@ -26,6 +27,12 @@ public class ContratoAgricolaDTO {
 
 	private Long indiceFinanceiroId;
 	private String indiceFinanceiroNome;
+	
+	private Long carteiraFinanceiraId;
+	private String carteiraFinanceiraNome;
+	
+	private Long fatoGeradorId;
+	private String fatoGeradorNome;
 
 	private Long tipoContratoAgricolaId;
 	private String tipoContratoAgricola;
@@ -74,4 +81,5 @@ public class ContratoAgricolaDTO {
 	private BigDecimal nivelClass4;
 	
 	private List<ContratoAgricolaParcelaDTO> parcelas;
+	private List<ContratoAgricolaDescontoDTO> descontos;
 }

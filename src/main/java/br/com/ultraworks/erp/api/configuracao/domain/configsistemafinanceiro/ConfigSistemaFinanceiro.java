@@ -8,6 +8,7 @@ import br.com.ultraworks.erp.api.financeiro.domain.grupofinanceiro.GrupoFinancei
 import br.com.ultraworks.erp.api.financeiro.domain.operacaoacessoriafinanceira.OperacaoAcessoriaFinanceira;
 import br.com.ultraworks.erp.api.financeiro.domain.operacaomovimentofinanceiro.OperacaoMovimentoFinanceiro;
 import br.com.ultraworks.erp.api.financeiro.domain.tipooperacaofinanceira.TipoOperacaoFinanceira;
+import br.com.ultraworks.erp.api.financeiro.domain.tipotitulo.TipoTitulo;
 import br.com.ultraworks.erp.api.tabela.domain.historicopadrao.HistoricoPadrao;
 import br.com.ultraworks.erp.core.entity.UWEntityBase;
 import jakarta.persistence.Entity;
@@ -39,6 +40,14 @@ public class ConfigSistemaFinanceiro extends UWEntityBase {
 	@ManyToOne
 	@JoinColumn(name = "config_sistema_id")
 	private ConfigSistema configSistema;
+	
+	@OneToOne
+	@JoinColumn(name = "tipo_titulo_receber")
+	private TipoTitulo tipoTituloReceber;
+	
+	@OneToOne
+	@JoinColumn(name = "tipo_titulo_pagar")
+	private TipoTitulo tipoTituloPagar;
 
 	@OneToOne
 	@JoinColumn(name = "oper_movfin_inc")

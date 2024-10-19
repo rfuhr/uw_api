@@ -7,6 +7,8 @@ public class ConfigSistemaFinanceiroDTO {
 
 	private Long id;
 	private Long configSistemaId;
+	private Long tipoTituloReceberId;
+	private Long tipoTituloPagarId;
 	private Long operacaoMovimentoFinanceiroInclusaoId;
 	private Long operacaoMovimentoFinanceiroBaixaId;
 	private Long operacaoAcessoriaFinanceiraPrincipalId;

@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import br.com.ultraworks.erp.api.agricola.domain.contratoagricoladesconto.ContratoAgricolaDesconto;
 import br.com.ultraworks.erp.api.agricola.domain.contratoagricolaparcela.ContratoAgricolaParcela;
 import br.com.ultraworks.erp.api.agricola.domain.finalidadecontratoagricola.FinalidadeContratoAgricola;
 import br.com.ultraworks.erp.api.agricola.domain.grupooperacaoagricola.GrupoOperacaoAgricola;
@@ -12,6 +13,8 @@ import br.com.ultraworks.erp.api.agricola.domain.safra.Safra;
 import br.com.ultraworks.erp.api.agricola.domain.tipocontratoagricola.TipoContratoAgricola;
 import br.com.ultraworks.erp.api.agricola.domain.tipoprecoagricola.TipoPrecoAgricola;
 import br.com.ultraworks.erp.api.estoque.domain.item.Item;
+import br.com.ultraworks.erp.api.financeiro.domain.carteirafinanceira.CarteiraFinanceira;
+import br.com.ultraworks.erp.api.financeiro.domain.fatogerador.FatoGerador;
 import br.com.ultraworks.erp.api.financeiro.domain.indicefinanceiro.IndiceFinanceiro;
 import br.com.ultraworks.erp.api.organograma.domain.departamento.Departamento;
 import br.com.ultraworks.erp.api.relacionamento.domain.parceiro.Parceiro;
@@ -70,7 +73,15 @@ public class ContratoAgricola extends UWEntityBase {
 	@OneToOne
 	@JoinColumn(name = "indice_financeiro_id")
 	private IndiceFinanceiro indiceFinanceiro;
+	
+	@OneToOne
+	@JoinColumn(name = "carteira_financeira_id")
+	private CarteiraFinanceira carteiraFinanceira;
 
+	@OneToOne
+	@JoinColumn(name = "fato_gerador_id")
+	private FatoGerador fatoGerador;
+	
 	@OneToOne
 	@JoinColumn(name = "tipo_contrato_agricola_id")
 	private TipoContratoAgricola tipoContratoAgricola;
@@ -165,4 +176,8 @@ public class ContratoAgricola extends UWEntityBase {
 
 	@Transient
 	private List<ContratoAgricolaParcela> parcelas;
+	
+	@Transient
+	private List<ContratoAgricolaDesconto> descontos;
+	
 }

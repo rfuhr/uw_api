@@ -2,14 +2,13 @@ package br.com.ultraworks.erp.api.tabela.domain.operacaointernafinanceiro;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import br.com.ultraworks.erp.api.agricola.domain.identificacaodocumentoagricola.IdentificacaoDocumentoAgricola;
-import br.com.ultraworks.erp.api.agricola.domain.tipocontratoagricola.TipoContratoAgricola;
-import br.com.ultraworks.erp.api.agricola.domain.tipoprecoagricola.TipoPrecoAgricola;
+import br.com.ultraworks.erp.api.financeiro.domain.caracteristicamovfin.CaracteristicaMovimentoFinanceiro;
+import br.com.ultraworks.erp.api.financeiro.domain.grupofinanceiro.GrupoFinanceiro;
 import br.com.ultraworks.erp.api.financeiro.domain.indicefinanceiro.IndiceFinanceiro;
-import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocal.ParceiroLocal;
+import br.com.ultraworks.erp.api.financeiro.domain.tipotitulo.TipoTitulo;
+import br.com.ultraworks.erp.api.tabela.domain.historicopadrao.HistoricoPadrao;
 import br.com.ultraworks.erp.api.tabela.domain.operacaointerna.OperacaoInterna;
 import br.com.ultraworks.erp.core.entity.UWEntityBase;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -45,4 +44,19 @@ public class OperacaoInternaFinanceiro extends UWEntityBase {
 	@JoinColumn(name = "indice_financeiro_padrao_id")
 	private IndiceFinanceiro indiceFinanceiroPadrao;
 	
+	@OneToOne
+	@JoinColumn(name = "tipo_titulo_id")
+	private TipoTitulo tipoTitulo;
+	
+	@OneToOne
+	@JoinColumn(name = "grupo_financeiro_id")
+	private GrupoFinanceiro grupoFinanceiro;
+	
+	@OneToOne
+	@JoinColumn(name = "grupo_financeiro_id")
+	private CaracteristicaMovimentoFinanceiro caracteristicaMovimentoFinanceiro;
+	
+	@OneToOne
+	@JoinColumn(name = "historico_padrao_id")
+	private HistoricoPadrao historicoPadrao;
 }

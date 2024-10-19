@@ -14,6 +14,8 @@ import br.com.ultraworks.erp.api.agricola.repository.SafraRepository;
 import br.com.ultraworks.erp.api.agricola.repository.TipoContratoAgricolaRepository;
 import br.com.ultraworks.erp.api.agricola.repository.TipoPrecoAgricolaRepository;
 import br.com.ultraworks.erp.api.estoque.repository.ItemRepository;
+import br.com.ultraworks.erp.api.financeiro.repository.CarteiraFinanceiraRepository;
+import br.com.ultraworks.erp.api.financeiro.repository.FatoGeradorRepository;
 import br.com.ultraworks.erp.api.financeiro.repository.IndiceFinanceiroRepository;
 import br.com.ultraworks.erp.api.organograma.repository.DepartamentoRepository;
 import br.com.ultraworks.erp.api.relacionamento.repository.ParceiroLocalRepository;
@@ -40,6 +42,9 @@ public class ContratoAgricolaMapper extends GenericMapper<ContratoAgricola, Cont
 	private SafraRepository safraRepository;
 	private RegraAtividadeRepository regraAtividadeRepository;
 	private ContratoAgricolaParcelaMapper contratoAgricolaParcelaMapper;
+	private ContratoAgricolaDescontoMapper contratoAgricolaDescontoMapper;
+	private CarteiraFinanceiraRepository carteiraFinanceiraRepository;
+	private FatoGeradorRepository fatoGeradorRepository;
 
 	public ContratoAgricolaMapper(ContratoAgricolaRepository contratoAgricolaRepository,
 			DepartamentoRepository departamentoRepository, ItemRepository itemRepository,
@@ -51,8 +56,9 @@ public class ContratoAgricolaMapper extends GenericMapper<ContratoAgricola, Cont
 			GrupoOperacaoAgricolaRepository grupoOperacaoAgricolaRepository,
 			FinalidadeContratoAgricolaRepository finalidadeContratoAgricolaRepository,
 			PredefinicaoPrecoAgricolaRepository predefinicaoPrecoAgricolaRepository, SafraRepository safraRepository,
-			RegraAtividadeRepository regraAtividadeRepository,
-			ContratoAgricolaParcelaMapper contratoAgricolaParcelaMapper) {
+			RegraAtividadeRepository regraAtividadeRepository, CarteiraFinanceiraRepository carteiraFinanceiraRepository,
+			ContratoAgricolaParcelaMapper contratoAgricolaParcelaMapper, ContratoAgricolaDescontoMapper contratoAgricolaDescontoMapper,
+			FatoGeradorRepository fatoGeradorRepository) {
 		super(contratoAgricolaRepository, ContratoAgricola::new, ContratoAgricolaDTO::new);
 		this.departamentoRepository = departamentoRepository;
 		this.itemRepository = itemRepository;
@@ -67,7 +73,10 @@ public class ContratoAgricolaMapper extends GenericMapper<ContratoAgricola, Cont
 		this.predefinicaoPrecoAgricolaRepository = predefinicaoPrecoAgricolaRepository;
 		this.safraRepository = safraRepository;
 		this.regraAtividadeRepository = regraAtividadeRepository;
+		this.carteiraFinanceiraRepository = carteiraFinanceiraRepository;
 		this.contratoAgricolaParcelaMapper = contratoAgricolaParcelaMapper;
+		this.contratoAgricolaDescontoMapper = contratoAgricolaDescontoMapper;
+		this.fatoGeradorRepository = fatoGeradorRepository;
 	}
 
 	@Override
@@ -94,6 +103,16 @@ public class ContratoAgricolaMapper extends GenericMapper<ContratoAgricola, Cont
 			entity.setIndiceFinanceiro(indiceFinanceiroRepository.findById(dto.getIndiceFinanceiroId())
 					.orElseThrow(() -> new RegisterNotFoundException(
 							"Não encontrado índice financeiro com id " + dto.getIndiceFinanceiroId())));
+		}
+		if (dto.getCarteiraFinanceiraId() != null) {
+			entity.setCarteiraFinanceira(carteiraFinanceiraRepository.findById(dto.getCarteiraFinanceiraId())
+					.orElseThrow(() -> new RegisterNotFoundException(
+							"Não encontrado carteira financeira com id " + dto.getCarteiraFinanceiraId())));
+		}
+		if (dto.getFatoGeradorId() != null) {
+			entity.setFatoGerador(fatoGeradorRepository.findById(dto.getFatoGeradorId())
+					.orElseThrow(() -> new RegisterNotFoundException(
+							"Não encontrado fato gerador com id " + dto.getFatoGeradorId())));
 		}
 		if (dto.getTipoContratoAgricolaId() != null) {
 			entity.setTipoContratoAgricola(tipoContratoAgricolaRepository.findById(dto.getTipoContratoAgricolaId())
@@ -160,6 +179,11 @@ public class ContratoAgricolaMapper extends GenericMapper<ContratoAgricola, Cont
 			entity.setParcelas(new ArrayList<>());
 			entity.getParcelas().addAll(contratoAgricolaParcelaMapper.toEntity(dto.getParcelas()));
 		}
+		
+		if (dto.getDescontos() != null && dto.getDescontos().size() > 0) {
+			entity.setDescontos(new ArrayList<>());
+			entity.getDescontos().addAll(contratoAgricolaDescontoMapper.toEntity(dto.getDescontos()));
+		}
 	}
 
 	@Override
@@ -174,8 +198,14 @@ public class ContratoAgricolaMapper extends GenericMapper<ContratoAgricola, Cont
 		dto.setParceiroLocalNome(entity.getParceiroLocal().getNomeLocal());
 		dto.setAvalistaId(entity.getAvalista().getId());
 		dto.setAvalistaNome(entity.getAvalista().getNomeRazaoSocial());
-		dto.setIndiceFinanceiroId(entity.getIndiceFinanceiro().getId());
-		dto.setIndiceFinanceiroNome(entity.getIndiceFinanceiro().getNome());
+		if (entity.getIndiceFinanceiro() != null) {
+			dto.setIndiceFinanceiroId(entity.getIndiceFinanceiro().getId());
+			dto.setIndiceFinanceiroNome(entity.getIndiceFinanceiro().getNome());
+		}
+		if (entity.getCarteiraFinanceira() != null) {
+			dto.setCarteiraFinanceiraId(entity.getCarteiraFinanceira().getId());
+			dto.setCarteiraFinanceiraNome(entity.getCarteiraFinanceira().getNome());
+		}
 		dto.setTipoContratoAgricolaId(entity.getTipoContratoAgricola().getId());
 		dto.setTipoPrecoAgricolaNome(entity.getTipoContratoAgricola().getNome());
 		dto.setTipoPrecoAgricolaId(entity.getTipoPrecoAgricola().getId());
@@ -215,6 +245,11 @@ public class ContratoAgricolaMapper extends GenericMapper<ContratoAgricola, Cont
 		dto.setParcelas(new ArrayList<>());
 		if (entity.getParcelas() != null) {
 			dto.getParcelas().addAll(contratoAgricolaParcelaMapper.toDto(entity.getParcelas()));
+		}
+		
+		dto.setDescontos(new ArrayList<>());
+		if (entity.getDescontos() != null) {
+			dto.getDescontos().addAll(contratoAgricolaDescontoMapper.toDto(entity.getDescontos()));
 		}
 
 	}

@@ -13,6 +13,7 @@ import br.com.ultraworks.erp.api.financeiro.repository.GrupoFinanceiroRepository
 import br.com.ultraworks.erp.api.financeiro.repository.OperacaoAcessoriaFinanceiraRepository;
 import br.com.ultraworks.erp.api.financeiro.repository.OperacaoMovimentoFinanceiroRepository;
 import br.com.ultraworks.erp.api.financeiro.repository.TipoOperacaoFinanceiraRepository;
+import br.com.ultraworks.erp.api.financeiro.repository.TipoTituloRepository;
 import br.com.ultraworks.erp.api.tabela.repository.HistoricoPadraoRepository;
 import br.com.ultraworks.erp.core.exception.RegisterNotFoundException;
 import br.com.ultraworks.erp.core.mapper.GenericMapper;
@@ -29,6 +30,7 @@ public class ConfigSistemaFinanceiroMapper extends GenericMapper<ConfigSistemaFi
 	CarteiraFinanceiraRepository carteiraFinanceiraRepository;
 	CaracteristicaMovimentoFinanceiroRepository caracteristicaMovimentoFinanceiroRepository;
 	HistoricoPadraoRepository historicoPadraoRepository;
+	TipoTituloRepository tipoTituloRepository;
 
 	public ConfigSistemaFinanceiroMapper(ConfigSistemaFinanceiroRepository configSistemaFinanceiroRepository,
 			ConfigSistemaRepository configSistemaRepository,
@@ -38,7 +40,7 @@ public class ConfigSistemaFinanceiroMapper extends GenericMapper<ConfigSistemaFi
 			GrupoFinanceiroRepository grupoFinanceiroRepository, FatoGeradorRepository fatoGeradorRepository,
 			CarteiraFinanceiraRepository carteiraFinanceiraRepository,
 			CaracteristicaMovimentoFinanceiroRepository caracteristicaMovimentoFinanceiroRepository,
-			HistoricoPadraoRepository historicoPadraoRepository) {
+			HistoricoPadraoRepository historicoPadraoRepository, TipoTituloRepository tipoTituloRepository) {
 		super(configSistemaFinanceiroRepository, ConfigSistemaFinanceiro::new, ConfigSistemaFinanceiroDTO::new);
 		this.configSistemaRepository = configSistemaRepository;
 		this.operacaoMovimentoFinanceiroRepository = operacaoMovimentoFinanceiroRepository;
@@ -49,6 +51,7 @@ public class ConfigSistemaFinanceiroMapper extends GenericMapper<ConfigSistemaFi
 		this.carteiraFinanceiraRepository = carteiraFinanceiraRepository;
 		this.caracteristicaMovimentoFinanceiroRepository = caracteristicaMovimentoFinanceiroRepository;
 		this.historicoPadraoRepository = historicoPadraoRepository;
+		this.tipoTituloRepository = tipoTituloRepository;
 	}
 
 	@Override
@@ -59,6 +62,15 @@ public class ConfigSistemaFinanceiroMapper extends GenericMapper<ConfigSistemaFi
 					.orElseThrow(() -> new RegisterNotFoundException(
 							"Não encontrado configuração de sistema com id " + dto.getConfigSistemaId())));
 		}
+		entity.setTipoTituloReceber(tipoTituloRepository
+				.findById(dto.getTipoTituloReceberId()).orElseThrow(
+						() -> new RegisterNotFoundException("Não encontrado tipo de título a receber com id "
+								+ dto.getTipoTituloReceberId())));
+		entity.setTipoTituloPagar(tipoTituloRepository
+				.findById(dto.getTipoTituloPagarId()).orElseThrow(
+						() -> new RegisterNotFoundException("Não encontrado tipo de título a pagar com id "
+								+ dto.getTipoTituloPagarId())));
+		
 		entity.setOperacaoMovimentoFinanceiroInclusao(operacaoMovimentoFinanceiroRepository
 				.findById(dto.getOperacaoMovimentoFinanceiroInclusaoId()).orElseThrow(
 						() -> new RegisterNotFoundException("Não encontrado operação de movimento financeiro com id "
@@ -114,6 +126,8 @@ public class ConfigSistemaFinanceiroMapper extends GenericMapper<ConfigSistemaFi
 	protected void setValuesToDto(ConfigSistemaFinanceiro entity, ConfigSistemaFinanceiroDTO dto) {
 		dto.setId(entity.getId());
 		dto.setConfigSistemaId(entity.getConfigSistema().getId());
+		dto.setTipoTituloReceberId(entity.getTipoTituloReceber().getId());
+		dto.setTipoTituloPagarId(entity.getTipoTituloPagar().getId());
 		dto.setOperacaoMovimentoFinanceiroInclusaoId(entity.getOperacaoMovimentoFinanceiroInclusao().getId());
 		dto.setOperacaoMovimentoFinanceiroBaixaId(entity.getOperacaoMovimentoFinanceiroBaixa().getId());
 		dto.setOperacaoAcessoriaFinanceiraPrincipalId(entity.getOperacaoAcessoriaFinanceiraPrincipal().getId());
