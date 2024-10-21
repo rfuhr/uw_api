@@ -53,7 +53,7 @@ public class OperacaoInternaFinanceiro extends UWEntityBase {
 	private GrupoFinanceiro grupoFinanceiro;
 	
 	@OneToOne
-	@JoinColumn(name = "grupo_financeiro_id")
+	@JoinColumn(name = "caracteristica_movimento_financeiro_id")
 	private CaracteristicaMovimentoFinanceiro caracteristicaMovimentoFinanceiro;
 	
 	@OneToOne
