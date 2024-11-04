@@ -20,8 +20,8 @@ import lombok.EqualsAndHashCode;
 public class Departamento extends UWEntityBase {
 
 	@Id
-	@SequenceGenerator(name = "filialSeq", sequenceName = "seq_departamento", allocationSize = 1)
-	@GeneratedValue(generator = "filialSeq")
+	@SequenceGenerator(name = "departamentoSeq", sequenceName = "seq_departamento", allocationSize = 1)
+	@GeneratedValue(generator = "departamentoSeq")
 	private Long id;
 
 	@OneToOne(fetch = FetchType.EAGER)
@@ -30,4 +30,5 @@ public class Departamento extends UWEntityBase {
 
 	private String nome;
 	private String sigla;
+	private boolean general;
 }

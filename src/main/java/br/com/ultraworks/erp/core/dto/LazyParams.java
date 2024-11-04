@@ -27,6 +27,8 @@ public class LazyParams implements Serializable {
 	private Integer page;
 	
 	private Long id;
+	
+	private boolean noShowGeneral;
 
 	public LazyParams() {
 	}

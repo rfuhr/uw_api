@@ -33,5 +33,6 @@ public class GrupoContabil extends UWEntityBase {
 	private int codigo;
 	
 	private String nome;
+	private boolean general;
 	
 }

@@ -19,6 +19,7 @@ public class GrupoContabilMapper extends GenericMapper<GrupoContabil, GrupoConta
 		entity.setId(dto.getId());
 		entity.setCodigo(dto.getCodigo());
 		entity.setNome(dto.getNome());
+		entity.setGeneral(dto.isGeneral());
 	}
 
 	@Override
@@ -26,5 +27,6 @@ public class GrupoContabilMapper extends GenericMapper<GrupoContabil, GrupoConta
 		dto.setId(entity.getId());
 		dto.setCodigo(entity.getCodigo());
 		dto.setNome(entity.getNome());
+		dto.setGeneral(entity.isGeneral());
 	}
 }

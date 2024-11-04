@@ -14,13 +14,16 @@ public class ConfigSistemaMapper extends GenericMapper<ConfigSistema, ConfigSist
 
 	private ConfigSistemaFinanceiroMapper configSistemaFinanceiroMapper;
 	private ConfigSistemaAgricolaMapper configSistemaAgricolaMapper;
+	private ConfigSistemaCompraMapper configSistemaCompraMapper;
 
 	public ConfigSistemaMapper(ConfigSistemaRepository repository,
 			ConfigSistemaFinanceiroMapper configSistemaFinanceiroMapper,
-			ConfigSistemaAgricolaMapper configSistemaAgricolaMapper) {
+			ConfigSistemaAgricolaMapper configSistemaAgricolaMapper,
+			ConfigSistemaCompraMapper configSistemaCompraMapper) {
 		super(repository, ConfigSistema::new, ConfigSistemaDTO::new);
 		this.configSistemaFinanceiroMapper = configSistemaFinanceiroMapper;
 		this.configSistemaAgricolaMapper = configSistemaAgricolaMapper;
+		this.configSistemaCompraMapper = configSistemaCompraMapper;
 	}
 
 	@Override
@@ -36,6 +39,10 @@ public class ConfigSistemaMapper extends GenericMapper<ConfigSistema, ConfigSist
 			entity.getConfiguracoesAgricola()
 					.addAll(configSistemaAgricolaMapper.toEntity(dto.getConfiguracoesAgricola()));
 		}
+		if (dto.getConfiguracoesCompra() != null && dto.getConfiguracoesCompra().size() > 0) {
+			entity.setConfiguracoesCompra(new ArrayList<>());
+			entity.getConfiguracoesCompra().addAll(configSistemaCompraMapper.toEntity(dto.getConfiguracoesCompra()));
+		}
 
 	}
 
@@ -50,6 +57,10 @@ public class ConfigSistemaMapper extends GenericMapper<ConfigSistema, ConfigSist
 		dto.setConfiguracoesAgricola(new ArrayList<>());
 		if (entity.getConfiguracoesAgricola() != null) {
 			dto.getConfiguracoesAgricola().addAll(configSistemaAgricolaMapper.toDto(entity.getConfiguracoesAgricola()));
+		}
+		dto.setConfiguracoesCompra(new ArrayList<>());
+		if (entity.getConfiguracoesCompra() != null) {
+			dto.getConfiguracoesCompra().addAll(configSistemaCompraMapper.toDto(entity.getConfiguracoesCompra()));
 		}
 	}
 }

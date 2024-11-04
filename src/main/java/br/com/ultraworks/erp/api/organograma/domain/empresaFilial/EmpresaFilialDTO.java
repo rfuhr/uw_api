@@ -21,4 +21,5 @@ public class EmpresaFilialDTO {
 	private String sigla;
 
 	private Long empresaId;
+	private boolean general;
 }

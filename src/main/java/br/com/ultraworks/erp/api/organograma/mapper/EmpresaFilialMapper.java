@@ -28,6 +28,7 @@ public class EmpresaFilialMapper extends GenericMapper<EmpresaFilial, EmpresaFil
 		entity.setNome(dto.getNome());
 		entity.setSigla(dto.getSigla());
 		entity.setEmpresa(empresaService.getById(dto.getEmpresaId()).orElseThrow(RegisterNotFoundException::new));
+		entity.setGeneral(dto.isGeneral());
 	}
 
 	@Override
@@ -36,6 +37,7 @@ public class EmpresaFilialMapper extends GenericMapper<EmpresaFilial, EmpresaFil
 		dto.setNome(entity.getNome());
 		dto.setSigla(entity.getSigla());
 		dto.setEmpresaId(entity.getEmpresa().getId());
+		dto.setGeneral(entity.isGeneral());
 		
 	}	
 }

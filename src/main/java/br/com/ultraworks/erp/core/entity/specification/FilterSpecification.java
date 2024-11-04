@@ -156,4 +156,10 @@ public class FilterSpecification<T> {
 			return builder.equal(x, Double.parseDouble(filtro.getValue()));
 		}
 	}
+	
+	public static <T> Specification<T> createNoShowGeneralSpecification() {
+		return (root, query, builder) -> {
+			return builder.equal(root.get("general"), false);
+		};
+	}
 }

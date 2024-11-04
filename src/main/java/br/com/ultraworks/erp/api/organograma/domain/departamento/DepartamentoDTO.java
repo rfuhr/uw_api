@@ -19,6 +19,8 @@ public class DepartamentoDTO {
 	@NotEmpty
 	@Size(min = 3, max = 30)
 	private String sigla;
+	
+	private boolean general;
 
 	private Long empresaFilialId;
 	private String empresaFilialNome;

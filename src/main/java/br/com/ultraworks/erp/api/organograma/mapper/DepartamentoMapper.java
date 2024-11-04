@@ -26,6 +26,7 @@ public class DepartamentoMapper extends GenericMapper<Departamento, Departamento
 		entity.setNome(dto.getNome());
 		entity.setSigla(dto.getSigla());
 		entity.setEmpresaFilial(empresaFilialService.getById(dto.getEmpresaFilialId()).orElseThrow(RegisterNotFoundException::new));
+		entity.setGeneral(dto.isGeneral());
 	}
 
 	@Override
@@ -33,12 +34,14 @@ public class DepartamentoMapper extends GenericMapper<Departamento, Departamento
 		dto.setId(entity.getId());
 		dto.setNome(entity.getNome());
 		dto.setSigla(entity.getSigla());
+		dto.setGeneral(entity.isGeneral());
 		dto.setEmpresaFilialId(entity.getEmpresaFilial().getId());
 		dto.setEmpresaFilialNome(entity.getEmpresaFilial().getNome());
 		
 		dto.setEmpresaId(entity.getEmpresaFilial().getEmpresa().getId());
 		dto.setEmpresaNome(entity.getEmpresaFilial().getEmpresa().getNome());
-		dto.setParceiroLocalFilialId(entity.getEmpresaFilial().getParceiroLocal().getId());
+		if (entity.getEmpresaFilial().getParceiroLocal() != null)
+			dto.setParceiroLocalFilialId(entity.getEmpresaFilial().getParceiroLocal().getId());
 		
 	}	
 }

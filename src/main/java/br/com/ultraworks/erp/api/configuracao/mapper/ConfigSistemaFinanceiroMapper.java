@@ -126,8 +126,10 @@ public class ConfigSistemaFinanceiroMapper extends GenericMapper<ConfigSistemaFi
 	protected void setValuesToDto(ConfigSistemaFinanceiro entity, ConfigSistemaFinanceiroDTO dto) {
 		dto.setId(entity.getId());
 		dto.setConfigSistemaId(entity.getConfigSistema().getId());
-		dto.setTipoTituloReceberId(entity.getTipoTituloReceber().getId());
-		dto.setTipoTituloPagarId(entity.getTipoTituloPagar().getId());
+		if (entity.getTipoTituloReceber() != null)
+			dto.setTipoTituloReceberId(entity.getTipoTituloReceber().getId());
+		if (entity.getTipoTituloPagar() != null)
+			dto.setTipoTituloPagarId(entity.getTipoTituloPagar().getId());
 		dto.setOperacaoMovimentoFinanceiroInclusaoId(entity.getOperacaoMovimentoFinanceiroInclusao().getId());
 		dto.setOperacaoMovimentoFinanceiroBaixaId(entity.getOperacaoMovimentoFinanceiroBaixa().getId());
 		dto.setOperacaoAcessoriaFinanceiraPrincipalId(entity.getOperacaoAcessoriaFinanceiraPrincipal().getId());

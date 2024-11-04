@@ -2,6 +2,7 @@ package br.com.ultraworks.erp.core.util;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidParameterException;
 import java.util.List;
@@ -113,4 +114,5 @@ public class SQLUtils {
         return conditions.stream()
                          .collect(Collectors.joining(" AND "));
     }
+	
 }

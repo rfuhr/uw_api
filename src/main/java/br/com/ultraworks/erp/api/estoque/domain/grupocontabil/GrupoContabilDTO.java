@@ -16,4 +16,5 @@ public class GrupoContabilDTO {
 	@FriendlyName("Nome")
 	private String nome;
 	private int codigo;
+	private boolean general;
 }

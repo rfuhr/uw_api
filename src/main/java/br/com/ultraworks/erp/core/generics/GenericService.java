@@ -2,6 +2,7 @@ package br.com.ultraworks.erp.core.generics;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -14,9 +15,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
-import br.com.ultraworks.erp.api.tabela.domain.cidade.Cidade;
 import br.com.ultraworks.erp.core.UWRepository;
 import br.com.ultraworks.erp.core.dto.LazyParams;
+import br.com.ultraworks.erp.core.entity.specification.FilterSpecification;
 import br.com.ultraworks.erp.core.exception.RegisterNotFoundException;
 import br.com.ultraworks.erp.core.mapper.EntityMapper;
 import br.com.ultraworks.erp.core.util.SQLUtils;
@@ -45,25 +46,42 @@ public class GenericService<T, ID, D> {
 
 	public Page<T> getAllPaginada(LazyParams params) {
 		List<Long> ids = new ArrayList<>();
-		
+
 		Page<T> resultados = getResultadosPaginado(params, ids);
 
 		return resultados;
 	}
-	
+
 	public Page<T> getAllPaginadaFilterIds(LazyParams params, List<Long> ids) {
-		if (ids == null) 
+		if (ids == null)
 			ids = new ArrayList<>();
-		
+
 		Page<T> resultados = getResultadosPaginado(params, ids);
 
 		return resultados;
 	}
-	
+
+	private boolean hasField(String fieldName) {
+		// Obtém a classe do tipo T
+		Class<?> clazz = (Class<?>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+		try {
+			// Tenta obter o campo pela reflexão
+			Field field = clazz.getDeclaredField(fieldName);
+			return true; // O campo existe
+		} catch (NoSuchFieldException e) {
+			return false; // O campo não existe
+		}
+	}
 
 	private Page<T> getResultadosPaginado(LazyParams params, List<Long> ids) {
-		
+
 		Specification<T> specification = SQLUtils.buildQueryByFilters(params, ids);
+
+		if (params.isNoShowGeneral() && hasField("general")) {
+			Specification<T> noShowGeneralSpec = FilterSpecification.createNoShowGeneralSpecification();
+
+			specification = (specification != null) ? specification.and(noShowGeneralSpec) : noShowGeneralSpec;
+		}
 
 		Sort sort = Sort.unsorted();
 		if (params.getSortField() != null) {
@@ -75,7 +93,6 @@ public class GenericService<T, ID, D> {
 		int pagina = params.getFirst() == 0 ? 0 : Math.abs(params.getFirst() / rows);
 		Pageable pageable = PageRequest.of(pagina, rows, sort);
 		Page<T> resultados = repository.findAll(specification, pageable);
-		
 
 		if (resultados.getContent() != null && params.getId() != null) {
 			Optional<T> registroEspecifico = resultados.getContent().stream().filter(item -> {
@@ -131,5 +148,9 @@ public class GenericService<T, ID, D> {
 		}
 	}
 
+	public void delete(List<ID> ids) {
+		ids.stream().forEach(id -> repository.findById(id).orElseThrow(RegisterNotFoundException::new));
+		repository.deleteAllById(ids);
+	}
 
 }

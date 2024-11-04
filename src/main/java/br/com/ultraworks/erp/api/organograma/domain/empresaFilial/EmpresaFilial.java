@@ -35,4 +35,6 @@ public class EmpresaFilial extends UWEntityBase {
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "parceiro_local_id")
 	private ParceiroLocal parceiroLocal;
+	
+	private boolean general;
 }
