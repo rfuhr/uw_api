@@ -9,10 +9,14 @@ import org.springframework.stereotype.Service;
 
 import br.com.ultraworks.erp.api.compras.domain.cotacaomercadoriaitem.CotacaoMercadoriaItem;
 import br.com.ultraworks.erp.api.compras.domain.cotacaomercadoriaitem.CotacaoMercadoriaItemDTO;
+import br.com.ultraworks.erp.api.compras.domain.solicitacaomercadoriaitem.SolicitacaoMercadoriaItem;
 import br.com.ultraworks.erp.api.compras.mapper.CotacaoMercadoriaItemMapper;
 import br.com.ultraworks.erp.api.compras.repository.CotacaoMercadoriaItemRepository;
+import br.com.ultraworks.erp.api.compras.repository.SolicitacaoMercadoriaItemRepository;
 import br.com.ultraworks.erp.api.compras.service.solicitacaomercadoria.SolicitacaoMercadoriaItemService;
+import br.com.ultraworks.erp.core.exception.RegisterNotFoundException;
 import br.com.ultraworks.erp.core.generics.GenericService;
+import br.com.ultraworks.erp.core.util.ListUtils;
 import lombok.NoArgsConstructor;
 
 @Service
@@ -36,14 +40,37 @@ public class CotacaoMercadoriaItemService
 		return listRegistros;
 	}
 
-	public void criarItensCotacao(Long cotacaoMercadoriaParceiroId, List<CotacaoMercadoriaItem> itens) {
+	public void persistList(Long cotacaoMercadoriaParceiroId, List<CotacaoMercadoriaItem> itens) {
+		List<CotacaoMercadoriaItem> itensSalvos = ((CotacaoMercadoriaItemRepository) repository)
+				.findByCotacaoMercadoriaParceiroId(cotacaoMercadoriaParceiroId);
+		
 		if (itens != null) {
 			itens.stream().forEach(item -> {
 				repository.save(item);
 			});
-			solicitacaoMercadoriaItemService.cotar(itens.stream()
-					.map(CotacaoMercadoriaItem::getSolicitacaoMercadoriaItem).collect(Collectors.toList()));
 		}
-
+		List<CotacaoMercadoriaItem> itExcluir = (List<CotacaoMercadoriaItem>) ListUtils
+				.compararListasERetornaDiferenca(itensSalvos, itens);
+		if (itExcluir != null && itExcluir.size() > 0) {
+			List<SolicitacaoMercadoriaItem> itensParaLiberar = itExcluir.stream()
+		            .map(CotacaoMercadoriaItem::getSolicitacaoMercadoriaItem)
+		            .filter(item -> itens.stream()
+		                    .map(CotacaoMercadoriaItem::getSolicitacaoMercadoriaItem)
+		                    .noneMatch(cotado -> cotado.getId().equals(item.getId()))
+		            )
+		            .collect(Collectors.toList());
+			
+			solicitacaoMercadoriaItemService.liberar(itensParaLiberar);
+			itExcluir.stream().forEach(it -> repository.deleteById(it.getId()));
+		}
 	}
-}
+
+	@Override
+	public void delete(List<Long> ids) {
+		List<CotacaoMercadoriaItem> itens = ids.stream()
+			    .map(id -> repository.findById(id).orElseThrow(RegisterNotFoundException::new))
+			    .collect(Collectors.toList());
+		solicitacaoMercadoriaItemService.liberar(itens.stream()
+				.map(CotacaoMercadoriaItem::getSolicitacaoMercadoriaItem).collect(Collectors.toList()));
+		repository.deleteAllById(ids);
+	}}

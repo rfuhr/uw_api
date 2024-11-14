@@ -13,9 +13,10 @@ public class CotacaoMercadoriaDTO {
 	private Long numero;
 	private Long departamentoCotacaoId;
 	private LocalDate dataCotacao;
+	private String situacaoCotacaoMercadoria;
 
 	private String departamentoCotacaoNome;
-	private String parceiroLocalNome;
+	private String situacaoCotacaoMercadoriaNome;
 
 	private List<CotacaoMercadoriaParceiroDTO> parceiros;
 }

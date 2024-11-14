@@ -15,6 +15,7 @@ import br.com.ultraworks.erp.api.compras.domain.configautorizacaosolicitacaomerc
 import br.com.ultraworks.erp.api.compras.domain.situacaosolicitacaomercadoria.SituacaoSolicitacaoMercadoria;
 import br.com.ultraworks.erp.api.compras.domain.solicitacaomercadoria.SolicitacaoMercadoria;
 import br.com.ultraworks.erp.api.compras.domain.solicitacaomercadoria.SolicitacaoMercadoriaDTO;
+import br.com.ultraworks.erp.api.compras.domain.solicitacaomercadoriaitem.SolicitacaoMercadoriaItem;
 import br.com.ultraworks.erp.api.compras.domain.statussolicitacaomercadoriaitem.StatusSolicitacaoMercadoriaItem;
 import br.com.ultraworks.erp.api.compras.mapper.SolicitacaoMercadoriaMapper;
 import br.com.ultraworks.erp.api.compras.repository.SolicitacaoMercadoriaRepository;
@@ -81,6 +82,7 @@ public class SolicitacaoMercadoriaService
 
 	@Override
 	public SolicitacaoMercadoria save(SolicitacaoMercadoria solicitacao) {
+		List<SolicitacaoMercadoriaItem> itensDaSolicitacao = solicitacao.getItens();
 		if (solicitacao.getId() == null && (!solicitacao.getSituacaoSolicitacaoMercadoria()
 				.equals(SituacaoSolicitacaoMercadoria.EM_DIGITACAO)
 				&& !solicitacao.getSituacaoSolicitacaoMercadoria().equals(SituacaoSolicitacaoMercadoria.DIGITADA))) {
@@ -128,8 +130,8 @@ public class SolicitacaoMercadoriaService
 		}
 		SolicitacaoMercadoria solicitacaoSaved = repository.save(solicitacao);
 
-		if (solicitacao.getItens() != null)
-			solicitacao.getItens().forEach(sol -> {
+		if (itensDaSolicitacao != null)
+			itensDaSolicitacao.forEach(sol -> {
 				sol.setSolicitacaoMercadoria(solicitacaoSaved);
 				if (solicitacaoSaved.getSituacaoSolicitacaoMercadoria().equals(SituacaoSolicitacaoMercadoria.EM_DIGITACAO)) {
 					sol.setStatus(StatusSolicitacaoMercadoriaItem.EM_DIGITACAO);
@@ -142,7 +144,7 @@ public class SolicitacaoMercadoriaService
 				} 
 			});
 
-		solicitacaoMercadoriaItemService.criarItens(solicitacaoSaved.getId(), solicitacaoSaved.getItens());
+		solicitacaoMercadoriaItemService.persistList(solicitacaoSaved.getId(), itensDaSolicitacao);
 
 		if (configAutorizacao != null) {
 			CustomUser user = (CustomUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -173,20 +175,21 @@ public class SolicitacaoMercadoriaService
 		SolicitacaoMercadoria solicitacao = this.getById(id).orElseThrow(RegisterNotFoundException::new);
 		solicitacao.setSituacaoSolicitacaoMercadoria(SituacaoSolicitacaoMercadoria.CANCELADA);
 		repository.save(solicitacao);
+		solicitacaoMercadoriaItemService.cancelarViaSolicitacao(solicitacao.getItens());
 	}
 
 	public void autorizar(Long id, Usuario usuarioAutorizador) {
 		SolicitacaoMercadoria solicitacao = this.getById(id).orElseThrow(RegisterNotFoundException::new);
 		solicitacao.setSituacaoSolicitacaoMercadoria(SituacaoSolicitacaoMercadoria.AUTORIZADA);
 		repository.save(solicitacao);
-		solicitacaoMercadoriaItemService.autorizar(solicitacao.getItens());
+		solicitacaoMercadoriaItemService.autorizarViaSolicitacao(solicitacao.getItens());
 	}
 
 	public void negar(Long id, Usuario usuarioAutorizador) {
 		SolicitacaoMercadoria solicitacao = this.getById(id).orElseThrow(RegisterNotFoundException::new);
 		solicitacao.setSituacaoSolicitacaoMercadoria(SituacaoSolicitacaoMercadoria.NAO_AUTORIZADA);
 		repository.save(solicitacao);
-		solicitacaoMercadoriaItemService.negar(solicitacao.getItens());
+		solicitacaoMercadoriaItemService.negarViaSolicitacao(solicitacao.getItens());
 	}
 
 	public List<SolicitacaoMercadoriaParaCotacaoVO> buscarSolicitacoesPendentesParaCotacao(

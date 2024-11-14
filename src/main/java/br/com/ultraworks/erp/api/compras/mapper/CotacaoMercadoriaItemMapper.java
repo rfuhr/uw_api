@@ -1,9 +1,11 @@
 package br.com.ultraworks.erp.api.compras.mapper;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import br.com.ultraworks.erp.api.compras.domain.cotacaomercadoriaitem.CotacaoMercadoriaItem;
 import br.com.ultraworks.erp.api.compras.domain.cotacaomercadoriaitem.CotacaoMercadoriaItemDTO;
+import br.com.ultraworks.erp.api.compras.domain.statuscotacaomercadoriaitem.StatusCotacaoMercadoriaItem;
 import br.com.ultraworks.erp.api.compras.repository.CotacaoMercadoriaItemRepository;
 import br.com.ultraworks.erp.api.compras.repository.CotacaoMercadoriaParceiroRepository;
 import br.com.ultraworks.erp.api.compras.repository.ItemSimplificadoRepository;
@@ -49,6 +51,9 @@ public class CotacaoMercadoriaItemMapper extends GenericMapper<CotacaoMercadoria
 					.orElseThrow(() -> new RegisterNotFoundException(
 							"Não encontrado item simplificado com id " + dto.getItemSimplificadoId())));
 		}
+		if (StringUtils.isNotBlank(dto.getStatus())) {
+			entity.setStatus(StatusCotacaoMercadoriaItem.fromValue(dto.getStatus()));
+		}
 		if (dto.getSolicitacaoMercadoriaItemId() != null) {
 			entity.setSolicitacaoMercadoriaItem(
 					solicitacaoMercadoriaItemRepository.findById(dto.getSolicitacaoMercadoriaItemId())
@@ -70,8 +75,28 @@ public class CotacaoMercadoriaItemMapper extends GenericMapper<CotacaoMercadoria
 			dto.setItemSimplificadoId(entity.getItemSimplificado().getId());
 			dto.setItemSimplificadoNome(entity.getItemSimplificado().getNome());
 		}
+		if (entity.getStatus() != null) {
+			dto.setStatus(entity.getStatus().getValue());
+			dto.setStatusNome(entity.getStatus().getName());
+		}
 		if (entity.getSolicitacaoMercadoriaItem() != null) {
 			dto.setSolicitacaoMercadoriaItemId(entity.getSolicitacaoMercadoriaItem().getId());
+			dto.setSolicitacaoMercadoriaItemDepartamentoEntregaId(entity.getSolicitacaoMercadoriaItem().getDepartamentoEntrega().getId());
+			dto.setSolicitacaoMercadoriaItemDepartamentoEntregaSigla(entity.getSolicitacaoMercadoriaItem().getDepartamentoEntrega().getSigla());
+			dto.setSolicitacaoMercadoriaItemQuantidadeSolicitada(entity.getSolicitacaoMercadoriaItem().getQuantidadeSolicitada());
+			dto.setSolicitacaoMercadoriaItemObservacao(entity.getSolicitacaoMercadoriaItem().getObservacao());
+			dto.setSolicitacaoMercadoriaItemUsuarioSolicitacaoNome(entity.getSolicitacaoMercadoriaItem().getUsuarioSolicitacao().getNome());
+			dto.setSolicitacaoMercadoriaItemPrevisaoDiasUtilizacao(entity.getSolicitacaoMercadoriaItem().getPrevisaoDiasUtilizacao());
+			dto.setSolicitacaoMercadoriaItemUrgenciaSolicitacao(entity.getSolicitacaoMercadoriaItem().getUrgenciaSolicitacaoMercadoria().getName());
+			
+
+			dto.setSolicitacaoMercadoriaId(entity.getSolicitacaoMercadoriaItem().getSolicitacaoMercadoria().getId());
+			dto.setSolicitacaoMercadoriaNumero(
+					entity.getSolicitacaoMercadoriaItem().getSolicitacaoMercadoria().getNumero());
+			dto.setSolicitacaoMercadoriaDataSolicitacao(
+					entity.getSolicitacaoMercadoriaItem().getSolicitacaoMercadoria().getDataSolicitacao());
+			dto.setSolicitacaoMercadoriaDepartamentoSolicitanteSigla(entity.getSolicitacaoMercadoriaItem()
+					.getSolicitacaoMercadoria().getDepartamentoSolicitante().getSigla());
 		}
 	}
 }

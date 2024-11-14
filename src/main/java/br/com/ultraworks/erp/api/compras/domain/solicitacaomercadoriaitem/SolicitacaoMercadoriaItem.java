@@ -33,9 +33,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 public class SolicitacaoMercadoriaItem extends UWEntityBase {
 
+	@EqualsAndHashCode.Include
 	@Id
 	@SequenceGenerator(name = "solicitacaoMercadoriaItemSeq", sequenceName = "seq_solicitacao_mercadoria_item", allocationSize = 1)
 	@GeneratedValue(generator = "solicitacaoMercadoriaItemSeq")

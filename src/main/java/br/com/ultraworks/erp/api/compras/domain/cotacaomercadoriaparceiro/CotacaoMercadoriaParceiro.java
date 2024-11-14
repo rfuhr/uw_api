@@ -4,8 +4,12 @@ import java.util.List;
 
 import br.com.ultraworks.erp.api.compras.domain.cotacaomercadoria.CotacaoMercadoria;
 import br.com.ultraworks.erp.api.compras.domain.cotacaomercadoriaitem.CotacaoMercadoriaItem;
+import br.com.ultraworks.erp.api.compras.domain.situacaocotacaomercadoriaparceiro.SituacaoCotacaoMercadoriaParceiro;
+import br.com.ultraworks.erp.api.compras.domain.situacaocotacaomercadoriaparceiro.SituacaoCotacaoMercadoriaParceiroConverter;
 import br.com.ultraworks.erp.api.relacionamento.domain.parceiroLocal.ParceiroLocal;
 import br.com.ultraworks.erp.core.entity.UWEntityBase;
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -40,6 +44,10 @@ public class CotacaoMercadoriaParceiro extends UWEntityBase {
 	@OneToOne
 	@JoinColumn(name = "parceiro_local_id")
 	private ParceiroLocal parceiroLocal;
+	
+	@Convert(converter = SituacaoCotacaoMercadoriaParceiroConverter.class)
+	@Column(name = "situacao")
+	private SituacaoCotacaoMercadoriaParceiro situacao;
 
 	@Transient
 	private List<CotacaoMercadoriaItem> itens;

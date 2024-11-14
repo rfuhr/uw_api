@@ -28,4 +28,4 @@ from 	solicitacao_mercadoria sm
 		left join item_simplificado isimp on isimp.id = smi.item_simplificado_id 
 where 	sm.situacao_solicitacao_mercadoria in ('4', '6', '7')
 and     sm.depto_solicitado_id = :departamentoSolicitadoId
-and     smi.data_atendente is null;
+and     smi.status in ('6')

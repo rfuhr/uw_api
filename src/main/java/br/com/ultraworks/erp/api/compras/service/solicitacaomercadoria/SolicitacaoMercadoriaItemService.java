@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import br.com.ultraworks.erp.api.agricola.domain.contratoagricoladesconto.ContratoAgricolaDesconto;
+import br.com.ultraworks.erp.api.agricola.repository.ContratoAgricolaDescontoRepository;
 import br.com.ultraworks.erp.api.compras.domain.situacaosolicitacaomercadoria.SituacaoSolicitacaoMercadoria;
 import br.com.ultraworks.erp.api.compras.domain.solicitacaomercadoria.SolicitacaoMercadoria;
 import br.com.ultraworks.erp.api.compras.domain.solicitacaomercadoriaitem.SolicitacaoMercadoriaItem;
@@ -22,6 +24,7 @@ import br.com.ultraworks.erp.api.seguranca.service.UsuarioService;
 import br.com.ultraworks.erp.core.events.EventPublisher;
 import br.com.ultraworks.erp.core.generics.GenericService;
 import br.com.ultraworks.erp.core.security.domain.CustomUser;
+import br.com.ultraworks.erp.core.util.ListUtils;
 
 @Service
 public class SolicitacaoMercadoriaItemService
@@ -50,7 +53,10 @@ public class SolicitacaoMercadoriaItemService
 		throw new RuntimeException("Not used method.");
 	}
 
-	public void criarItens(Long solicitacaoMercadoriaId, List<SolicitacaoMercadoriaItem> solicitacoes) {
+	public void persistList(Long solicitacaoMercadoriaId, List<SolicitacaoMercadoriaItem> solicitacoes) {
+		List<SolicitacaoMercadoriaItem> itensSalvos = ((SolicitacaoMercadoriaItemRepository) repository)
+				.findBySolicitacaoMercadoriaId(solicitacaoMercadoriaId);
+		
 		CustomUser user = (CustomUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Optional<Usuario> usuarioOptional = usuarioService.findByUserId(user.getId());
 		if (solicitacoes != null)
@@ -58,15 +64,23 @@ public class SolicitacaoMercadoriaItemService
 				solicitacao.setUsuarioSolicitacao(usuarioOptional.get());
 				repository.save(solicitacao);
 			});
+		List<SolicitacaoMercadoriaItem> itExcluir = (List<SolicitacaoMercadoriaItem>) ListUtils
+				.compararListasERetornaDiferenca(itensSalvos, solicitacoes);
+		itExcluir.stream().forEach(it -> repository.deleteById(it.getId()));
 	}
 
-	public void autorizar(List<SolicitacaoMercadoriaItem> itens) {
-		itens.forEach(item -> item.setStatus(StatusSolicitacaoMercadoriaItem.AUTORIZADA));
+	public void autorizarViaSolicitacao(List<SolicitacaoMercadoriaItem> itens) {
+		itens.forEach(item -> item.setStatus(StatusSolicitacaoMercadoriaItem.LIBERADA));
 		repository.saveAll(itens);
 	}
 
-	public void negar(List<SolicitacaoMercadoriaItem> itens) {
+	public void negarViaSolicitacao(List<SolicitacaoMercadoriaItem> itens) {
 		itens.forEach(item -> item.setStatus(StatusSolicitacaoMercadoriaItem.NAO_AUTORIZADA));
+		repository.saveAll(itens);
+	}
+	
+	public void cancelarViaSolicitacao(List<SolicitacaoMercadoriaItem> itens) {
+		itens.forEach(item -> item.setStatus(StatusSolicitacaoMercadoriaItem.CANCELADA));
 		repository.saveAll(itens);
 	}
 
@@ -77,6 +91,14 @@ public class SolicitacaoMercadoriaItemService
 				itens.stream().map(SolicitacaoMercadoriaItem::getSolicitacaoMercadoria)
 						.map(SolicitacaoMercadoria::getId).collect(Collectors.toList())));
 
+	}
+	
+	public void liberar(List<SolicitacaoMercadoriaItem> itens) {
+		itens.forEach(item -> item.setStatus(StatusSolicitacaoMercadoriaItem.LIBERADA));
+		repository.saveAll(itens);
+		eventPublisher.publishEvent(new SolicitacaoMercadoriaItemSituacaoChangedEvent(
+				itens.stream().map(SolicitacaoMercadoriaItem::getSolicitacaoMercadoria)
+						.map(SolicitacaoMercadoria::getId).collect(Collectors.toList())));
 	}
 
 }

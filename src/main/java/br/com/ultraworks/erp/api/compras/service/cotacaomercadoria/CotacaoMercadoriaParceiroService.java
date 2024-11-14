@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import br.com.ultraworks.erp.api.compras.domain.cotacaomercadoriaitem.CotacaoMercadoriaItem;
@@ -14,7 +13,6 @@ import br.com.ultraworks.erp.api.compras.domain.cotacaomercadoriaparceiro.Cotaca
 import br.com.ultraworks.erp.api.compras.mapper.CotacaoMercadoriaParceiroMapper;
 import br.com.ultraworks.erp.api.compras.repository.CotacaoMercadoriaParceiroRepository;
 import br.com.ultraworks.erp.core.generics.GenericService;
-import br.com.ultraworks.erp.core.security.domain.CustomUser;
 import br.com.ultraworks.erp.core.util.ListUtils;
 import lombok.NoArgsConstructor;
 
@@ -45,7 +43,10 @@ public class CotacaoMercadoriaParceiroService
 		return listRegistros;
 	}
 
-	public void criarCotacaoParceiros(Long cotacaoMercadoriaId, List<CotacaoMercadoriaParceiro> parceiros) {
+	public void persistList(Long cotacaoMercadoriaId, List<CotacaoMercadoriaParceiro> parceiros) {
+		List<CotacaoMercadoriaParceiro> itensSalvos = ((CotacaoMercadoriaParceiroRepository) repository)
+				.findByCotacaoMercadoriaId(cotacaoMercadoriaId);
+
 		if (parceiros != null)
 			parceiros.stream().forEach(parceiro -> {
 				List<CotacaoMercadoriaItem> itensSalvar = parceiro.getItens();
@@ -53,7 +54,16 @@ public class CotacaoMercadoriaParceiroService
 				itensSalvar.forEach(item -> {
 					item.setCotacaoMercadoriaParceiro(parceiro);
 				});
-				cotacaoMercadoriaItemService.criarItensCotacao(parceiro.getId(), itensSalvar);
+				cotacaoMercadoriaItemService.persistList(parceiro.getId(), itensSalvar);
 			});
+		List<CotacaoMercadoriaParceiro> itExcluir = (List<CotacaoMercadoriaParceiro>) ListUtils
+				.compararListasERetornaDiferenca(itensSalvos, parceiros);
+		itExcluir.stream().forEach(it -> {
+			it.setItens(cotacaoMercadoriaItemService.getAllByCotacaoMercadoriaParceiro(it.getId()));
+			if (it.getItens() != null)
+				cotacaoMercadoriaItemService
+						.delete(it.getItens().stream().map(CotacaoMercadoriaItem::getId).collect(Collectors.toList()));
+			repository.deleteById(it.getId());
+		});
 	}
 }

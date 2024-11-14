@@ -6,8 +6,8 @@ import java.util.List;
 import br.com.ultraworks.erp.core.dto.EnumResponse;
 
 public enum IndicadorFormaPagamento {
-    AVISTA("0", "Pagamento à Vista"),
-    APRAZO("1", "Pagamento à Prazo");
+    AVISTA("1", "Pagamento à Vista"),
+    APRAZO("2", "Pagamento à Prazo");
 
     private String value;
     private String name;

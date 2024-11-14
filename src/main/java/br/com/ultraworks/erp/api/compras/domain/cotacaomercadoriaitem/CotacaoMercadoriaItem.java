@@ -3,8 +3,12 @@ package br.com.ultraworks.erp.api.compras.domain.cotacaomercadoriaitem;
 import br.com.ultraworks.erp.api.compras.domain.cotacaomercadoriaparceiro.CotacaoMercadoriaParceiro;
 import br.com.ultraworks.erp.api.compras.domain.itemsimplificado.ItemSimplificado;
 import br.com.ultraworks.erp.api.compras.domain.solicitacaomercadoriaitem.SolicitacaoMercadoriaItem;
+import br.com.ultraworks.erp.api.compras.domain.statuscotacaomercadoriaitem.StatusCotacaoMercadoriaItem;
+import br.com.ultraworks.erp.api.compras.domain.statuscotacaomercadoriaitem.StatusCotacaoMercadoriaItemConverter;
 import br.com.ultraworks.erp.api.estoque.domain.item.Item;
 import br.com.ultraworks.erp.core.entity.UWEntityBase;
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -42,7 +46,11 @@ public class CotacaoMercadoriaItem extends UWEntityBase {
 	@OneToOne
 	@JoinColumn(name = "item_simplificado_id")
 	private ItemSimplificado itemSimplificado;
-	
+
+	@Convert(converter = StatusCotacaoMercadoriaItemConverter.class)
+	@Column(name = "status")
+	private StatusCotacaoMercadoriaItem status;
+
 	@OneToOne
 	@JoinColumn(name = "solicitacao_mercadoria_item_id")
 	private SolicitacaoMercadoriaItem solicitacaoMercadoriaItem;
