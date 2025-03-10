@@ -20,14 +20,18 @@ import br.com.ultraworks.erp.api.compras.domain.statuscotacaomercadoriaitem.Stat
 import br.com.ultraworks.erp.api.compras.mapper.CotacaoMercadoriaMapper;
 import br.com.ultraworks.erp.api.compras.repository.CotacaoMercadoriaRepository;
 import br.com.ultraworks.erp.api.compras.repository.query.BuscarCotacoesParaRetornoQuery;
+import br.com.ultraworks.erp.api.compras.request.RequestInformaRetornoCotacao;
 import br.com.ultraworks.erp.api.compras.service.ConfigAutorizacaoSolicitacaoMercadoriaService;
 import br.com.ultraworks.erp.api.compras.service.solicitacaomercadoria.SolicitacaoMercadoriaItemService;
 import br.com.ultraworks.erp.api.compras.vo.CotacaoMercadoriaParaRetornoVO;
 import br.com.ultraworks.erp.api.configuracao.domain.configsistema.ConfigSistema;
 import br.com.ultraworks.erp.api.configuracao.service.ConfigSistemaService;
 import br.com.ultraworks.erp.api.configuracao.service.ControleNumeracaoService;
+import br.com.ultraworks.erp.api.financeiro.service.CondicaoPagamentoService;
+import br.com.ultraworks.erp.api.fiscal.domain.meiopagamento.MeioPagamento;
 import br.com.ultraworks.erp.api.tabela.domain.tipodocumento.TipoDocumento;
 import br.com.ultraworks.erp.core.exception.BusinessException;
+import br.com.ultraworks.erp.core.exception.RegisterNotFoundException;
 import br.com.ultraworks.erp.core.generics.GenericService;
 import lombok.NoArgsConstructor;
 
@@ -40,20 +44,22 @@ public class CotacaoMercadoriaService extends GenericService<CotacaoMercadoria, 
 	private ConfigSistemaService configSistemaService;
 	private ControleNumeracaoService controleNumeracaoService;
 	private BuscarCotacoesParaRetornoQuery buscarCotacoesParaRetornoQuery;
-
+	private CondicaoPagamentoService condicaoPagamentoService;
+	
 	@Autowired
 	public CotacaoMercadoriaService(CotacaoMercadoriaRepository repository, CotacaoMercadoriaMapper mapper,
 			CotacaoMercadoriaParceiroService cotacaoMercadoriaParceiroService,
 			SolicitacaoMercadoriaItemService solicitacaoMercadoriaItemService,
 			ConfigSistemaService configSistemaService, ControleNumeracaoService controleNumeracaoService,
 			ConfigAutorizacaoSolicitacaoMercadoriaService configAutorizacaoSolicitacaoMercadoriaService,
-			BuscarCotacoesParaRetornoQuery buscarCotacoesParaRetornoQuery) {
+			BuscarCotacoesParaRetornoQuery buscarCotacoesParaRetornoQuery, CondicaoPagamentoService condicaoPagamentoService) {
 		super(repository, mapper);
 		this.cotacaoMercadoriaParceiroService = cotacaoMercadoriaParceiroService;
 		this.solicitacaoMercadoriaItemService = solicitacaoMercadoriaItemService;
 		this.configSistemaService = configSistemaService;
 		this.controleNumeracaoService = controleNumeracaoService;
 		this.buscarCotacoesParaRetornoQuery = buscarCotacoesParaRetornoQuery;
+		this.condicaoPagamentoService = condicaoPagamentoService;
 	}
 
 	@Override
@@ -169,6 +175,40 @@ public class CotacaoMercadoriaService extends GenericService<CotacaoMercadoria, 
 					"Cotação de nº " + cotacao.getNumero().toString() + " não está aguardando retorno");
 		}
 		return Optional.empty();
+	}
+
+	public void informarRetorno(RequestInformaRetornoCotacao requestInformaRetornoCotacao) {
+		CotacaoMercadoria cotacaoMercadoria = this.getById(requestInformaRetornoCotacao.getCotacaoMercadoriaId())
+				.orElseThrow(() -> new RegisterNotFoundException(
+						"Não encontrado cotação com id " + requestInformaRetornoCotacao.getCotacaoMercadoriaId()));
+		CotacaoMercadoriaParceiro cotacaoMercadoriaParceiro = cotacaoMercadoria.getParceiros().stream()
+				.filter(el -> el.getId().equals(requestInformaRetornoCotacao.getCotacaoMercadoriaParceiroId()))
+				.findFirst()
+				.orElseThrow(() -> new RegisterNotFoundException("Não encontrado cotação para parceiro com id "
+						+ requestInformaRetornoCotacao.getCotacaoMercadoriaParceiroId()));
+
+		cotacaoMercadoria.setSituacaoCotacaoMercadoria(SituacaoCotacaoMercadoria.fromValue(requestInformaRetornoCotacao.getSituacao()));
+		
+		cotacaoMercadoriaParceiro.setPrevisaoDiasEntrega(requestInformaRetornoCotacao.getPrevisaoDiasEntrega());
+		cotacaoMercadoriaParceiro.setCondicaoPagamento(condicaoPagamentoService.getById(requestInformaRetornoCotacao.getCondicaoPagamentoId()).get());
+		cotacaoMercadoriaParceiro.setMeioPagamento(MeioPagamento.fromValue(requestInformaRetornoCotacao.getMeioPagamento()));
+		if (cotacaoMercadoria.getSituacaoCotacaoMercadoria().equals(SituacaoCotacaoMercadoria.RETORNO_PARCIAL))
+			cotacaoMercadoriaParceiro.setSituacao(SituacaoCotacaoMercadoriaParceiro.RETORNO_PARCIAL);
+		if (cotacaoMercadoria.getSituacaoCotacaoMercadoria().equals(SituacaoCotacaoMercadoria.AGUARDANDO_MAPA))
+			cotacaoMercadoriaParceiro.setSituacao(SituacaoCotacaoMercadoriaParceiro.AGUARDANDO_MAPA);
+		
+		requestInformaRetornoCotacao.getItens().forEach(item -> {
+			Optional<CotacaoMercadoriaItem> optCotacaoMercadoriaItem = cotacaoMercadoriaParceiro.getItens().stream().filter(el -> el.getId().equals(item.getCotacaoMercadoriaItemId())).findFirst();
+			if (optCotacaoMercadoriaItem.isPresent()) {
+				optCotacaoMercadoriaItem.get().setQuantidadeCotada(item.getQuantidadeCotada());
+				optCotacaoMercadoriaItem.get().setValorUnitario(item.getValorUnitario());
+				optCotacaoMercadoriaItem.get().setStatus(StatusCotacaoMercadoriaItem.AGUARDANDO_MAPA);
+			}
+			
+		});
+		List<CotacaoMercadoriaParceiro> parceirosDaCotacao = cotacaoMercadoria.getParceiros();
+		CotacaoMercadoria cotacaoSaved = repository.save(cotacaoMercadoria);
+		cotacaoMercadoriaParceiroService.persistList(cotacaoSaved.getId(), parceirosDaCotacao);
 	}
 
 }

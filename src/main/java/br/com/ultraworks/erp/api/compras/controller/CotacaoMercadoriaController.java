@@ -7,12 +7,15 @@ import java.util.Optional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.ultraworks.erp.api.compras.domain.cotacaomercadoria.CotacaoMercadoria;
 import br.com.ultraworks.erp.api.compras.domain.cotacaomercadoria.CotacaoMercadoriaDTO;
 import br.com.ultraworks.erp.api.compras.mapper.CotacaoMercadoriaMapper;
+import br.com.ultraworks.erp.api.compras.request.RequestInformaRetornoCotacao;
 import br.com.ultraworks.erp.api.compras.service.cotacaomercadoria.CotacaoMercadoriaService;
 import br.com.ultraworks.erp.api.compras.vo.CotacaoMercadoriaParaRetornoVO;
 import br.com.ultraworks.erp.core.exception.RegisterNotFoundException;
@@ -49,5 +52,12 @@ public class CotacaoMercadoriaController
 		} else {
 			return ResponseEntity.ok(Collections.emptyList());
 		}
+	}
+	
+	@PostMapping("/servicos/informar-retorno")
+	public ResponseEntity<?> informarRetorno(@RequestBody RequestInformaRetornoCotacao requestInformaRetornoCotacao) {
+		 ((CotacaoMercadoriaService) service)
+				.informarRetorno(requestInformaRetornoCotacao);
+		 return ResponseEntity.noContent().build();	
 	}
 }

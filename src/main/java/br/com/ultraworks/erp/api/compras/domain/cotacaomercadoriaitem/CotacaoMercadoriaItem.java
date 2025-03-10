@@ -1,5 +1,7 @@
 package br.com.ultraworks.erp.api.compras.domain.cotacaomercadoriaitem;
 
+import java.math.BigDecimal;
+
 import br.com.ultraworks.erp.api.compras.domain.cotacaomercadoriaparceiro.CotacaoMercadoriaParceiro;
 import br.com.ultraworks.erp.api.compras.domain.itemsimplificado.ItemSimplificado;
 import br.com.ultraworks.erp.api.compras.domain.solicitacaomercadoriaitem.SolicitacaoMercadoriaItem;
@@ -54,5 +56,11 @@ public class CotacaoMercadoriaItem extends UWEntityBase {
 	@OneToOne
 	@JoinColumn(name = "solicitacao_mercadoria_item_id")
 	private SolicitacaoMercadoriaItem solicitacaoMercadoriaItem;
+	
+	@Column(name = "quantidade_cotada")
+	private BigDecimal quantidadeCotada;
+	
+	@Column(name = "valor_unitario")
+	private BigDecimal valorUnitario;
 
 }

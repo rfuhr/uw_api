@@ -61,6 +61,8 @@ public class CotacaoMercadoriaItemMapper extends GenericMapper<CotacaoMercadoria
 									"Não encontrado item da solicitação de mercadoria com id "
 											+ dto.getSolicitacaoMercadoriaItemId())));
 		}
+		entity.setQuantidadeCotada(dto.getQuantidadeCotada());
+		entity.setValorUnitario(dto.getValorUnitario());
 	}
 
 	@Override
@@ -81,14 +83,19 @@ public class CotacaoMercadoriaItemMapper extends GenericMapper<CotacaoMercadoria
 		}
 		if (entity.getSolicitacaoMercadoriaItem() != null) {
 			dto.setSolicitacaoMercadoriaItemId(entity.getSolicitacaoMercadoriaItem().getId());
-			dto.setSolicitacaoMercadoriaItemDepartamentoEntregaId(entity.getSolicitacaoMercadoriaItem().getDepartamentoEntrega().getId());
-			dto.setSolicitacaoMercadoriaItemDepartamentoEntregaSigla(entity.getSolicitacaoMercadoriaItem().getDepartamentoEntrega().getSigla());
-			dto.setSolicitacaoMercadoriaItemQuantidadeSolicitada(entity.getSolicitacaoMercadoriaItem().getQuantidadeSolicitada());
+			dto.setSolicitacaoMercadoriaItemDepartamentoEntregaId(
+					entity.getSolicitacaoMercadoriaItem().getDepartamentoEntrega().getId());
+			dto.setSolicitacaoMercadoriaItemDepartamentoEntregaSigla(
+					entity.getSolicitacaoMercadoriaItem().getDepartamentoEntrega().getSigla());
+			dto.setSolicitacaoMercadoriaItemQuantidadeSolicitada(
+					entity.getSolicitacaoMercadoriaItem().getQuantidadeSolicitada());
 			dto.setSolicitacaoMercadoriaItemObservacao(entity.getSolicitacaoMercadoriaItem().getObservacao());
-			dto.setSolicitacaoMercadoriaItemUsuarioSolicitacaoNome(entity.getSolicitacaoMercadoriaItem().getUsuarioSolicitacao().getNome());
-			dto.setSolicitacaoMercadoriaItemPrevisaoDiasUtilizacao(entity.getSolicitacaoMercadoriaItem().getPrevisaoDiasUtilizacao());
-			dto.setSolicitacaoMercadoriaItemUrgenciaSolicitacao(entity.getSolicitacaoMercadoriaItem().getUrgenciaSolicitacaoMercadoria().getName());
-			
+			dto.setSolicitacaoMercadoriaItemUsuarioSolicitacaoNome(
+					entity.getSolicitacaoMercadoriaItem().getUsuarioSolicitacao().getNome());
+			dto.setSolicitacaoMercadoriaItemPrevisaoDiasUtilizacao(
+					entity.getSolicitacaoMercadoriaItem().getPrevisaoDiasUtilizacao());
+			dto.setSolicitacaoMercadoriaItemUrgenciaSolicitacao(
+					entity.getSolicitacaoMercadoriaItem().getUrgenciaSolicitacaoMercadoria().getName());
 
 			dto.setSolicitacaoMercadoriaId(entity.getSolicitacaoMercadoriaItem().getSolicitacaoMercadoria().getId());
 			dto.setSolicitacaoMercadoriaNumero(
@@ -98,5 +105,7 @@ public class CotacaoMercadoriaItemMapper extends GenericMapper<CotacaoMercadoria
 			dto.setSolicitacaoMercadoriaDepartamentoSolicitanteSigla(entity.getSolicitacaoMercadoriaItem()
 					.getSolicitacaoMercadoria().getDepartamentoSolicitante().getSigla());
 		}
+		dto.setQuantidadeCotada(entity.getQuantidadeCotada());
+		dto.setValorUnitario(entity.getValorUnitario());
 	}
 }

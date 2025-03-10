@@ -14,7 +14,9 @@ public class CotacaoMercadoriaItemDTO {
 	private Long itemSimplificadoId;
 	private String status;
 	private Long solicitacaoMercadoriaItemId;
-
+	private BigDecimal quantidadeCotada;
+	private BigDecimal valorUnitario;
+	
 	private Long solicitacaoMercadoriaId;
 	private Long solicitacaoMercadoriaNumero;
 	private String solicitacaoMercadoriaDepartamentoSolicitanteSigla;
