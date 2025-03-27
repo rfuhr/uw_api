@@ -23,4 +23,6 @@ public interface DocumentoRepository extends UWRepository<Documento, Long> {
 	Long verificaDuplicidade(Long numero, LocalDate dataDocumento, Long parceiroLocalId, Long operacaoInternaId, BigDecimal valor,
 			int validaId, Long id);
 
+	Documento findByNfeId(Long nfeId);
+	
 }

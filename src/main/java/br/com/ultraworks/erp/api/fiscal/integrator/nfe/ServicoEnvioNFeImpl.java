@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import javax.xml.bind.JAXBException;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -112,6 +114,7 @@ import br.com.ultraworks.erp.api.configuracao.service.EmpresaCertificadoService;
 import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFe;
 import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFeAut;
 import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFeCofinsItem;
+import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFeComunicacaoSEFAZ;
 import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFeDest;
 import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFeDetItem;
 import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFeDetPagamento;
@@ -132,7 +135,10 @@ import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFeRetirada;
 import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFeTotais;
 import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFeTransporte;
 import br.com.ultraworks.erp.api.fiscal.domain.nfe.entity.NFeVolume;
+import br.com.ultraworks.erp.api.fiscal.domain.tipocomunicacaonfe.TipoComunicacaoNfe;
 import br.com.ultraworks.erp.api.fiscal.integrator.nfe.dto.RetornoNFeIntegracao;
+import br.com.ultraworks.erp.api.fiscal.repository.NFeComunicacaoSEFAZRepository;
+import br.com.ultraworks.erp.api.fiscal.service.NFeComunicacaoSEFAZService;
 import br.com.ultraworks.erp.api.relacionamento.service.ParceiroLocalService;
 import br.com.ultraworks.erp.api.tabela.domain.situacaodocumento.SituacaoDocumento;
 import br.com.ultraworks.erp.core.exception.BusinessException;
@@ -191,6 +197,7 @@ public class ServicoEnvioNFeImpl implements IServicoEnvioNFe {
 						RetornoUtil.validaAssincrono(tRetConsReciNFe);
 						retornoNFeIntegracao.setStatus(tRetConsReciNFe.getProtNFe().get(0).getInfProt().getCStat());
 						retornoNFeIntegracao.setProtocolo(tRetConsReciNFe.getProtNFe().get(0).getInfProt().getNProt());
+						retornoNFeIntegracao.setErroValidarRetorno(tRetConsReciNFe.getProtNFe().get(0).getInfProt().getXMotivo());
 						xmlFinal = XmlNfeUtil.criaNfeProc(enviNFe, tRetConsReciNFe.getProtNFe().get(0));
 						retornoNFeIntegracao.setXml(xmlFinal);
 					} else {
@@ -201,6 +208,7 @@ public class ServicoEnvioNFeImpl implements IServicoEnvioNFe {
 					retornoNFeIntegracao.setStatus(retorno.getProtNFe().getInfProt().getCStat());
 					retornoNFeIntegracao.setProtocolo(retorno.getProtNFe().getInfProt().getNProt());
 					xmlFinal = XmlNfeUtil.criaNfeProc(enviNFe, retorno.getProtNFe());
+					retornoNFeIntegracao.setErroValidarRetorno(retorno.getProtNFe().getInfProt().getXMotivo());
 					retornoNFeIntegracao.setXml(xmlFinal);				
 				}
 			} catch (Exception e) {
@@ -211,6 +219,23 @@ public class ServicoEnvioNFeImpl implements IServicoEnvioNFe {
 //			retornoNFeIntegracao.setErroValidarRetorno(retorno.getXMotivo());
 //		}
 		
+		if (retorno.getInfRec() != null) {
+			retornoNFeIntegracao.setRecibo(retorno.getInfRec().getNRec());			
+		}
+		
+		try {
+			String xmlEnvio = XmlNfeUtil.objectToXml(enviNFe, configuracoesNfe.getEncode());
+			retornoNFeIntegracao.setXmlEnvio(xmlEnvio);
+		} catch (JAXBException | NfeException e) {
+			retornoNFeIntegracao.setXmlEnvio("Erro ao recuperar o XML de Envio da NFe.");
+		}
+		
+		try {
+			String xmlRetorno = XmlNfeUtil.objectToXml(retorno, configuracoesNfe.getEncode());
+			retornoNFeIntegracao.setXmlRetorno(xmlRetorno);
+		} catch (JAXBException | NfeException e) {
+			retornoNFeIntegracao.setXmlRetorno("Erro ao recuperar o XML de Retorno da NFe.");
+		}
 
 		return retornoNFeIntegracao;
 	}

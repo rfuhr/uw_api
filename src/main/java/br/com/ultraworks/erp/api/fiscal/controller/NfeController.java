@@ -5,7 +5,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -81,6 +80,11 @@ public class NfeController {
 		return ResponseEntity.ok(nfeService.getCacheNFe(cacheId));
 	}
 	
+	@GetMapping("/sefaz/{nfeId}")
+	public ResponseEntity<?> getNFeComunicacaoSEFAZ(@PathVariable Long nfeId) {
+		return ResponseEntity.ok(nfeService.getNFeComunicacaoSEFAZ(nfeId));
+	}
+	
 	@PostMapping
 	public ResponseEntity<?> emitirNFe(@RequestBody NFeRequest nFeRequest) {
 		nfeService.salvarNFe(nFeRequest);
@@ -97,4 +101,27 @@ public class NfeController {
 
 		return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
 	};
+	
+	@GetMapping("/{nfeId}/inutilizar")
+	public ResponseEntity<byte[]> inutilizarNFe(@PathVariable Long nfeId) {
+		nfeService.inutilizar(nfeId);
+		return ResponseEntity.accepted().build();
+	};
+	
+	@GetMapping("/{nfeId}/cancelar")
+	public ResponseEntity<byte[]> cancelarNFe(@PathVariable Long nfeId) {
+		nfeService.cancelarNFe(nfeId);
+		return ResponseEntity.accepted().build();
+	};
+	
+	@GetMapping("/{nfeId}/integrar")
+	public ResponseEntity<?> integrarNFe(@PathVariable Long nfeId) {
+		nfeService.integrarNFe(nfeId);
+		return ResponseEntity.accepted().build();
+	}
+	
+	@GetMapping("/{nfeId}/consultar-status")
+	public ResponseEntity<?> consultarStatusNFe(@PathVariable Long nfeId) {
+		return ResponseEntity.ok(nfeService.consultarStatusNFe(nfeId));
+	}
 }

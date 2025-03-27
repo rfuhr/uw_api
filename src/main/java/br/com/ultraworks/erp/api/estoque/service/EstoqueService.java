@@ -92,6 +92,11 @@ public class EstoqueService {
 				movimentoEstoque.setCalculaCustoMedioSaldo(operacaoInternaEstoque.isCalculaCustoMedio());
 				movimentoEstoque.setDocumento(atualizaEstoqueRequest.getDocumento());
 				movimentoEstoque.setEntrada(atualizaEstoqueRequest.isEntrada());
+				if (atualizaEstoqueRequest.isEntrada()) {
+					movimentoEstoque.setDebitoCredito("C");
+				} else {
+					movimentoEstoque.setDebitoCredito("D");
+				}
 				movimentoEstoque.setProtocoloDocumento(atualizaEstoqueRequest.getProtocoloDocumento());
 				movimentoEstoque.setQuantidade(item.getQuantidade());
 				movimentoEstoque.setCustoMedio(item.getCustoMedio());

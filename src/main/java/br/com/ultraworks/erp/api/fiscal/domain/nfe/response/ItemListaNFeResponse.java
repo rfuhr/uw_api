@@ -1,5 +1,6 @@
 package br.com.ultraworks.erp.api.fiscal.domain.nfe.response;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 
 import lombok.AllArgsConstructor;
@@ -19,4 +20,10 @@ public class ItemListaNFeResponse {
 	private int serie;
 	private int numero;
 	private String situacao;
+	private String cpfCnpj;
+	private String nome;
+	private String siglaOperacaoInterna;
+	private BigDecimal vnf;
+	private String situacaoIntegracao;
+	private String tipoNfe;
 }

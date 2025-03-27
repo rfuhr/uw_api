@@ -11,6 +11,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
+import org.glassfish.jaxb.core.v2.TODO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -81,7 +82,6 @@ public class ServicoIntegracaoFinanceira {
 	private NegociacaoFinanceiraService negociacaoService;
 	private ConfigSistemaService configSistemaService;
 
-	@Autowired
 	public ServicoIntegracaoFinanceira(TituloRepository tituloRepository, ParcelaRepository parcelaRepository,
 			MovimentoRepository movimentoRepository, ParametroFinanceiroRepository parametroFinanceiroRepository,
 			MotivoEstornoFinanceiroRepository motivoEstornoFinanceiroRepository,
@@ -247,10 +247,10 @@ public class ServicoIntegracaoFinanceira {
 				});
 	}
 
-	public void executarIntegracao() {
+	public Titulo executarIntegracao() {
 
 		if (this.tipoOperacaoIntegracaoFinanceira.isInclusaoLancamento()) {
-			executarIntegracaoNovoTitulo();
+			return executarIntegracaoNovoTitulo();
 		}
 		if (this.tipoOperacaoIntegracaoFinanceira.isBaixa()) {
 			executarIntegracaoBaixaParcela();
@@ -264,12 +264,15 @@ public class ServicoIntegracaoFinanceira {
 		if (this.tipoOperacaoIntegracaoFinanceira.isNegociacaoFinanceira()) {
 			executarIntegracaoNegociacao();
 		}
+		
+		return null;
 	}
 
-	private void executarIntegracaoNovoTitulo() {
+	private Titulo executarIntegracaoNovoTitulo() {
 		validaInclusaoTitulo();
 		Titulo titulo = persistirTitulo();
 		persistirParcelasEMovimentos(titulo);
+		return titulo;
 	}
 
 	private void validaInclusaoTitulo() {
@@ -340,20 +343,28 @@ public class ServicoIntegracaoFinanceira {
 				container.getContainerDefinicaoOperacao().getConta(),
 				container.getContainerDefinicaoOperacao().getObservacao());
 
-		for (ContainerParcelaBaixa containerBaixaParcela : container.getListContainerBaixaParcela()) {
+		for (ContainerParcelaBaixa containerBaixaParcela : container.getListContainerBaixaParcela()) {			
+			
 			List<MovimentoFinanceiro> listaMovimentoGravado = buscaMovimentoParaBaixa(
 					containerBaixaParcela.getIdMovimentoParaBaixa());
+			
+			BigDecimal valorMovimentoTotal = BigDecimal.ZERO;
+			
 			if (containerBaixaParcela.isCriaSubSequenciaMovimento()) {
+				valorMovimentoTotal = listaMovimentoGravado.get(0).getSaldoParcela();
 				_sequenciaMovimento = listaMovimentoGravado.get(0).getSeqMvto();
 				_subSequenciaMovimento = listaMovimentoGravado.get(0).getSubSeqMvto() + 1;
-				_saldoParcela = listaMovimentoGravado.get(0).getSaldoParcela();
+				_saldoParcela = valorMovimentoTotal;
 			} else {
-				BigDecimal valorMovimentoTotal = buscaSomaMovimento(container.getListContainerBaixaParcela(),
+				valorMovimentoTotal = buscaSomaMovimento(container.getListContainerBaixaParcela(),
 						containerBaixaParcela.getIdMovimentoParaBaixa());
 				_sequenciaMovimento = listaMovimentoGravado.get(0).getSeqMvto() + 1;
 				_subSequenciaMovimento = 1;
 				_saldoParcela = listaMovimentoGravado.get(0).getSaldoParcela().subtract(valorMovimentoTotal);
 			}
+			
+			validarSaldoParcelaParaBaixa(containerBaixaParcela, valorMovimentoTotal);
+			
 			_parcelaId = listaMovimentoGravado.get(0).getParcela().getId();
 			_carteiraFinanceira = listaMovimentoGravado.get(0).getCarteiraFinanceira();
 			_valorBaixa = containerBaixaParcela.getValorBaixa();
@@ -815,4 +826,15 @@ public class ServicoIntegracaoFinanceira {
 				.quantidadeParcelas(quantidadeParcelas).build());
 
 	}
+	
+	public void validarBaixaPorCancelamento(Long tituloId) {
+		// TODO - Validar se o título está com saldo total disponível, caso não esteja deve apresentar uma mensagem de erro
+	}
+	
+	private void validarSaldoParcelaParaBaixa(ContainerParcelaBaixa containerBaixaParcela,
+			BigDecimal valorMovimentoTotal) {
+		// TODO - Validar se o saldo da parcela - o valor do movimento vai deixar com saldo negativo
+		
+	}
+	
 }

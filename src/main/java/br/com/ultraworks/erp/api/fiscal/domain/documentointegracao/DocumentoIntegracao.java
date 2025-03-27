@@ -48,6 +48,8 @@ public class DocumentoIntegracao extends UWEntityBase {
 	
 	private boolean integrado = false;
 	
+	private boolean cancelamento = false;
+	
 	@Column(name = "data_integracao")
 	@UpdateTimestamp
 	private LocalDateTime dataIntegracao;

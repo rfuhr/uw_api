@@ -2,6 +2,8 @@ package br.com.ultraworks.erp.api.fiscal.domain.nfe.entity;
 
 import java.util.List;
 
+import br.com.ultraworks.erp.api.fiscal.domain.tiponfe.TipoNfe;
+import br.com.ultraworks.erp.api.fiscal.domain.tiponfe.TipoNfeConverter;
 import br.com.ultraworks.erp.api.organograma.domain.empresaFilial.EmpresaFilial;
 import br.com.ultraworks.erp.api.tabela.domain.situacaodocumento.SituacaoDocumento;
 import br.com.ultraworks.erp.api.tabela.domain.situacaodocumento.SituacaoDocumentoConverter;
@@ -54,6 +56,10 @@ public class NFe extends UWEntityBase {
 	@Convert(converter = SituacaoDocumentoConverter.class)
 	@Column(name = "situacao")
 	private SituacaoDocumento situacao;
+	
+	@Convert(converter = TipoNfeConverter.class)
+	@Column(name = "tipo_nfe")
+	private TipoNfe tipoNfe;
 
 	@OneToOne(mappedBy = "nfe", cascade = CascadeType.ALL, orphanRemoval = true)
 	private NFeIde nfeIde;

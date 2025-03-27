@@ -10,4 +10,6 @@ public class RetornoNFeIntegracao {
 	private String protocolo;
 	private String recibo;
 	private String erroValidarRetorno;
+	private String xmlRetorno;
+	private String xmlEnvio;
 }

@@ -1,0 +1,2 @@
+alter table operacao_interna_financeiro add column motivo_estorno_financeiro_id bigint not null default 1;
+alter table operacao_interna_financeiro add  CONSTRAINT operacao_interna_financeiro_motivo_estorno_financeiro_id_foreign FOREIGN KEY (motivo_estorno_financeiro_id) REFERENCES motivo_estorno_financeiro (id);

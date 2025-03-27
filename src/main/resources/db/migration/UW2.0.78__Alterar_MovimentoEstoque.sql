@@ -1,0 +1,1 @@
+alter table movimento_estoque add column debito_credito varchar(1) not null;

@@ -1,0 +1,1 @@
+ALTER TABLE configuracao_fiscal_ipi ALTER COLUMN enquadramento_id DROP NOT NULL;

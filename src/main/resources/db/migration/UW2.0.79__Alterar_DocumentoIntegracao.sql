@@ -1,0 +1,1 @@
+alter table documento_integracao add column cancelamento boolean not null default false;

@@ -1,5 +1,6 @@
 package br.com.ultraworks.erp.api.fiscal.repository.query;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,7 +29,12 @@ public class BuscaListagemNFeQuery {
 						.nfeId(t.get("nfeId", Long.class))
 						.dataHoraEmissao(t.get("dataHoraEmissao", Instant.class))
 						.chaveNFe(t.get("chaveNFe", String.class)).serie(t.get("serie", Integer.class))
-						.numero(t.get("numero", Integer.class)).situacao(t.get("situacao", String.class)).build())
+						.numero(t.get("numero", Integer.class)).situacao(t.get("situacao", String.class))
+						.cpfCnpj(t.get("cpfCnpj", String.class)).nome(t.get("nome", String.class))
+						.siglaOperacaoInterna(t.get("siglaOperacaoInterna", String.class))
+						.vnf(t.get("vnf", BigDecimal.class)).situacaoIntegracao(t.get("situacaoIntegracao", String.class))
+						.tipoNfe(t.get("tipoNfe", String.class))
+						.build())
 				.collect(Collectors.toList());
 
 	}

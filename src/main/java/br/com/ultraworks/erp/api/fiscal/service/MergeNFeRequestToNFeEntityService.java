@@ -956,6 +956,7 @@ public class MergeNFeRequestToNFeEntityService {
 				.parseInt(FinalidadeNfe.fromValue(identificacaoNFeRequest.getFinalidadeNFe()).getCodigoReceita()));
 		nfeIde.setIndpres(Integer.parseInt(TipoPresencaComprador
 				.fromValue(identificacaoNFeRequest.getTipoPresencaComprador()).getCodigoReceita()));
+		nfeIde.setIndfinal(Integer.parseInt(identificacaoNFeRequest.getTipoConsumidor()));
 
 		if (identificacaoNFeRequest.getDocumentosReferenciados() != null
 				&& !identificacaoNFeRequest.getDocumentosReferenciados().isEmpty()) {

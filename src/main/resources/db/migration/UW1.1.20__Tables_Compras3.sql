@@ -53,6 +53,6 @@ alter table cotacao_mercadoria_parceiro add situacao varchar(3) not null default
 alter table cotacao_mercadoria_item add status varchar(3) not null default '1';
 
 alter table cotacao_mercadoria add CONSTRAINT situacao_cotacao_mercadoria_foreign FOREIGN KEY (situacao_cotacao_mercadoria) REFERENCES situacao_cotacao_mercadoria (value);
-alter table cotacao_mercadoria_parceiro add CONSTRAINT situacao_cotacao_mercadoria_parceiro_foreign FOREIGN KEY (situacao_cotacao_mercadoria_parceiro) REFERENCES situacao_cotacao_mercadoria_parceiro (value);
+alter table cotacao_mercadoria_parceiro add CONSTRAINT situacao_cotacao_mercadoria_parceiro_foreign FOREIGN KEY (situacao) REFERENCES situacao_cotacao_mercadoria_parceiro (value);
 alter table cotacao_mercadoria_item add CONSTRAINT status_cotacao_mercadoria_item_foreign FOREIGN KEY (status) REFERENCES status_cotacao_mercadoria_item (value);
 

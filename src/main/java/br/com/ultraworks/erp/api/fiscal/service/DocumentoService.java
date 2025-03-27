@@ -22,6 +22,9 @@ import br.com.ultraworks.erp.api.fiscal.domain.nfe.request.NFeRequest;
 import br.com.ultraworks.erp.api.fiscal.domain.nfe.request.PagamentoNFeRequest;
 import br.com.ultraworks.erp.api.fiscal.domain.tipointegracao.TipoIntegracao;
 import br.com.ultraworks.erp.api.fiscal.mapper.DocumentoMapper;
+import br.com.ultraworks.erp.api.fiscal.repository.DocumentoIntegracaoRepository;
+import br.com.ultraworks.erp.api.fiscal.repository.DocumentoItemRepository;
+import br.com.ultraworks.erp.api.fiscal.repository.DocumentoParcelaRepository;
 import br.com.ultraworks.erp.api.fiscal.repository.DocumentoRepository;
 import br.com.ultraworks.erp.api.fiscal.repository.query.VerificaDuplicidadeDocumentoQuery;
 import br.com.ultraworks.erp.api.organograma.domain.departamento.Departamento;
@@ -49,6 +52,10 @@ public class DocumentoService extends GenericService<Documento, Long, DocumentoD
 	ParceiroLocalRepository parceiroLocalRepository;
 	ItemRepository itemRepository;
 	TipoDocumentoRepository tipoDocumentoRepository;
+	DocumentoIntegracaoRepository documentoIntegracaoRepository;
+	DocumentoItemRepository documentoItemRepository;
+	DocumentoParcelaRepository documentoParcelaRepository;
+	DocumentoRepository documentoRepository;
 
 	@Autowired
 	public DocumentoService(DocumentoRepository repository, DocumentoMapper mapper,
@@ -57,7 +64,11 @@ public class DocumentoService extends GenericService<Documento, Long, DocumentoD
 			OperacaoInternaRepository operacaoInternaRepository,
 			ParceiroLocalRepository parceiroLocalRepository,
 			ItemRepository itemRepository,
-			TipoDocumentoRepository tipoDocumentoRepository) {
+			TipoDocumentoRepository tipoDocumentoRepository,
+			DocumentoIntegracaoRepository documentoIntegracaoRepository,
+			DocumentoItemRepository documentoItemRepository,
+			DocumentoParcelaRepository documentoParcelaRepository,
+			DocumentoRepository documentoRepository) {
 		super(repository, mapper);
 		this.verificaDuplicidadeDocumentoQuery = verificaDuplicidadeDocumentoQuery;
 		this.departamentoRepository = departamentoRepository;
@@ -65,6 +76,37 @@ public class DocumentoService extends GenericService<Documento, Long, DocumentoD
 		this.parceiroLocalRepository = parceiroLocalRepository;
 		this.itemRepository = itemRepository;
 		this.tipoDocumentoRepository = tipoDocumentoRepository;
+		this.documentoIntegracaoRepository = documentoIntegracaoRepository;
+		this.documentoItemRepository = documentoItemRepository;
+		this.documentoParcelaRepository = documentoParcelaRepository;
+		this.documentoRepository = documentoRepository;
+	}
+	
+	public Documento findByNFeId(Long nfeId) {
+		Documento documento = documentoRepository.findByNfeId(nfeId);
+		
+		if (documento != null) {
+			documento.getItens().clear();
+			documento.getItens().addAll(documentoItemRepository.findByDocumentoId(documento.getId()));
+			documento.getParcelas().clear();
+			documento.getParcelas().addAll(documentoParcelaRepository.findByDocumentoId(documento.getId()));
+			documento.getIntegracoes().clear();
+			documento.getIntegracoes().addAll(documentoIntegracaoRepository.findByDocumentoId(documento.getId()));
+			if (documento.getIntegracoes().size() > 0) {
+				for (DocumentoIntegracao documentoIntegracao : documento.getIntegracoes()) {
+					if (documentoIntegracao.getTipoIntegracao().equals(TipoIntegracao.ESTOQUE) 
+							&& !documentoIntegracao.isIntegrado()) {
+						documento.setAtualizaEstoque(documentoIntegracao);
+					}
+					if (documentoIntegracao.getTipoIntegracao().equals(TipoIntegracao.FINANCEIRO)
+							&& !documentoIntegracao.isIntegrado()) {
+						documento.setAtualizaFinanceiro(documentoIntegracao);
+					}
+				}
+			}
+		}
+		
+		return documento;
 	}
 	
 	@Override
@@ -87,32 +129,82 @@ public class DocumentoService extends GenericService<Documento, Long, DocumentoD
 	
 	@Transactional
 	public void criarDocumentoByNFe(NFeRequest nFeRequest, NFe nfe) {
-		Departamento departamento = departamentoRepository.findById(nFeRequest.getIdentificacaoNFeRequest().getEmitenteId())
-				.orElseThrow(() -> new RegisterNotFoundException("Não foi encontrado o Departamento para o ID informado."));
 		
-		OperacaoInterna operacaoInterna = operacaoInternaRepository.findById(nFeRequest.getIdentificacaoNFeRequest().getOperacaoInternaId())
-				.orElseThrow(() -> new RegisterNotFoundException("Não foi encontrada a Operação Interna para o ID informado."));
-		
-		ParceiroLocal parceiroLocal = parceiroLocalRepository.findById(nFeRequest.getIdentificacaoNFeRequest().getOperacaoInternaId())
-				.orElseThrow(() -> new RegisterNotFoundException("Não foi encontrad o Local do Parceiro para o ID informado."));
-		
-		TipoDocumento tipoDocumento = tipoDocumentoRepository.findByCodigoReceita("55");
-		
-		Documento documento = new Documento();
-		documento.setDataDocumento(nFeRequest.getIdentificacaoNFeRequest().getDataHoraEmissao().toLocalDate());
-		documento.setDepartamento(departamento);
-		documento.setNumero(Long.valueOf(nFeRequest.getIdentificacaoNFeRequest().getNumero()));
-		documento.setNfe(nfe);
-		documento.setOperacaoInterna(operacaoInterna);
-		documento.setOrigemDocumento(OrigemDocumento.EMISSOR_NFE);
-		documento.setParceiroLocal(parceiroLocal);
-		documento.setSituacaoDocumento(SituacaoDocumento.PENDENTE);
-		documento.setTipoDocumento(tipoDocumento); 
-		documento.setValor(calculaValorTotalNota(nFeRequest.getItensNFeRequest().getItens()));
-		documento.setIntegracoes(criarIntegracoesDocumento(nFeRequest, documento));
-		documento.setItens(criarDocumentoItem(nFeRequest, documento));
-		
-		this.save(documento);
+		if (nfe.getSituacao() == SituacaoDocumento.EMDIGITACAO || nfe.getSituacao() == SituacaoDocumento.AGUARDANDOENVIO
+				|| nfe.getSituacao() == SituacaoDocumento.PENDENTE) {
+			
+			Departamento departamento = departamentoRepository.findById(nFeRequest.getIdentificacaoNFeRequest().getEmitenteId())
+					.orElseThrow(() -> new RegisterNotFoundException("Não foi encontrado o Departamento para o ID informado."));
+			
+			OperacaoInterna operacaoInterna = operacaoInternaRepository.findById(nFeRequest.getIdentificacaoNFeRequest().getOperacaoInternaId())
+					.orElseThrow(() -> new RegisterNotFoundException("Não foi encontrada a Operação Interna para o ID informado."));
+			
+			ParceiroLocal parceiroLocal = parceiroLocalRepository.findById(nFeRequest.getIdentificacaoNFeRequest().getOperacaoInternaId())
+					.orElseThrow(() -> new RegisterNotFoundException("Não foi encontrad o Local do Parceiro para o ID informado."));
+			
+			TipoDocumento tipoDocumento = tipoDocumentoRepository.findByCodigoReceita("55");
+			
+			if (nfe.getSituacao() == SituacaoDocumento.AGUARDANDOENVIO) {
+				this.excluirDocumento(nfe);
+			}
+			
+			Documento documento = new Documento();
+			documento.setDataDocumento(nFeRequest.getIdentificacaoNFeRequest().getDataHoraEmissao().toLocalDate());
+			documento.setDepartamento(departamento);
+			documento.setNumero(Long.valueOf(nFeRequest.getIdentificacaoNFeRequest().getNumero()));
+			documento.setNfe(nfe);
+			documento.setOperacaoInterna(operacaoInterna);
+			documento.setOrigemDocumento(OrigemDocumento.EMISSOR_NFE);
+			documento.setParceiroLocal(parceiroLocal);
+			documento.setSituacaoDocumento(SituacaoDocumento.PENDENTE);
+			documento.setTipoDocumento(tipoDocumento); 
+			documento.setValor(calculaValorTotalNota(nFeRequest.getItensNFeRequest().getItens()));
+			documento.setIntegracoes(criarIntegracoesDocumento(nFeRequest, documento));
+			documento.setItens(criarDocumentoItem(nFeRequest, documento));
+			
+			documento = this.save(documento);
+			
+			documento.getIntegracoes().forEach(integracao -> {
+				documentoIntegracaoRepository.save(integracao);
+			});
+			
+			documento.getParcelas().forEach(parcela -> {
+				documentoParcelaRepository.save(parcela);
+			});
+			
+			documento.getItens().forEach(item -> {
+				documentoItemRepository.save(item);
+			});
+			
+		}
+	}
+
+	private void excluirDocumento(NFe nfe) {
+		Documento documento = documentoRepository.findByNfeId(nfe.getId());;
+		if (documento != null) {
+			List<DocumentoIntegracao> integracoes = this.documentoIntegracaoRepository.findByDocumentoId(documento.getId());
+			if (!integracoes.isEmpty() && integracoes.size() > 0) {
+				integracoes.forEach(integracao -> {
+					this.documentoIntegracaoRepository.delete(integracao);
+				});
+			}
+			
+			List<DocumentoItem> itens = this.documentoItemRepository.findByDocumentoId(documento.getId());
+			if (!itens.isEmpty() && itens.size() > 0) {
+				itens.forEach(item -> {
+					this.documentoItemRepository.delete(item);
+				});
+			}
+			
+			List<DocumentoParcela> parcelas = this.documentoParcelaRepository.findByDocumentoId(documento.getId());
+			if (!parcelas.isEmpty() && parcelas.size() > 0) {
+				parcelas.forEach(parcela -> {
+					this.documentoParcelaRepository.delete(parcela);
+				});
+			}
+			
+			this.delete(documento.getId());
+		}
 	}
 
 	private BigDecimal calculaValorTotalNota(List<ItemNFeRequest> itens) {
@@ -185,8 +277,8 @@ public class DocumentoService extends GenericService<Documento, Long, DocumentoD
 		return listaParcelas;
 	}
 
-	private void verificaDuplicidadeDocumento(Documento entity) {
-		verificaDuplicidadeDocumentoQuery.executeSQL(entity);
-	}
+//	private void verificaDuplicidadeDocumento(Documento entity) {
+//		verificaDuplicidadeDocumentoQuery.executeSQL(entity);
+//	}
 	
 }

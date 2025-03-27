@@ -14,8 +14,8 @@ create table config_sistema_compra (
 );	
 -----------------------------
 
-alter table config_sistema_financeiro add tipo_titulo_receber bigint not null;
-alter table config_sistema_financeiro add tipo_titulo_pagar bigint not null;
+alter table config_sistema_financeiro add tipo_titulo_receber bigint not null default 1;
+alter table config_sistema_financeiro add tipo_titulo_pagar bigint not null default 2;
 
 alter table empresa_filial add general boolean not null default false;
 alter table departamento add general boolean not null default false;
@@ -53,13 +53,13 @@ create table valida_departamento_grupo_contabil (
 alter table item_simplificado add 	data_inicio_vigencia date not null;
 alter table item_simplificado add 	data_final_vigencia  date not null;
 
+-- drop sequence seq_solicitacao_compra;
+-- drop sequence solicitacao_compra_item;
+
 drop table situacao_solicitacao_compra;
-drop table urgencia_solicitacao_compra;
 drop table solicitacao_compra;
 drop table solicitacao_compra_item;
-
-drop sequence seq_solicitacao_compra;
-drop sequence solicitacao_compra_item;
+drop table urgencia_solicitacao_compra;
 
 create table situacao_solicitacao_mercadoria (
 	value				varchar(3) not null constraint situacao_solicitacao_mercadoria_pkey primary key,
@@ -222,7 +222,7 @@ create table config_autorizacao_solicitacao_mercadoria (
 	CONSTRAINT empresa_filial_config_aut_solicitacao_mercadoria_foreign FOREIGN KEY (empresa_filial_id) REFERENCES empresa_filial (id),
 	CONSTRAINT depto_config_aut_solicitacao_mercadoria_foreign FOREIGN KEY (departamento_id) REFERENCES departamento (id),
 	CONSTRAINT grupo_ctabil_config_aut_solicitacao_mercadoria_foreign FOREIGN KEY (grupo_contabil_id) REFERENCES grupo_contabil (id)
-)
+);
 
 -----------------------------------------------------------------------
 
@@ -274,4 +274,4 @@ create table cotacao_mercadoria_item (
 	CONSTRAINT item_cotacao_mercadoria_item_foreign FOREIGN KEY (item_id) REFERENCES item (id),
 	CONSTRAINT item_simpl_cotacao_mercadoria_item_foreign FOREIGN KEY (item_simplificado_id) REFERENCES item_simplificado (id),
 	CONSTRAINT solmercitem_cotacao_mercadoria_item_foreign FOREIGN KEY (cotacao_mercadoria_parceiro_id) REFERENCES cotacao_mercadoria_parceiro (id)
-)
+);

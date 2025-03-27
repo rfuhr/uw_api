@@ -167,4 +167,24 @@ where operacao_interna_id = :operacaoInternaId
  and (item_id is null or item_id = :itemId)
  and (origem_id is null or origem_id = :origemId)
  and (ncm_id is null or ncm_id = :ncmId)   
+UNION ALL 
+select 'Por GERAL' as consulta, 8 as ordem,  
+       case when item_id is null then 1 else 0 end +
+       case when grupo_tributacao_id is null then 1 else 0 end +
+       case when cfop_id is null then 1 else 0 end +
+       case when ncm_id is null then 1 else 0 end +
+       case when origem_id is null then 1 else 0 end +
+       case when classificacao_operacao_id is null then 1 else 0 end +
+       case when operacao_interna_id is null then 1 else 0 end 
+       as subordem,
+       id, grupo_tributacao_id, cfop_id, ncm_id, origem_id, 
+       operacao_interna_id, classificacao_operacao_id, item_id, icms_id, ipi_id, pis_id, cofins_id
+from configuracoes
+where operacao_interna_id is null 
+ and (grupo_tributacao_id is null)
+ and (cfop_id is null)
+ and (classificacao_operacao_id is null)
+ and (item_id is null)
+ and (origem_id is null)
+ and (ncm_id is null)  
 order by ordem, subordem 

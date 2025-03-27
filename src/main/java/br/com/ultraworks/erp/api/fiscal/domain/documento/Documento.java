@@ -2,10 +2,12 @@ package br.com.ultraworks.erp.api.fiscal.domain.documento;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import br.com.ultraworks.erp.api.financeiro.domain.titulo.Titulo;
 import br.com.ultraworks.erp.api.fiscal.domain.documentoItem.DocumentoItem;
 import br.com.ultraworks.erp.api.fiscal.domain.documentointegracao.DocumentoIntegracao;
 import br.com.ultraworks.erp.api.fiscal.domain.documentoparcela.DocumentoParcela;
@@ -19,17 +21,16 @@ import br.com.ultraworks.erp.api.tabela.domain.situacaodocumento.SituacaoDocumen
 import br.com.ultraworks.erp.api.tabela.domain.situacaodocumento.SituacaoDocumentoConverter;
 import br.com.ultraworks.erp.api.tabela.domain.tipodocumento.TipoDocumento;
 import br.com.ultraworks.erp.core.entity.UWEntityBase;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -94,13 +95,23 @@ public class Documento extends UWEntityBase {
 	@Column(name = "situacao")
 	private SituacaoDocumento situacaoDocumento;
 	
-	@OneToMany(mappedBy = "documento", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<DocumentoItem> itens;
+	@Transient
+	private List<DocumentoItem> itens = new ArrayList<>();
 	
-	@OneToMany(mappedBy = "documento", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<DocumentoParcela> parcelas;
+	@Transient
+	private List<DocumentoParcela> parcelas = new ArrayList<>();
 	
-	@OneToMany(mappedBy = "documento", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<DocumentoIntegracao> integracoes;
+	@Transient
+	private List<DocumentoIntegracao> integracoes = new ArrayList<>();
+	
+	@OneToOne
+	@JoinColumn(name = "titulo_id")
+	private Titulo titulo;
+	
+	@Transient
+	private DocumentoIntegracao atualizaEstoque = null;
+	
+	@Transient
+	private DocumentoIntegracao atualizaFinanceiro = null;
 
 }

@@ -104,4 +104,7 @@ public class MovimentoEstoque extends UWEntityBase {
 	@Column(name = "protocolo_documento")
 	private Long protocoloDocumento;
 	
+	@Column(name = "debito_credito")
+	private String debitoCredito;
+	
 }

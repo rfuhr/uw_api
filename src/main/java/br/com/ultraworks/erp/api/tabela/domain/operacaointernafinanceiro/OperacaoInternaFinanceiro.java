@@ -3,8 +3,11 @@ package br.com.ultraworks.erp.api.tabela.domain.operacaointernafinanceiro;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import br.com.ultraworks.erp.api.financeiro.domain.caracteristicamovfin.CaracteristicaMovimentoFinanceiro;
+import br.com.ultraworks.erp.api.financeiro.domain.carteirafinanceira.CarteiraFinanceira;
+import br.com.ultraworks.erp.api.financeiro.domain.fatogerador.FatoGerador;
 import br.com.ultraworks.erp.api.financeiro.domain.grupofinanceiro.GrupoFinanceiro;
 import br.com.ultraworks.erp.api.financeiro.domain.indicefinanceiro.IndiceFinanceiro;
+import br.com.ultraworks.erp.api.financeiro.domain.motivoestornofinanceiro.MotivoEstornoFinanceiro;
 import br.com.ultraworks.erp.api.financeiro.domain.tipotitulo.TipoTitulo;
 import br.com.ultraworks.erp.api.tabela.domain.historicopadrao.HistoricoPadrao;
 import br.com.ultraworks.erp.api.tabela.domain.operacaointerna.OperacaoInterna;
@@ -59,4 +62,16 @@ public class OperacaoInternaFinanceiro extends UWEntityBase {
 	@OneToOne
 	@JoinColumn(name = "historico_padrao_id")
 	private HistoricoPadrao historicoPadrao;
+	
+	@OneToOne
+	@JoinColumn(name = "carteira_financeira_id")
+	private CarteiraFinanceira carteiraFinanceira;
+	
+	@OneToOne
+	@JoinColumn(name = "fato_gerador_id")
+	private FatoGerador fatoGerador;
+	
+	@OneToOne
+	@JoinColumn(name = "motivo_estorno_financeiro_id")
+	private MotivoEstornoFinanceiro motivoEstornoFinanceiro;
 }

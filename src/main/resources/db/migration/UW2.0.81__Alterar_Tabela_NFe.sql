@@ -1,0 +1,1 @@
+alter table nfe add column tipo_nfe varchar(2) not null default '1';
