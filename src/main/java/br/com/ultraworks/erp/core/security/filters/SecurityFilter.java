@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -39,7 +40,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
 	@Autowired
 	public SecurityFilter(UserRepository userRepository, JwtHelper jwtHelper, TokenRepository tokenRepository,
-			RequestMappingHandlerMapping handlerMapping, HandlerExceptionResolver handlerExceptionResolver) {
+			@Qualifier("requestMappingHandlerMapping") RequestMappingHandlerMapping handlerMapping, HandlerExceptionResolver handlerExceptionResolver) {
 		this.jwtHelper = jwtHelper;
 		this.userRepository = userRepository;
 		this.tokenRepository = tokenRepository;

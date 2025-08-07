@@ -3,8 +3,6 @@ package br.com.ultraworks.erp.core.dto;
 import java.io.Serializable;
 import java.util.HashMap;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.Data;
 
 @Data
